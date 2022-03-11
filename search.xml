@@ -342,7 +342,7 @@ stacking: bert + 传统特征</p>
 <p><strong>数百万远程设备</strong>上<strong>学习单个全局模型</strong>。</p>
 <p>约束: 设备生成的数据被本地存储和处理，只有<strong>中间更新周期性地与中央服务器进行通信</strong>。</p>
 <p>因此目标通常是最小化以下目标函数：</p>
-<p>$$<br>\min <em>{w} F(w), \text { where } F(w):&#x3D;\sum</em>{k&#x3D;1}^{m} p_{k} F_{k}(w)<br>$$<br>m 是设备总数， $  p_k ≥ 0 $  并且 $ ∑_kp_k &#x3D; 1 $<br>$ F_k $(w)  是第 k 个设备的本地目标函数（一般是个loss损失函数）</p>
+<p>$  \min_{w} F(w), \text { where } F(w):&#x3D;\sum_{k&#x3D;1}^{m} p_{k} F_{k}(w) $<br>m 是设备总数， $  p_k ≥ 0 $  并且 $ ∑_kp_k &#x3D; 1 $<br>$ F_k $(w)  是第 k 个设备的本地目标函数（一般是个loss损失函数）</p>
 <p>例如：$F_{k}(w)&#x3D;\frac{1}{n_{k}} \sum_{j_{k}&#x3D;1}^{n_{k}} f_{j_{k}}\left(w ; x_{j_{k}}, y_{j_{k}}\right)$，表示第k个客户端上，所有训练样本的损失值取平均</p>
 <p>一般, 第k 个客户端的$ p_k $ ：  $ p_k &#x3D; 1&#x2F;n $ 或者  $ p_k &#x3D; n_k&#x2F;n $  , $ n &#x3D; ∑_k n_k $ (即，n&#x3D;所有客户端的训练数据)</p>
 <h2 id="2-核心挑战"><a href="#2-核心挑战" class="headerlink" title="2. 核心挑战"></a>2. 核心挑战</h2><h3 id="2-1-挑战1：昂贵的沟通"><a href="#2-1-挑战1：昂贵的沟通" class="headerlink" title="2.1 挑战1：昂贵的沟通"></a>2.1 挑战1：昂贵的沟通</h3><p>为了使模型与联邦网络中的设备生成的数据相匹配，因此有必要开发通信效率高的方法,作为训练过程的一部分</p>
