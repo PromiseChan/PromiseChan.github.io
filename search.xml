@@ -328,8 +328,8 @@ stacking: bert + 传统特征</p>
         <category>python</category>
       </categories>
       <tags>
-        <tag>java</tag>
-        <tag>python</tag>
+        <tag>分析</tag>
+        <tag>心得</tag>
       </tags>
   </entry>
   <entry>
@@ -470,8 +470,8 @@ stacking: bert + 传统特征</p>
         <category>federated-learning</category>
       </categories>
       <tags>
-        <tag>python</tag>
-        <tag>federated-learning</tag>
+        <tag>分析</tag>
+        <tag>心得</tag>
       </tags>
   </entry>
 </search>
