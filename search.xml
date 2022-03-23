@@ -464,4 +464,38 @@ stacking: bert + 传统特征</p>
         <tag>心得</tag>
       </tags>
   </entry>
+  <entry>
+    <title>trojan搭建小记</title>
+    <url>/2022/03/23/trojan-setup/</url>
+    <content><![CDATA[<span id="more"></span>
+
+<h2 id="参考博客"><a href="#参考博客" class="headerlink" title="参考博客"></a>参考博客</h2><p><a href="https://iyideng.vip/black-technology/cgfw/trojan-server-building-and-using-tutorial.html">https://iyideng.vip/black-technology/cgfw/trojan-server-building-and-using-tutorial.html</a></p>
+<h2 id="服务端"><a href="#服务端" class="headerlink" title="服务端"></a>服务端</h2><p>Trojan多用户一键搭建脚本</p>
+<figure class="highlight shell"><table><tr><td class="code"><pre><span class="line">source &lt;(curl -sL https://git.io/trojan-install)</span><br></pre></td></tr></table></figure>
+
+<p>选择“1.Let’s Encrypt 证书”，然后申请输入域名，进入SSL证书安装过程。</p>
+<p>稍等片刻安装完成，系统进入选择安装mysql方式的选项，选择“安装docker版mysql(mariadb)”，在键盘按数字“1”，然后直接进入”安装docker版mysql(mariadb)”的过程</p>
+<p>一键安装脚本提示设置连接Trojan服务器的用户名和密码</p>
+<p>一般情况下，直接使用随机用户名和密码，直接回车即可</p>
+<p>完成后，命令行输入 trojan 即可呼出菜单</p>
+<p>也可以在浏览器访问“https:&#x2F;&#x2F;域名”，进入web控制面板</p>
+<h2 id="卸载命令"><a href="#卸载命令" class="headerlink" title="卸载命令"></a>卸载命令</h2><figure class="highlight shell"><table><tr><td class="code"><pre><span class="line">source &lt;(curl -sL https://git.io/trojan-install) –remove</span><br></pre></td></tr></table></figure>
+
+<h2 id="一键安装并开启BBR加速"><a href="#一键安装并开启BBR加速" class="headerlink" title="一键安装并开启BBR加速"></a>一键安装并开启BBR加速</h2><figure class="highlight shell"><table><tr><td class="code"><pre><span class="line">cd /usr/src &amp;&amp; wget -N --no-check-certificate &quot;https://raw.githubusercontent.com/chiakge/Linux-NetSpeed/master/tcp.sh&quot; &amp;&amp; chmod +x tcp.sh &amp;&amp; ./tcp.sh</span><br></pre></td></tr></table></figure>
+
+<p>呼出trojan菜单</p>
+<p>输入2，安装BBRplus版内核</p>
+<p>abort kernel removal — no</p>
+<p>重启服务器</p>
+<p>再次呼出trojan菜单</p>
+<p>选择“7”启用“使用BBRplus版加速”</p>
+<h2 id="Trojan客户端配置"><a href="#Trojan客户端配置" class="headerlink" title="Trojan客户端配置"></a>Trojan客户端配置</h2><p>windows — v2rayN-core</p>
+<p>android —v2rayNG</p>
+<p>ios&#x2F;ipad – windows-V2rayN局域网共享</p>
+<p>mac — i2rayN</p>
+]]></content>
+      <tags>
+        <tag>trojan</tag>
+      </tags>
+  </entry>
 </search>
