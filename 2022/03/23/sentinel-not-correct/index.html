@@ -20,20 +20,20 @@
     var CONFIG = {"hostname":"example.com","root":"/","scheme":"Mist","version":"7.8.0","exturl":false,"sidebar":{"position":"left","display":"always","padding":18,"offset":12,"onmobile":false},"copycode":{"enable":false,"show_result":false,"style":"mac"},"back2top":{"enable":true,"sidebar":false,"scrollpercent":false},"bookmark":{"enable":false,"color":"#222","save":"auto"},"fancybox":false,"mediumzoom":false,"lazyload":false,"pangu":false,"comments":{"style":"tabs","active":null,"storage":true,"lazyload":false,"nav":null},"algolia":{"hits":{"per_page":10},"labels":{"input_placeholder":"Search for Posts","hits_empty":"We didn't find any results for the search: ${query}","hits_stats":"${hits} results found in ${time} ms"}},"localsearch":{"enable":true,"trigger":"auto","top_n_per_article":1,"unescape":false,"preload":false},"motion":{"enable":true,"async":false,"transition":{"post_block":"fadeIn","post_header":"slideDownIn","post_body":"slideDownIn","coll_header":"slideLeftIn","sidebar":"slideUpIn"}},"path":"search.xml"};
   </script>
 
-  <meta name="description" content="因线上发现dubbo 监控节点提供的并发数，与实际调用情况不符合，特此分析并提交issue给社区https:&#x2F;&#x2F;github.com&#x2F;apache&#x2F;dubbo&#x2F;issues&#x2F;7757">
+  <meta name="description" content="sentinel 并非精确限流 https:&#x2F;&#x2F;www.cnblogs.com&#x2F;mrxiaobai-wen&#x2F;p&#x2F;14192841.html">
 <meta property="og:type" content="article">
-<meta property="og:title" content="dubbo filter打乱 issue（BUG）">
-<meta property="og:url" content="http://example.com/2022/03/23/dubbo-filter-order-issue/index.html">
+<meta property="og:title" content="sentinel限流不精确">
+<meta property="og:url" content="http://example.com/2022/03/23/sentinel-not-correct/index.html">
 <meta property="og:site_name" content="PromiseChanの博客">
-<meta property="og:description" content="因线上发现dubbo 监控节点提供的并发数，与实际调用情况不符合，特此分析并提交issue给社区https:&#x2F;&#x2F;github.com&#x2F;apache&#x2F;dubbo&#x2F;issues&#x2F;7757">
+<meta property="og:description" content="sentinel 并非精确限流 https:&#x2F;&#x2F;www.cnblogs.com&#x2F;mrxiaobai-wen&#x2F;p&#x2F;14192841.html">
 <meta property="og:locale" content="zh_CN">
-<meta property="article:published_time" content="2022-03-23T14:56:32.000Z">
-<meta property="article:modified_time" content="2022-03-23T15:31:04.398Z">
+<meta property="article:published_time" content="2022-03-23T15:27:12.000Z">
+<meta property="article:modified_time" content="2022-03-23T15:33:12.758Z">
 <meta property="article:author" content="Promise Chan">
-<meta property="article:tag" content="dubbo SPI Filter">
+<meta property="article:tag" content="sentinel">
 <meta name="twitter:card" content="summary">
 
-<link rel="canonical" href="http://example.com/2022/03/23/dubbo-filter-order-issue/">
+<link rel="canonical" href="http://example.com/2022/03/23/sentinel-not-correct/">
 
 
 <script id="page-configurations">
@@ -46,7 +46,7 @@
   };
 </script>
 
-  <title>dubbo filter打乱 issue（BUG） | PromiseChanの博客</title>
+  <title>sentinel限流不精确 | PromiseChanの博客</title>
   
 
 
@@ -193,7 +193,7 @@
   
   
   <article itemscope itemtype="http://schema.org/Article" class="post-block" lang="zh-CN">
-    <link itemprop="mainEntityOfPage" href="http://example.com/2022/03/23/dubbo-filter-order-issue/">
+    <link itemprop="mainEntityOfPage" href="http://example.com/2022/03/23/sentinel-not-correct/">
 
     <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
       <meta itemprop="image" content="/images/header.jpg">
@@ -206,7 +206,7 @@
     </span>
       <header class="post-header">
         <h1 class="post-title" itemprop="name headline">
-          dubbo filter打乱 issue（BUG）
+          sentinel限流不精确
         </h1>
 
         <div class="post-meta">
@@ -217,7 +217,7 @@
               <span class="post-meta-item-text">发表于</span>
               
 
-              <time title="创建时间：2022-03-23 22:56:32 / 修改时间：23:31:04" itemprop="dateCreated datePublished" datetime="2022-03-23T22:56:32+08:00">2022-03-23</time>
+              <time title="创建时间：2022-03-23 23:27:12 / 修改时间：23:33:12" itemprop="dateCreated datePublished" datetime="2022-03-23T23:27:12+08:00">2022-03-23</time>
             </span>
 
           
@@ -231,16 +231,8 @@
     <div class="post-body" itemprop="articleBody">
 
       
-        <p>因线上发现dubbo 监控节点提供的并发数，与实际调用情况不符合，特此分析并提交issue给社区<br><a target="_blank" rel="noopener" href="https://github.com/apache/dubbo/issues/7757">https://github.com/apache/dubbo/issues/7757</a></p>
-<span id="more"></span>
-
-<h2 id="场景"><a href="#场景" class="headerlink" title="场景"></a>场景</h2><p>已设置 executes 参数 &#x3D; 10</p>
-<h2 id="现象"><a href="#现象" class="headerlink" title="现象"></a>现象</h2><p>压力：并发 20<br>监控节点得到的提供方上执行RPC调用的并发数 20<br>调用方收到的实际限流次数 10</p>
-<h2 id="预期"><a href="#预期" class="headerlink" title="预期"></a>预期</h2><p>监控节点显示提供方上执行RPC调用的并发数 10<br>调用方收到的实际限流次数 10</p>
-<h2 id="分析"><a href="#分析" class="headerlink" title="分析"></a>分析</h2><p>实际限流次数是正确的，说明限流是生效的<br>但是dubbo监控节点显示不正确</p>
-<h2 id="issue"><a href="#issue" class="headerlink" title="issue"></a>issue</h2><p><a target="_blank" rel="noopener" href="https://github.com/apache/dubbo/issues/7757">https://github.com/apache/dubbo/issues/7757</a></p>
-<p>经过代码验证，是因为项目中对dubbo filter做了SPI扩展，<br>导致dubbo 加载所有filter，构成 filter chain的时候，把原顺序打乱了<br>原来：dubbo限流filter -&gt; monitorFiler<br>现在：monitorFilter -&gt; dubbo限流filter</p>
-<p>所以出现监控不准，<br>原来记录的是：提供方上的实际RPC调用的并发数<br>filter打乱后记录的是：提供方上接收到请求的并发书数</p>
+        <p>sentinel 并非精确限流</p>
+<p><a target="_blank" rel="noopener" href="https://www.cnblogs.com/mrxiaobai-wen/p/14192841.html">https://www.cnblogs.com/mrxiaobai-wen/p/14192841.html</a></p>
 
     </div>
 
@@ -250,7 +242,7 @@
 
       <footer class="post-footer">
           <div class="post-tags">
-              <a href="/tags/dubbo-SPI-Filter/" rel="tag"># dubbo SPI Filter</a>
+              <a href="/tags/sentinel/" rel="tag"># sentinel</a>
           </div>
 
         
@@ -259,13 +251,10 @@
         
     <div class="post-nav">
       <div class="post-nav-item">
-    <a href="/2022/03/23/trojan-setup/" rel="prev" title="trojan搭建小记">
-      <i class="fa fa-chevron-left"></i> trojan搭建小记
+    <a href="/2022/03/23/dubbo-filter-order-issue/" rel="prev" title="dubbo filter打乱 issue（BUG）">
+      <i class="fa fa-chevron-left"></i> dubbo filter打乱 issue（BUG）
     </a></div>
-      <div class="post-nav-item">
-    <a href="/2022/03/23/sentinel-not-correct/" rel="next" title="sentinel限流不精确">
-      sentinel限流不精确 <i class="fa fa-chevron-right"></i>
-    </a></div>
+      <div class="post-nav-item"></div>
     </div>
       </footer>
     
@@ -324,7 +313,6 @@
 
       <!--noindex-->
       <div class="post-toc-wrap sidebar-panel">
-          <div class="post-toc motion-element"><ol class="nav"><li class="nav-item nav-level-2"><a class="nav-link" href="#%E5%9C%BA%E6%99%AF"><span class="nav-number">1.</span> <span class="nav-text">场景</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E7%8E%B0%E8%B1%A1"><span class="nav-number">2.</span> <span class="nav-text">现象</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E9%A2%84%E6%9C%9F"><span class="nav-number">3.</span> <span class="nav-text">预期</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E5%88%86%E6%9E%90"><span class="nav-number">4.</span> <span class="nav-text">分析</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#issue"><span class="nav-number">5.</span> <span class="nav-text">issue</span></a></li></ol></div>
       </div>
       <!--/noindex-->
 

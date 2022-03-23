@@ -513,5 +513,18 @@ stacking: bert + 传统特征</p>
 <p>经过代码验证，是因为项目中对dubbo filter做了SPI扩展，<br>导致dubbo 加载所有filter，构成 filter chain的时候，把原顺序打乱了<br>原来：dubbo限流filter -&gt; monitorFiler<br>现在：monitorFilter -&gt; dubbo限流filter</p>
 <p>所以出现监控不准，<br>原来记录的是：提供方上的实际RPC调用的并发数<br>filter打乱后记录的是：提供方上接收到请求的并发书数</p>
 ]]></content>
+      <tags>
+        <tag>dubbo SPI Filter</tag>
+      </tags>
+  </entry>
+  <entry>
+    <title>sentinel限流不精确</title>
+    <url>/2022/03/23/sentinel-not-correct/</url>
+    <content><![CDATA[<p>sentinel 并非精确限流</p>
+<p><a href="https://www.cnblogs.com/mrxiaobai-wen/p/14192841.html">https://www.cnblogs.com/mrxiaobai-wen/p/14192841.html</a></p>
+]]></content>
+      <tags>
+        <tag>sentinel</tag>
+      </tags>
   </entry>
 </search>
