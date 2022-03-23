@@ -507,7 +507,7 @@ stacking: bert + 传统特征</p>
 
 <h2 id="场景"><a href="#场景" class="headerlink" title="场景"></a>场景</h2><p>已设置 executes 参数 &#x3D; 10</p>
 <h2 id="现象"><a href="#现象" class="headerlink" title="现象"></a>现象</h2><p>压力：并发 20<br>监控节点得到的提供方上执行RPC调用的并发数 20<br>调用方收到的实际限流次数 10</p>
-<h2 id="预期"><a href="#预期" class="headerlink" title="预期"></a>预期</h2><p>提供方上执行RPC调用的并发数 20<br>调用方收到的实际限流次数 10</p>
+<h2 id="预期"><a href="#预期" class="headerlink" title="预期"></a>预期</h2><p>监控节点显示提供方上执行RPC调用的并发数 10<br>调用方收到的实际限流次数 10</p>
 <h2 id="分析"><a href="#分析" class="headerlink" title="分析"></a>分析</h2><p>实际限流次数是正确的，说明限流是生效的<br>但是dubbo监控节点显示不正确</p>
 <h2 id="issue"><a href="#issue" class="headerlink" title="issue"></a>issue</h2><p><a href="https://github.com/apache/dubbo/issues/7757">https://github.com/apache/dubbo/issues/7757</a></p>
 <p>经过代码验证，是因为项目中对dubbo filter做了SPI扩展，<br>导致dubbo 加载所有filter，构成 filter chain的时候，把原顺序打乱了<br>原来：dubbo限流filter -&gt; monitorFiler<br>现在：monitorFilter -&gt; dubbo限流filter</p>
