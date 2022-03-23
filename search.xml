@@ -467,7 +467,8 @@ stacking: bert + 传统特征</p>
   <entry>
     <title>trojan搭建小记</title>
     <url>/2022/03/23/trojan-setup/</url>
-    <content><![CDATA[<span id="more"></span>
+    <content><![CDATA[<p>个人经历, 仅供参考</p>
+<span id="more"></span>
 
 <h2 id="参考博客"><a href="#参考博客" class="headerlink" title="参考博客"></a>参考博客</h2><p><a href="https://iyideng.vip/black-technology/cgfw/trojan-server-building-and-using-tutorial.html">https://iyideng.vip/black-technology/cgfw/trojan-server-building-and-using-tutorial.html</a></p>
 <h2 id="服务端"><a href="#服务端" class="headerlink" title="服务端"></a>服务端</h2><p>Trojan多用户一键搭建脚本</p>
