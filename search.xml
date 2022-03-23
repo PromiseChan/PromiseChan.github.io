@@ -34,6 +34,9 @@
 <li><p>查看方法的入参和异常</p>
 <figure class="highlight shell"><table><tr><td class="code"><pre><span class="line">watch *.CommonTest test &#x27;&#123;params,returnObj,throwExp&#125;&#x27; -x 5 -e</span><br></pre></td></tr></table></figure></li>
 </ol>
+<h3 id="tomcat-类加载机制"><a href="#tomcat-类加载机制" class="headerlink" title="tomcat 类加载机制"></a>tomcat 类加载机制</h3><p>tomcat 打破了双亲委派机制，jvm 默认类加载器appclassloader 会启动tomcat自定义的类加载器</p>
+<p>自定义的类加载 parallelwebappclassloader 会分别加载webapps 下的各个应用jar包，完成各个应用的启动相互隔离</p>
+<p>也因此，springboot 项目出现明明 jvm 里面已经加载了某个class，但是 springboot仍然报错 no class found，是因为这个class 可能被其他classloader加载了，单与使用到这个class的类所在的类加载器不一致，且使用类为父加载器，那个class为子类加载，导致找不到class</p>
 <h2 id="dubbo-分析"><a href="#dubbo-分析" class="headerlink" title="dubbo 分析"></a>dubbo 分析</h2><pre><code>1./root/下载/dubbo 分析/《dubbo源码分析系列@www.java1234.com.pdf》
 
 2./root/下载/dubbo 分析/ 《dubbo源码解析2.0@www.java1234.com.pdf》
