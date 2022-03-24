@@ -528,7 +528,7 @@ stacking: bert + 传统特征</p>
       </tags>
   </entry>
   <entry>
-    <title></title>
+    <title>BumbleBee 体验</title>
     <url>/2022/03/24/BumbleBee-demo/</url>
     <content><![CDATA[<p>个人兴趣，用ebpf技术可直接hack 进入系统态执行，BumbleBee作为类似nodejs&#x2F;Jenkins一样的脚手架与部署工具，可以很方便的开发eBPF程序并完成部署</p>
 <span id="more"></span>
