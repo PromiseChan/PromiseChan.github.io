@@ -61,17 +61,17 @@
 <p> 启动时，读取配置，从zk获取服务提供方列表，并缓存到本地</p>
 <p> 执行调用逻辑时，生成一个代理对象proxy，所有的服务调用，使用proxy类生成的对象统一完成</p>
 <pre><code> proxy中，首先进行一系列预处理，
-
+ 
  然后用dubboReference创建一个netty客户端，设置自己的ip，port，
-
+ 
  如果没有缓存，从zk上订阅服务，获取服务具体提供方的ip:port; 包装成调用url-&gt;调用invoker的缓存， 如果有缓然后从缓存中选择一个提供方ip:port 
-
+ 
  用netty框架进行网络通信，向提供方传输序列化后的参数（包括要调用的服务名，入参等）
-
+ 
  提供方nettyChannel接受到请求，开始处理，
-
+ 
  通过一个proxy对象，统一完成调用过程，中间进过一些逻辑判断，根据url，从本读缓存中，读取url对应invoker，在dubboInvoker中完成服务具体实现接口的调用，包括拦截器中的处理
-
+ 
  并将结果用netty网络通信传输后返回给消费方
 </code></pre>
 </li>
@@ -138,6 +138,12 @@
 <p>例如 zpkin中的spanid</p>
 </li>
 </ol>
+<h2 id="docker"><a href="#docker" class="headerlink" title="docker"></a>docker</h2><h3 id="常用命令"><a href="#常用命令" class="headerlink" title="常用命令"></a>常用命令</h3><figure class="highlight shell"><table><tr><td class="code"><pre><span class="line">docker inspect 容器名字或者 ID | grep -i logpath</span><br><span class="line"></span><br><span class="line">docker ps | grep 容器id</span><br><span class="line"></span><br><span class="line">docker  run -it 镜像id</span><br><span class="line"></span><br><span class="line">docker exec -it 容器id bash</span><br><span class="line"></span><br><span class="line">docker cp 源 容器id:目的</span><br><span class="line"><span class="meta"></span></span><br><span class="line"><span class="meta"># </span><span class="language-bash">容器抓包</span></span><br><span class="line">docker ps | grep xxx 获取容器id/name</span><br><span class="line">docker inspect --format &quot;&#123;&#123;.State.Pid&#125;&#125;&quot; container_id/name 获取PID</span><br><span class="line">nsenter -n -t container_id/name</span><br><span class="line"></span><br><span class="line"></span><br><span class="line">docker logs 容器id | grep 关键词</span><br></pre></td></tr></table></figure>
+
+
+
+
+
 <h2 id="ELK-搭建（日志中心基本搭建）"><a href="#ELK-搭建（日志中心基本搭建）" class="headerlink" title="ELK 搭建（日志中心基本搭建）"></a>ELK 搭建（日志中心基本搭建）</h2><h3 id="架构"><a href="#架构" class="headerlink" title="架构"></a>架构</h3><p>（filebeat ：logstash-forwarder 的升级版）</p>
 <p><img src="https://www.ibm.com/developerworks/cn/opensource/os-cn-elk/img006.png" alt="图 6. 实验系统架构"></p>
 <p><a href="https://www.ibm.com/developerworks/cn/opensource/os-cn-elk-filebeat/index.html">https://www.ibm.com/developerworks/cn/opensource/os-cn-elk-filebeat/index.html</a></p>
