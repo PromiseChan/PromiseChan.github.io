@@ -334,6 +334,12 @@ stacking: bert + 传统特征</p>
     <content><![CDATA[<p>不定时更新, 该时间段学到、想到的联邦学习知识</p>
 <span id="more"></span>
 
+
+
+<h1 id="arxiv-downloader"><a href="#arxiv-downloader" class="headerlink" title="arxiv downloader"></a>arxiv downloader</h1><figure class="highlight shell"><table><tr><td class="code"><pre><span class="line">wget -U NoSuchBrowser/1.0 https://arxiv.org/pdf/你需要下载的论文.pdf</span><br></pre></td></tr></table></figure>
+
+
+
 <h1 id="联邦学习现状、关键问题、发展方向"><a href="#联邦学习现状、关键问题、发展方向" class="headerlink" title="联邦学习现状、关键问题、发展方向"></a>联邦学习现状、关键问题、发展方向</h1><h2 id="1-问题定义"><a href="#1-问题定义" class="headerlink" title="1 问题定义"></a>1 问题定义</h2><h3 id="1-1-典型目标函数"><a href="#1-1-典型目标函数" class="headerlink" title="1.1 典型目标函数"></a>1.1 典型目标函数</h3><p>典型联邦学习问题: </p>
 <p><strong>数百万远程设备</strong>上<strong>学习单个全局模型</strong>。</p>
 <p>约束: 设备生成的数据被本地存储和处理，只有<strong>中间更新周期性地与中央服务器进行通信</strong>。</p>
