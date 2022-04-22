@@ -592,4 +592,50 @@ stacking: bert + 传统特征</p>
         <tag>docker</tag>
       </tags>
   </entry>
+  <entry>
+    <title>北京超算中心使用教程</title>
+    <url>/2022/04/22/super-computing-tutorial/</url>
+    <content><![CDATA[<p>超算机器使用心得</p>
+<span id="more"></span>
+
+<h2 id="查看已加载的模块"><a href="#查看已加载的模块" class="headerlink" title="查看已加载的模块"></a>查看已加载的模块</h2><figure class="highlight shell"><table><tr><td class="code"><pre><span class="line">module list</span><br><span class="line"></span><br><span class="line">(base) [xxxx ]$ module list</span><br><span class="line">No Modulefiles Currently Loaded.</span><br></pre></td></tr></table></figure>
+
+
+
+<h2 id="查询已安装的模块"><a href="#查询已安装的模块" class="headerlink" title="查询已安装的模块"></a>查询已安装的模块</h2><figure class="highlight shell"><table><tr><td class="code"><pre><span class="line">module avail  | grep anaconda</span><br><span class="line"></span><br><span class="line">--------------------------------------------------------- /usr/share/Modules/modulefiles ---------------------------------------------------------</span><br><span class="line">dot         module-git  module-info modules     null        use.own</span><br><span class="line"></span><br><span class="line">------------------------------------------------------------- /data/apps/modulefiles -------------------------------------------------------------</span><br><span class="line">alphafold/2.0.0                                  gmp/6.2.1</span><br><span class="line">alphafold/2.0.0_20210827                         go/1.17.5</span><br><span class="line">alphafold/2.0.1                                  gromacs/2019.4</span><br><span class="line">alphafold/2.1.1                                  gromacs/2020.5-plumed2</span><br><span class="line">alphafold/2.2.0                                  gromacs/2020.6</span><br><span class="line">alphafold/ParallelFold-2.0.1                     gromacs/2021.1</span><br><span class="line">amber/Amber21_openmpi                            gromacs/2021.2</span><br><span class="line">anaconda/2020.11                                 gromacs/2021.2-Parallel</span><br><span class="line"></span><br></pre></td></tr></table></figure>
+
+<h2 id="加载anaconda模块"><a href="#加载anaconda模块" class="headerlink" title="加载anaconda模块"></a>加载anaconda模块</h2><figure class="highlight shell"><table><tr><td class="code"><pre><span class="line">module load anaconda/2020.11</span><br></pre></td></tr></table></figure>
+
+<h2 id="利用加载的anaconda-创建环境"><a href="#利用加载的anaconda-创建环境" class="headerlink" title="利用加载的anaconda 创建环境"></a>利用加载的anaconda 创建环境</h2><figure class="highlight shell"><table><tr><td class="code"><pre><span class="line">conda create -n py37 python=3.7</span><br></pre></td></tr></table></figure>
+
+<h2 id="加载cuda-模块"><a href="#加载cuda-模块" class="headerlink" title="加载cuda 模块"></a>加载cuda 模块</h2><figure class="highlight plaintext"><table><tr><td class="code"><pre><span class="line">module load cuda/9.2</span><br></pre></td></tr></table></figure>
+
+<h2 id="进入新建的环境"><a href="#进入新建的环境" class="headerlink" title="进入新建的环境"></a>进入新建的环境</h2><figure class="highlight plaintext"><table><tr><td class="code"><pre><span class="line">conda activate py37</span><br></pre></td></tr></table></figure>
+
+<h2 id="安装-python-库依赖"><a href="#安装-python-库依赖" class="headerlink" title="安装 python 库依赖"></a>安装 python 库依赖</h2><figure class="highlight shell"><table><tr><td class="code"><pre><span class="line">conda install pytorch==1.2.0 torchvision==0.4.0 cudatoolkit=9.2 -c pytorch -y</span><br><span class="line">conda install scikit-learn -y</span><br><span class="line">conda install pandas</span><br></pre></td></tr></table></figure>
+
+<h2 id="调试python-脚本"><a href="#调试python-脚本" class="headerlink" title="调试python 脚本"></a>调试python 脚本</h2><figure class="highlight shell"><table><tr><td class="code"><pre><span class="line">python xxx.py</span><br></pre></td></tr></table></figure>
+
+<h2 id="编写运行脚本"><a href="#编写运行脚本" class="headerlink" title="编写运行脚本"></a>编写运行脚本</h2><figure class="highlight shell"><table><tr><td class="code"><pre><span class="line"><span class="meta">#</span><span class="language-bash">!/bin/bash</span></span><br><span class="line"></span><br><span class="line">module load anaconda/2020.11 &amp;&amp; \</span><br><span class="line">module load cuda/9.2 &amp;&amp; \</span><br><span class="line">source activate py37 &amp;&amp; \</span><br><span class="line">python xxx.py &gt; run.log</span><br></pre></td></tr></table></figure>
+
+<h2 id="提交到计算节点"><a href="#提交到计算节点" class="headerlink" title="提交到计算节点"></a>提交到计算节点</h2><figure class="highlight shell"><table><tr><td class="code"><pre><span class="line">rm -rf slurm-*.out &amp;&amp; \</span><br><span class="line">sbatch --gpus=1 ./submmitNormal.sh</span><br></pre></td></tr></table></figure>
+
+<h2 id="查看任务运行情况"><a href="#查看任务运行情况" class="headerlink" title="查看任务运行情况"></a>查看任务运行情况</h2><figure class="highlight shell"><table><tr><td class="code"><pre><span class="line">parajobs</span><br><span class="line">JOBID PARTITION     NAME     USER     ST    TIME       NODES NODELIST(REASON)</span><br><span class="line">176118 gpu          submmitN  scv4458  R    1:42:56      1    g0006</span><br><span class="line">176118 作业GPU利用率为:</span><br><span class="line">index, utilization.gpu [%], utilization.memory [%], memory.total [MiB], memory.free [MiB],memory.used </span><br><span class="line">  7,      13 %,               2 %,                        32510 MiB,     32128 MiB,         382 MiB</span><br></pre></td></tr></table></figure>
+
+<h2 id="查看运行日志"><a href="#查看运行日志" class="headerlink" title="查看运行日志"></a>查看运行日志</h2><figure class="highlight shell"><table><tr><td class="code"><pre><span class="line">tail -100f slurm-xxx.out</span><br></pre></td></tr></table></figure>
+
+
+
+<h2 id="取消任务"><a href="#取消任务" class="headerlink" title="取消任务"></a>取消任务</h2><figure class="highlight shell"><table><tr><td class="code"><pre><span class="line">scancel [jobid]</span><br></pre></td></tr></table></figure>
+
+]]></content>
+      <categories>
+        <category>python</category>
+        <category>shell</category>
+      </categories>
+      <tags>
+        <tag>心得</tag>
+        <tag>超算使用教程</tag>
+      </tags>
+  </entry>
 </search>
