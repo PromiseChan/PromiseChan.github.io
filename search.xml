@@ -12,6 +12,8 @@
 
 3/root/下载/java 分析/《IntelliJ IDEA快捷键大全@www.java1234.com.pdf》
 </code></pre>
+<h3 id="远程debug"><a href="#远程debug" class="headerlink" title="远程debug"></a>远程debug</h3><figure class="highlight java"><table><tr><td class="code"><pre><span class="line">## jvm 参数中加入以下命令</span><br><span class="line">-Xdebug</span><br><span class="line">-Xrunjdwp:transport=dt_socket,address=<span class="number">5005</span>,server=y,suspend=n</span><br></pre></td></tr></table></figure>
+
 <h3 id="jstack-x2F-javacore-导出"><a href="#jstack-x2F-javacore-导出" class="headerlink" title="jstack&#x2F;javacore 导出"></a>jstack&#x2F;javacore 导出</h3><p>供程序卡死时分析使用</p>
 <figure class="highlight shell"><table><tr><td class="code"><pre><span class="line">jstack &lt;pid&gt; </span><br><span class="line">or</span><br><span class="line">kill -3 pid</span><br></pre></td></tr></table></figure>
 
