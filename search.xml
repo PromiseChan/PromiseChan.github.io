@@ -709,4 +709,61 @@ stacking: bert + 传统特征</p>
         <tag>MAT</tag>
       </tags>
   </entry>
+  <entry>
+    <title>mysql-learning</title>
+    <url>/2022/05/19/mysql-learning/</url>
+    <content><![CDATA[<p>mysql 专栏</p>
+<span id="more"></span>
+
+<h2 id="mysql-cpu-gt-x3D-100-排查"><a href="#mysql-cpu-gt-x3D-100-排查" class="headerlink" title="mysql cpu &gt;&#x3D;100% 排查"></a>mysql cpu &gt;&#x3D;100% 排查</h2><h3 id="查询正在占用mysql的-sql语句"><a href="#查询正在占用mysql的-sql语句" class="headerlink" title="查询正在占用mysql的 sql语句"></a>查询正在占用mysql的 sql语句</h3><figure class="highlight sql"><table><tr><td class="code"><pre><span class="line"># mysql数据集 root权限的用户</span><br><span class="line"><span class="keyword">show</span> <span class="keyword">full</span> processlist</span><br></pre></td></tr></table></figure>
+
+<table>
+<thead>
+<tr>
+<th>Id</th>
+<th>User</th>
+<th>Host</th>
+<th>db</th>
+<th>Command</th>
+<th>Time</th>
+<th>State</th>
+<th>Info</th>
+</tr>
+</thead>
+<tbody><tr>
+<td>363</td>
+<td>root</td>
+<td>39.170.43.242:3721</td>
+<td>gwdb</td>
+<td>Sleep</td>
+<td>29</td>
+<td></td>
+<td></td>
+</tr>
+<tr>
+<td>364</td>
+<td>root</td>
+<td>39.170.43.242:3722</td>
+<td>gwdb</td>
+<td>Query</td>
+<td>0</td>
+<td>init</td>
+<td>&#x2F;* ApplicationName&#x3D;DBeaver Enterprise 21.0.0 - SQLEditor &lt;Script.sql&gt; *&#x2F; show full processlist</td>
+</tr>
+</tbody></table>
+<p>其中 state 是run 的，表示正在抢占mysql 资源</p>
+<p>time 表示占用的时间</p>
+<h3 id="优化1-：索引"><a href="#优化1-：索引" class="headerlink" title="优化1 ：索引"></a>优化1 ：索引</h3><p>根据查询到的sql，统计表中记录数量大小</p>
+<p>如果超过十万级，可以根据 where 字段添加索引</p>
+<p>经过验证，三层嵌套的sql，在加上索引后，速度提高了将近2倍</p>
+<h3 id="优化2：sql"><a href="#优化2：sql" class="headerlink" title="优化2：sql"></a>优化2：sql</h3><p>如果已添加索引，则需要分析sql，将 sql拆分，一段一段执行，探究哪一段执行较为缓慢</p>
+<p>这一段 一般是用了mysql的内置函数，例如 data,str 等</p>
+<p>需要替换为 用后端语言计算好后的sql，避免mysql 执行过慢</p>
+]]></content>
+      <tags>
+        <tag>分析</tag>
+        <tag>心得</tag>
+        <tag>mysql</tag>
+      </tags>
+  </entry>
 </search>
