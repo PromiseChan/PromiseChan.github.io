@@ -769,7 +769,9 @@ stacking: bert + 传统特征</p>
   <entry>
     <title>模型压缩专题</title>
     <url>/2022/06/24/module-compression/</url>
-    <content><![CDATA[<h2 id="模型压缩方法"><a href="#模型压缩方法" class="headerlink" title="模型压缩方法"></a>模型压缩方法</h2><ul>
+    <content><![CDATA[<h2 id="模型压缩方法"><a href="#模型压缩方法" class="headerlink" title="模型压缩方法"></a>模型压缩方法</h2><span id="more"></span>
+
+<ul>
 <li>知识蒸馏 Knowledge Distillation</li>
 <li>网络剪枝 Network Pruning</li>
 <li>CNN架构设计 Architecture Design</li>

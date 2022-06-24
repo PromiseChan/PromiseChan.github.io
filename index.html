@@ -215,7 +215,7 @@
               <span class="post-meta-item-text">发表于</span>
               
 
-              <time title="创建时间：2022-06-24 20:18:50 / 修改时间：20:52:59" itemprop="dateCreated datePublished" datetime="2022-06-24T20:18:50+08:00">2022-06-24</time>
+              <time title="创建时间：2022-06-24 20:18:50 / 修改时间：20:54:47" itemprop="dateCreated datePublished" datetime="2022-06-24T20:18:50+08:00">2022-06-24</time>
             </span>
 
           
@@ -229,121 +229,15 @@
     <div class="post-body" itemprop="articleBody">
 
       
-          <h2 id="模型压缩方法"><a href="#模型压缩方法" class="headerlink" title="模型压缩方法"></a>模型压缩方法</h2><ul>
-<li>知识蒸馏 Knowledge Distillation</li>
-<li>网络剪枝 Network Pruning</li>
-<li>CNN架构设计 Architecture Design</li>
-<li>参数量化 Weight Quantization</li>
-</ul>
-<h3 id="知识蒸馏"><a href="#知识蒸馏" class="headerlink" title="知识蒸馏"></a>知识蒸馏</h3><h3 id="网络剪枝"><a href="#网络剪枝" class="headerlink" title="网络剪枝"></a>网络剪枝</h3><p><img src="https://i.imgur.com/Iwp90Wp.png"></p>
-<p>简单来说就是让一个已经学完的模型中的神经元进行删减，让整个网路的更瘦。</p>
-<h4 id="Weight-amp-Neuron-Pruning"><a href="#Weight-amp-Neuron-Pruning" class="headerlink" title="Weight &amp; Neuron Pruning"></a>Weight &amp; Neuron Pruning</h4><p>weight和neuron pruning差別在于</p>
-<p>prune掉一個neuron就等于是把一個matrix的整个column全部砍掉。但如此一來速度就會比較快。因为neuron pruning后matrix整体变小，</p>
-<p>但weight pruning大小不变，只是有很多空洞</p>
-<h4 id="What-to-Prune"><a href="#What-to-Prune" class="headerlink" title="What to Prune?"></a>What to Prune?</h4><ul>
-<li>既然要Neuron Pruning，那就必须先要衡量Neuron的重要性。衡量完所有的Neuron后，就可以把比较不重要的Neuron刪減掉。</li>
-<li>在这里我们介绍一个很简单可以衡量Neuron重要性的方法 - 就是看 batchnorm layer的Γ因子来决定neuron的重要性。 (by paper - Network Slimming)</li>
-<li><img src="https://i.imgur.com/JVpCm2r.png"></li>
-</ul>
-<p>详细 <a target="_blank" rel="noopener" href="https://arxiv.org/abs/1708.06519">Netowrk Slimming</a></p>
-<h4 id="要怎么操作"><a href="#要怎么操作" class="headerlink" title="要怎么操作?"></a>要怎么操作?</h4><ul>
-<li>为了避免复杂的操作，我们会将StudentNet(width_mult&#x3D;α)的neuron经过筛选后移植到StudentNet(width_mult&#x3D;β)。(α &gt; β)</li>
-<li>筛选的方法也很简单，只需要抓出每一個block的 batchnorm 的γ即可。</li>
-</ul>
-<h4 id="一些操作细节"><a href="#一些操作细节" class="headerlink" title="一些操作细节"></a>一些操作细节</h4><ul>
-<li>假设model中间两层是这样的:</li>
-</ul>
-<table>
-<thead>
-<tr>
-<th>Layer</th>
-<th>Output # of Channels</th>
-</tr>
-</thead>
-<tbody><tr>
-<td>Input</td>
-<td>in_chs</td>
-</tr>
-<tr>
-<td>Depthwise(in_chs)</td>
-<td>in_chs</td>
-</tr>
-<tr>
-<td>BatchNorm(in_chs)</td>
-<td>in_chs</td>
-</tr>
-<tr>
-<td>Pointwise(in_chs, <strong>mid_chs</strong>)</td>
-<td><strong>mid_chs</strong></td>
-</tr>
-<tr>
-<td><strong>Depthwise(mid_chs)</strong></td>
-<td><strong>mid_chs</strong></td>
-</tr>
-<tr>
-<td><strong>BatchNorm(mid_chs)</strong></td>
-<td><strong>mid_chs</strong></td>
-</tr>
-<tr>
-<td>Pointwise(<strong>mid_chs</strong>, out_chs)</td>
-<td>out_chs</td>
-</tr>
-</tbody></table>
-<p>则你会发现利用第二个BatchNorm来做筛选的时候，跟他的Neuron有直接关系的应该是该层的Depthwise（bn上面）&amp;Pointwise（bn下面）以及上层的Pointwise。<br>因此再做neuron筛选时要记得将这四个(包括自己, bn)也要同时prune掉。</p>
-<ul>
-<li>在Design Architecure內，model的一個block，名称所对应的Weight：</li>
-</ul>
-<table>
-<thead>
-<tr>
-<th>#</th>
-<th>name</th>
-<th>meaning</th>
-<th>code</th>
-<th>weight shape</th>
-</tr>
-</thead>
-<tbody><tr>
-<td>0</td>
-<td>cnn.{i}.0</td>
-<td>Depthwise Convolution Layer</td>
-<td>nn.Conv2d(x, x, 3, 1, 1, group&#x3D;x)</td>
-<td>(x, 1, 3, 3)</td>
-</tr>
-<tr>
-<td>1</td>
-<td>cnn.{i}.1</td>
-<td>Batch Normalization</td>
-<td>nn.BatchNorm2d(x)</td>
-<td>(x)</td>
-</tr>
-<tr>
-<td>2</td>
-<td></td>
-<td>ReLU6</td>
-<td>nn.ReLU6</td>
-<td></td>
-</tr>
-<tr>
-<td>3</td>
-<td>cnn.{i}.3</td>
-<td>Pointwise Convolution Layer</td>
-<td>nn.Conv2d(x, y, 1),</td>
-<td>(y, x, 1, 1)</td>
-</tr>
-<tr>
-<td>4</td>
-<td></td>
-<td>MaxPooling</td>
-<td>nn.MaxPool2d(2, 2, 0)</td>
-<td></td>
-</tr>
-</tbody></table>
-<h4 id="code："><a href="#code：" class="headerlink" title="code："></a>code：</h4><figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br><span class="line">47</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">def</span> <span class="title function_">network_slimming</span>(<span class="params">old_model, new_model</span>):</span><br><span class="line">    params = old_model.state_dict()</span><br><span class="line">    new_params = new_model.state_dict()</span><br><span class="line">    </span><br><span class="line">    <span class="comment"># selected_idx: 每一层所选择的neuron index</span></span><br><span class="line">    selected_idx = []</span><br><span class="line">    <span class="comment"># 我们共有7层CNN，因此逐一抓取选择的neuron index 们。</span></span><br><span class="line">    <span class="keyword">for</span> i <span class="keyword">in</span> <span class="built_in">range</span>(<span class="number">8</span>):</span><br><span class="line">        <span class="comment"># 根据上表，我们要抓的 γ 系数 在cnn.&#123;i&#125;.1.weight內。</span></span><br><span class="line">        importance = params[<span class="string">f&#x27;cnn.<span class="subst">&#123;i&#125;</span>.1.weight&#x27;</span>]</span><br><span class="line">        <span class="comment"># 抓取总共要筛选几个neuron。</span></span><br><span class="line">        old_dim = <span class="built_in">len</span>(importance)</span><br><span class="line">        new_dim = <span class="built_in">len</span>(new_params[<span class="string">f&#x27;cnn.<span class="subst">&#123;i&#125;</span>.1.weight&#x27;</span>])</span><br><span class="line">        <span class="comment"># 以Ranking做Index排序，较大的会排在前面(descending=True)。</span></span><br><span class="line">        ranking = torch.argsort(importance, descending=<span class="literal">True</span>)</span><br><span class="line">        <span class="comment"># 把筛选結果放入selected_idx中。</span></span><br><span class="line">        selected_idx.append(ranking[:new_dim])</span><br><span class="line"></span><br><span class="line">    now_processed = <span class="number">1</span></span><br><span class="line">    <span class="keyword">for</span> (name, p1), (name2, p2) <span class="keyword">in</span> <span class="built_in">zip</span>(params.items(), new_params.items()):</span><br><span class="line">        <span class="comment"># 如果是cnn层，则直接移植(copy)参数。进入else</span></span><br><span class="line">        <span class="comment"># 如果是FC层(full connection)，或者该参数只有一个数字(例如batchnorm的tracenum等等资讯)，那么就直接复制。</span></span><br><span class="line">        <span class="keyword">if</span> name.startswith(<span class="string">&#x27;cnn&#x27;</span>) <span class="keyword">and</span> p1.size() != torch.Size([]) <span class="keyword">and</span> now_processed != <span class="built_in">len</span>(selected_idx):</span><br><span class="line">            <span class="comment"># 当处理到Pointwise的weight時，让now_processed+1，表示该层的移植已经完成。</span></span><br><span class="line">            <span class="keyword">if</span> name.startswith(<span class="string">f&#x27;cnn.<span class="subst">&#123;now_processed&#125;</span>.3&#x27;</span>):</span><br><span class="line">                now_processed += <span class="number">1</span></span><br><span class="line"></span><br><span class="line">            <span class="comment"># 如果是pointwise，weight会被上一层的pruning和下一层的pruning所影响，因此需要特判。</span></span><br><span class="line">            <span class="keyword">if</span> name.endswith(<span class="string">&#x27;3.weight&#x27;</span>):</span><br><span class="line">                <span class="comment"># 如果是最后一层cnn，則输出的neuron不需要prune掉。</span></span><br><span class="line">                <span class="keyword">if</span> <span class="built_in">len</span>(selected_idx) == now_processed:</span><br><span class="line">                    new_params[name] = p1[:,selected_idx[now_processed-<span class="number">1</span>]]</span><br><span class="line">                <span class="comment"># 反之，就依照上层和下层所选择的index進行移植。</span></span><br><span class="line">                <span class="comment"># 这里需要注意的是 Conv2d(x,y,1)的weight shape是(y,x,1,1)，顺序是反的。</span></span><br><span class="line">                <span class="keyword">else</span>:</span><br><span class="line">                    new_params[name] = p1[selected_idx[now_processed]][:,selected_idx[now_processed-<span class="number">1</span>]]</span><br><span class="line">            <span class="keyword">else</span>:</span><br><span class="line">               <span class="comment"># 如果不是pointwise层，该层的weight 按 选择的神经元进行剪枝</span></span><br><span class="line">                new_params[name] = p1[selected_idx[now_processed]]</span><br><span class="line">        <span class="keyword">else</span>:</span><br><span class="line">            <span class="comment"># 如果是cnn层，则直接移植(copy)参数 </span></span><br><span class="line">            <span class="comment"># 如果是FC层(full connection)，或者该参数只有一个数字(例如batchnorm的tracenum等等资讯)，那么就直接复制。</span></span><br><span class="line">            new_params[name] = p1</span><br><span class="line"></span><br><span class="line">    <span class="comment"># 让新 model load进来，被我们筛选过的parameters，并回传new_model。        </span></span><br><span class="line">    new_model.load_state_dict(new_params)</span><br><span class="line">    <span class="keyword">return</span> new_model</span><br></pre></td></tr></table></figure>
-
-
-
-
+          <h2 id="模型压缩方法"><a href="#模型压缩方法" class="headerlink" title="模型压缩方法"></a>模型压缩方法</h2>
+          <!--noindex-->
+            <div class="post-button">
+              <a class="btn" href="/2022/06/24/module-compression/#more" rel="contents">
+                阅读全文 &raquo;
+              </a>
+            </div>
+          <!--/noindex-->
+        
       
     </div>
 
