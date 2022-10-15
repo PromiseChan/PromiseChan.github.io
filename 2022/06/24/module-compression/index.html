@@ -1,0 +1,746 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+  <meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=2">
+<meta name="theme-color" content="#222">
+<meta name="generator" content="Hexo 6.0.0">
+  <link rel="apple-touch-icon" sizes="180x180" href="/images/apple-touch-icon-next.png">
+  <link rel="icon" type="image/png" sizes="32x32" href="/images/favicon-32x32-next.png">
+  <link rel="icon" type="image/png" sizes="16x16" href="/images/favicon-16x16-next.png">
+  <link rel="mask-icon" href="/images/logo.svg" color="#222">
+
+<link rel="stylesheet" href="/css/main.css">
+
+
+<link rel="stylesheet" href="/lib/font-awesome/css/font-awesome.min.css">
+
+<script id="hexo-configurations">
+    var NexT = window.NexT || {};
+    var CONFIG = {"hostname":"example.com","root":"/","scheme":"Mist","version":"7.8.0","exturl":false,"sidebar":{"position":"left","display":"always","padding":18,"offset":12,"onmobile":false},"copycode":{"enable":false,"show_result":false,"style":"mac"},"back2top":{"enable":true,"sidebar":false,"scrollpercent":false},"bookmark":{"enable":false,"color":"#222","save":"auto"},"fancybox":false,"mediumzoom":false,"lazyload":false,"pangu":false,"comments":{"style":"tabs","active":null,"storage":true,"lazyload":false,"nav":null},"algolia":{"hits":{"per_page":10},"labels":{"input_placeholder":"Search for Posts","hits_empty":"We didn't find any results for the search: ${query}","hits_stats":"${hits} results found in ${time} ms"}},"localsearch":{"enable":true,"trigger":"auto","top_n_per_article":1,"unescape":false,"preload":false},"motion":{"enable":true,"async":false,"transition":{"post_block":"fadeIn","post_header":"slideDownIn","post_body":"slideDownIn","coll_header":"slideLeftIn","sidebar":"slideUpIn"}},"path":"search.xml"};
+  </script>
+
+  <meta name="description" content="模型压缩方法">
+<meta property="og:type" content="article">
+<meta property="og:title" content="模型压缩专题">
+<meta property="og:url" content="http://example.com/2022/06/24/module-compression/index.html">
+<meta property="og:site_name" content="PromiseChanの博客">
+<meta property="og:description" content="模型压缩方法">
+<meta property="og:locale" content="zh_CN">
+<meta property="og:image" content="https://i.imgur.com/Iwp90Wp.png">
+<meta property="og:image" content="https://i.imgur.com/JVpCm2r.png">
+<meta property="og:image" content="https://pic3.zhimg.com/80/v2-6bda18bee53b68c4cf54ca0c7a14289e_720w.jpg">
+<meta property="og:image" content="https://www.zhihu.com/equation?tex=1%5Ctimes1">
+<meta property="og:image" content="https://www.zhihu.com/equation?tex=M%5Ctimes+N">
+<meta property="og:image" content="https://www.zhihu.com/equation?tex=+M%5Ctimes+N+%5Ctimes+D_W+%5Ctimes+D_H+%5Ctag5">
+<meta property="og:image" content="https://pic4.zhimg.com/80/v2-b6820a655633454e8e736d42ea947ccf_720w.jpg">
+<meta property="og:image" content="https://www.zhihu.com/equation?tex=D_K+%5Ctimes+D_K+%5Ctimes+M+++M%5Ctimes+N">
+<meta property="og:image" content="https://www.zhihu.com/equation?tex=+%5Cfrac%7BD_K+%5Ctimes+D_K+%5Ctimes+M+++M%5Ctimes+N%7D%7BD_K+%5Ctimes+D_K+%5Ctimes+M+%5Ctimes+N%7D+=+%5Cfrac%7B1%7D%7BN%7D+++%5Cfrac%7B1%7D%7BD_K%5E2%7D+%5Ctag6">
+<meta property="og:image" content="https://pic3.zhimg.com/80/v2-4d1f28fc3bf1740bdf8ef329e0190892_720w.jpg">
+<meta property="og:image" content="https://pic4.zhimg.com/80/v2-a35cdf3973e076467108de12fd24b287_720w.jpg">
+<meta property="og:image" content="https://www.zhihu.com/equation?tex=t">
+<meta property="og:image" content="https://www.zhihu.com/equation?tex=t">
+<meta property="og:image" content="https://www.zhihu.com/equation?tex=t">
+<meta property="og:image" content="https://www.zhihu.com/equation?tex=5-10">
+<meta property="og:image" content="https://www.zhihu.com/equation?tex=t=6">
+<meta property="og:image" content="https://www.zhihu.com/equation?tex=t">
+<meta property="og:image" content="https://pic4.zhimg.com/80/v2-648ca4e9e7b575bc5d288a64772dc79f_720w.jpg">
+<meta property="og:image" content="https://www.zhihu.com/equation?tex=g">
+<meta property="og:image" content="https://www.zhihu.com/equation?tex=g%5Ctimes+n">
+<meta property="og:image" content="https://www.zhihu.com/equation?tex=(g,n)">
+<meta property="og:image" content="https://www.zhihu.com/equation?tex=(n,g)">
+<meta property="og:image" content="https://pic3.zhimg.com/80/v2-f8ddc33fb1f578bf7f51a4b6e5407426_720w.jpg">
+<meta property="og:image" content="https://pic1.zhimg.com/80/v2-a8d5297a16f7bcc40a31d427cf062e58_720w.jpg">
+<meta property="og:image" content="https://www.zhihu.com/equation?tex=c_%7B1%7D">
+<meta property="og:image" content="https://www.zhihu.com/equation?tex=c_%7B2%7D">
+<meta property="og:image" content="https://www.zhihu.com/equation?tex=h%5Ctimes+w">
+<meta property="og:image" content="https://www.zhihu.com/equation?tex=B=hwc_1c_2">
+<meta property="og:image" content="https://www.zhihu.com/equation?tex=hw(c_1+c_2)+c_1c_2">
+<meta property="og:image" content="https://www.zhihu.com/equation?tex=B">
+<meta property="og:image" content="https://www.zhihu.com/equation?tex=c_2=%5Cfrac%7BB%7D%7Bhwc_1%7D">
+<meta property="og:image" content="https://www.zhihu.com/equation?tex=%5C%5CMAC+%5Cgeq+2%5Csqrt%7BhwB%7D+%5Cfrac%7BB%7D%7Bhw%7D">
+<meta property="og:image" content="https://www.zhihu.com/equation?tex=c_1=c_2">
+<meta property="og:image" content="https://www.zhihu.com/equation?tex=B=hwc_1c_2/g">
+<meta property="og:image" content="https://www.zhihu.com/equation?tex=g">
+<meta property="og:image" content="https://www.zhihu.com/equation?tex=hw(c_1+c_2)+c_1c_2/g">
+<meta property="og:image" content="https://www.zhihu.com/equation?tex=c_1%5Ctimes+h+%5Ctimes+w">
+<meta property="og:image" content="https://www.zhihu.com/equation?tex=B">
+<meta property="og:image" content="https://www.zhihu.com/equation?tex=+%5C%5CMAC+=+hwc_1+++Bg/c_1+++B/hw">
+<meta property="og:image" content="https://www.zhihu.com/equation?tex=g">
+<meta property="og:image" content="https://www.zhihu.com/equation?tex=g">
+<meta property="og:image" content="https://pic2.zhimg.com/80/v2-83d494ec03595ac2af9c8c933ee7804d_720w.jpg">
+<meta property="og:image" content="https://www.zhihu.com/equation?tex=c%27">
+<meta property="og:image" content="https://www.zhihu.com/equation?tex=c-c%27">
+<meta property="og:image" content="https://www.zhihu.com/equation?tex=c%27=c/2">
+<meta property="og:image" content="https://www.zhihu.com/equation?tex=3%5Ctimes3">
+<meta property="og:image" content="https://www.zhihu.com/equation?tex=1%5Ctimes1">
+<meta property="og:image" content="https://www.zhihu.com/equation?tex=3%5Ctimes3">
+<meta property="og:image" content="https://www.zhihu.com/equation?tex=3%5Ctimes3">
+<meta property="og:image" content="https://www.zhihu.com/equation?tex=3%5Ctimes3%5Ctimes+M+%5Ctimes+N">
+<meta property="og:image" content="https://www.zhihu.com/equation?tex=M">
+<meta property="og:image" content="https://www.zhihu.com/equation?tex=N">
+<meta property="og:image" content="https://www.zhihu.com/equation?tex=M">
+<meta property="og:image" content="https://www.zhihu.com/equation?tex=N">
+<meta property="og:image" content="https://www.zhihu.com/equation?tex=1%5Ctimes1">
+<meta property="og:image" content="https://www.zhihu.com/equation?tex=1%5Ctimes1">
+<meta property="og:image" content="https://www.zhihu.com/equation?tex=3%5Ctimes3">
+<meta property="og:image" content="https://www.zhihu.com/equation?tex=3%5Ctimes3">
+<meta property="og:image" content="https://www.zhihu.com/equation?tex=1%5Ctimes1">
+<meta property="og:image" content="https://www.zhihu.com/equation?tex=s_%7B1x1%7D">
+<meta property="og:image" content="https://www.zhihu.com/equation?tex=1%5Ctimes1">
+<meta property="og:image" content="https://www.zhihu.com/equation?tex=3%5Ctimes3">
+<meta property="og:image" content="https://www.zhihu.com/equation?tex=e_%7B1x1%7D">
+<meta property="og:image" content="https://www.zhihu.com/equation?tex=e_%7B3x3%7D">
+<meta property="og:image" content="https://www.zhihu.com/equation?tex=s_%7B1x1%7D+%3C+e_%7B1x1%7D+++e_%7B3x3%7D">
+<meta property="og:image" content="https://www.zhihu.com/equation?tex=3%5Ctimes3">
+<meta property="og:image" content="https://www.zhihu.com/equation?tex=s_%7B1x1%7D+=+%5Cfrac%7Be_%7B1x1%7D%7D%7B4%7D+=+%5Cfrac%7Be_%7B3x3%7D%7D%7B4%7D">
+<meta property="og:image" content="https://www.zhihu.com/equation?tex=s_%7B1x1%7D=3">
+<meta property="og:image" content="https://www.zhihu.com/equation?tex=e_%7B1x1%7D+=+e_%7B3x3%7D+=+4">
+<meta property="og:image" content="https://pic3.zhimg.com/80/v2-5fde12f060519e493cb059484514f88a_720w.jpg">
+<meta property="og:image" content="https://www.zhihu.com/equation?tex=e_%7B1x1%7D+=+e_%7B3x3%7D">
+<meta property="og:image" content="https://pic1.zhimg.com/80/v2-921ca51e1265508f3bf8a55261a1b878_720w.jpg">
+<meta property="og:image" content="https://pic3.zhimg.com/80/v2-5f8ff8cb94babde05e69365336e77a62_720w.jpg">
+<meta property="article:published_time" content="2022-06-24T12:18:50.000Z">
+<meta property="article:modified_time" content="2022-10-15T16:59:30.306Z">
+<meta property="article:author" content="Promise Chan">
+<meta property="article:tag" content="模型压缩">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:image" content="https://i.imgur.com/Iwp90Wp.png">
+
+<link rel="canonical" href="http://example.com/2022/06/24/module-compression/">
+
+
+<script id="page-configurations">
+  // https://hexo.io/docs/variables.html
+  CONFIG.page = {
+    sidebar: "",
+    isHome : false,
+    isPost : true,
+    lang   : 'zh-CN'
+  };
+</script>
+
+  <title>模型压缩专题 | PromiseChanの博客</title>
+  
+
+
+
+
+
+
+  <noscript>
+  <style>
+  .use-motion .brand,
+  .use-motion .menu-item,
+  .sidebar-inner,
+  .use-motion .post-block,
+  .use-motion .pagination,
+  .use-motion .comments,
+  .use-motion .post-header,
+  .use-motion .post-body,
+  .use-motion .collection-header { opacity: initial; }
+
+  .use-motion .site-title,
+  .use-motion .site-subtitle {
+    opacity: initial;
+    top: initial;
+  }
+
+  .use-motion .logo-line-before i { left: initial; }
+  .use-motion .logo-line-after i { right: initial; }
+  </style>
+</noscript>
+
+<!-- hexo injector head_end start -->
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/katex@0.12.0/dist/katex.min.css">
+
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/hexo-math@4.0.0/dist/style.css">
+<!-- hexo injector head_end end --></head>
+
+<body itemscope itemtype="http://schema.org/WebPage">
+  <div class="container use-motion">
+    <div class="headband"></div>
+
+    <header class="header" itemscope itemtype="http://schema.org/WPHeader">
+      <div class="header-inner"><div class="site-brand-container">
+  <div class="site-nav-toggle">
+    <div class="toggle" aria-label="切换导航栏">
+      <span class="toggle-line toggle-line-first"></span>
+      <span class="toggle-line toggle-line-middle"></span>
+      <span class="toggle-line toggle-line-last"></span>
+    </div>
+  </div>
+
+  <div class="site-meta">
+
+    <a href="/" class="brand" rel="start">
+      <span class="logo-line-before"><i></i></span>
+      <h1 class="site-title">PromiseChanの博客</h1>
+      <span class="logo-line-after"><i></i></span>
+    </a>
+  </div>
+
+  <div class="site-nav-right">
+    <div class="toggle popup-trigger">
+        <i class="fa fa-search fa-fw fa-lg"></i>
+    </div>
+  </div>
+</div>
+
+
+
+
+<nav class="site-nav">
+  <ul id="menu" class="menu">
+        <li class="menu-item menu-item-home">
+
+    <a href="/" rel="section"><i class="fa fa-fw fa-fa fa-home"></i>首页</a>
+
+  </li>
+        <li class="menu-item menu-item-archives">
+
+    <a href="/archives/" rel="section"><i class="fa fa-fw fa-fa fa-archive"></i>归档</a>
+
+  </li>
+        <li class="menu-item menu-item-tags">
+
+    <a href="/tags/" rel="section"><i class="fa fa-fw fa-fa fa-tags"></i>标签</a>
+
+  </li>
+        <li class="menu-item menu-item-categories">
+
+    <a href="/categories/" rel="section"><i class="fa fa-fw fa-fa fa-th"></i>分类</a>
+
+  </li>
+      <li class="menu-item menu-item-search">
+        <a role="button" class="popup-trigger"><i class="fa fa-search fa-fw"></i>搜索
+        </a>
+      </li>
+  </ul>
+</nav>
+
+
+
+  <div class="search-pop-overlay">
+    <div class="popup search-popup">
+        <div class="search-header">
+  <span class="search-icon">
+    <i class="fa fa-search"></i>
+  </span>
+  <div class="search-input-container">
+    <input autocomplete="off" autocapitalize="off"
+           placeholder="搜索..." spellcheck="false"
+           type="search" class="search-input">
+  </div>
+  <span class="popup-btn-close">
+    <i class="fa fa-times-circle"></i>
+  </span>
+</div>
+<div id="search-result">
+  <div id="no-result">
+    <i class="fa fa-spinner fa-pulse fa-5x fa-fw"></i>
+  </div>
+</div>
+
+    </div>
+  </div>
+
+</div>
+    </header>
+
+    
+  <div class="back-to-top">
+    <i class="fa fa-arrow-up"></i>
+    <span>0%</span>
+  </div>
+
+
+    <main class="main">
+      <div class="main-inner">
+        <div class="content-wrap">
+          
+
+          <div class="content post posts-expand">
+            
+
+    
+  
+  
+  <article itemscope itemtype="http://schema.org/Article" class="post-block" lang="zh-CN">
+    <link itemprop="mainEntityOfPage" href="http://example.com/2022/06/24/module-compression/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="image" content="/images/header.jpg">
+      <meta itemprop="name" content="Promise Chan">
+      <meta itemprop="description" content="Coding & upgrading">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="PromiseChanの博客">
+    </span>
+      <header class="post-header">
+        <h1 class="post-title" itemprop="name headline">
+          模型压缩专题
+        </h1>
+
+        <div class="post-meta">
+            <span class="post-meta-item">
+              <span class="post-meta-item-icon">
+                <i class="fa fa-calendar-o"></i>
+              </span>
+              <span class="post-meta-item-text">发表于</span>
+
+              <time title="创建时间：2022-06-24 20:18:50" itemprop="dateCreated datePublished" datetime="2022-06-24T20:18:50+08:00">2022-06-24</time>
+            </span>
+              <span class="post-meta-item">
+                <span class="post-meta-item-icon">
+                  <i class="fa fa-calendar-check-o"></i>
+                </span>
+                <span class="post-meta-item-text">更新于</span>
+                <time title="修改时间：2022-10-16 00:59:30" itemprop="dateModified" datetime="2022-10-16T00:59:30+08:00">2022-10-16</time>
+              </span>
+
+          
+
+        </div>
+      </header>
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+        <h2 id="模型压缩方法"><a href="#模型压缩方法" class="headerlink" title="模型压缩方法"></a>模型压缩方法</h2><span id="more"></span>
+
+<ul>
+<li>知识蒸馏 Knowledge Distillation</li>
+<li>网络剪枝 Network Pruning</li>
+<li>CNN架构设计 Architecture Design</li>
+<li>参数量化 Weight Quantization</li>
+</ul>
+<h3 id="知识蒸馏"><a href="#知识蒸馏" class="headerlink" title="知识蒸馏"></a>知识蒸馏</h3><h3 id="网络剪枝"><a href="#网络剪枝" class="headerlink" title="网络剪枝"></a>网络剪枝</h3><p><img src="https://i.imgur.com/Iwp90Wp.png"></p>
+<p>简单来说就是让一个已经学完的模型中的神经元进行删减，让整个网路的更瘦。</p>
+<h4 id="Weight-amp-Neuron-Pruning"><a href="#Weight-amp-Neuron-Pruning" class="headerlink" title="Weight &amp; Neuron Pruning"></a>Weight &amp; Neuron Pruning</h4><p>weight和neuron pruning差別在于</p>
+<p>prune掉一個neuron就等于是把一個matrix的整个column全部砍掉。但如此一來速度就會比較快。因为neuron pruning后matrix整体变小，</p>
+<p>但weight pruning大小不变，只是有很多空洞</p>
+<h4 id="What-to-Prune"><a href="#What-to-Prune" class="headerlink" title="What to Prune?"></a>What to Prune?</h4><ul>
+<li>既然要Neuron Pruning，那就必须先要衡量Neuron的重要性。衡量完所有的Neuron后，就可以把比较不重要的Neuron刪減掉。</li>
+<li>在这里我们介绍一个很简单可以衡量Neuron重要性的方法 - 就是看 batchnorm layer的Γ因子来决定neuron的重要性。 (by paper - Network Slimming)</li>
+<li><img src="https://i.imgur.com/JVpCm2r.png"></li>
+</ul>
+<p>详细 <a target="_blank" rel="noopener" href="https://arxiv.org/abs/1708.06519">Netowrk Slimming</a></p>
+<h4 id="要怎么操作"><a href="#要怎么操作" class="headerlink" title="要怎么操作?"></a>要怎么操作?</h4><ul>
+<li>为了避免复杂的操作，我们会将StudentNet(width_mult&#x3D;α)的neuron经过筛选后移植到StudentNet(width_mult&#x3D;β)。(α &gt; β)</li>
+<li>筛选的方法也很简单，只需要抓出每一個block的 batchnorm 的γ即可。</li>
+</ul>
+<h4 id="一些操作细节"><a href="#一些操作细节" class="headerlink" title="一些操作细节"></a>一些操作细节</h4><ul>
+<li>假设model中间两层是这样的:</li>
+</ul>
+<table>
+<thead>
+<tr>
+<th>Layer</th>
+<th>Output # of Channels</th>
+</tr>
+</thead>
+<tbody><tr>
+<td>Input</td>
+<td>in_chs</td>
+</tr>
+<tr>
+<td>Depthwise(in_chs)</td>
+<td>in_chs</td>
+</tr>
+<tr>
+<td>BatchNorm(in_chs)</td>
+<td>in_chs</td>
+</tr>
+<tr>
+<td>Pointwise(in_chs, <strong>mid_chs</strong>)</td>
+<td><strong>mid_chs</strong></td>
+</tr>
+<tr>
+<td><strong>Depthwise(mid_chs)</strong></td>
+<td><strong>mid_chs</strong></td>
+</tr>
+<tr>
+<td><strong>BatchNorm(mid_chs)</strong></td>
+<td><strong>mid_chs</strong></td>
+</tr>
+<tr>
+<td>Pointwise(<strong>mid_chs</strong>, out_chs)</td>
+<td>out_chs</td>
+</tr>
+</tbody></table>
+<p>则你会发现利用第二个BatchNorm来做筛选的时候，跟他的Neuron有直接关系的应该是该层的Depthwise（bn上面）&amp;Pointwise（bn下面）以及上层的Pointwise。<br>因此再做neuron筛选时要记得将这四个(包括自己, bn)也要同时prune掉。</p>
+<ul>
+<li>在Design Architecure內，model的一個block，名称所对应的Weight：</li>
+</ul>
+<table>
+<thead>
+<tr>
+<th>#</th>
+<th>name</th>
+<th>meaning</th>
+<th>code</th>
+<th>weight shape</th>
+</tr>
+</thead>
+<tbody><tr>
+<td>0</td>
+<td>cnn.{i}.0</td>
+<td>Depthwise Convolution Layer</td>
+<td>nn.Conv2d(x, x, 3, 1, 1, group&#x3D;x)</td>
+<td>(x, 1, 3, 3)</td>
+</tr>
+<tr>
+<td>1</td>
+<td>cnn.{i}.1</td>
+<td>Batch Normalization</td>
+<td>nn.BatchNorm2d(x)</td>
+<td>(x)</td>
+</tr>
+<tr>
+<td>2</td>
+<td></td>
+<td>ReLU6</td>
+<td>nn.ReLU6</td>
+<td></td>
+</tr>
+<tr>
+<td>3</td>
+<td>cnn.{i}.3</td>
+<td>Pointwise Convolution Layer</td>
+<td>nn.Conv2d(x, y, 1),</td>
+<td>(y, x, 1, 1)</td>
+</tr>
+<tr>
+<td>4</td>
+<td></td>
+<td>MaxPooling</td>
+<td>nn.MaxPool2d(2, 2, 0)</td>
+<td></td>
+</tr>
+</tbody></table>
+<h4 id="code："><a href="#code：" class="headerlink" title="code："></a>code：</h4><figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br><span class="line">47</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">def</span> <span class="title function_">network_slimming</span>(<span class="params">old_model, new_model</span>):</span><br><span class="line">    params = old_model.state_dict()</span><br><span class="line">    new_params = new_model.state_dict()</span><br><span class="line">    </span><br><span class="line">    <span class="comment"># selected_idx: 每一层所选择的neuron index</span></span><br><span class="line">    selected_idx = []</span><br><span class="line">    <span class="comment"># 我们共有7层CNN，因此逐一抓取选择的neuron index 们。</span></span><br><span class="line">    <span class="keyword">for</span> i <span class="keyword">in</span> <span class="built_in">range</span>(<span class="number">8</span>):</span><br><span class="line">        <span class="comment"># 根据上表，我们要抓的 γ 系数 在cnn.&#123;i&#125;.1.weight內。</span></span><br><span class="line">        importance = params[<span class="string">f&#x27;cnn.<span class="subst">&#123;i&#125;</span>.1.weight&#x27;</span>]</span><br><span class="line">        <span class="comment"># 抓取总共要筛选几个neuron。</span></span><br><span class="line">        old_dim = <span class="built_in">len</span>(importance)</span><br><span class="line">        new_dim = <span class="built_in">len</span>(new_params[<span class="string">f&#x27;cnn.<span class="subst">&#123;i&#125;</span>.1.weight&#x27;</span>])</span><br><span class="line">        <span class="comment"># 以Ranking做Index排序，较大的会排在前面(descending=True)。</span></span><br><span class="line">        ranking = torch.argsort(importance, descending=<span class="literal">True</span>)</span><br><span class="line">        <span class="comment"># 把筛选結果放入selected_idx中。</span></span><br><span class="line">        selected_idx.append(ranking[:new_dim])</span><br><span class="line"></span><br><span class="line">    now_processed = <span class="number">1</span></span><br><span class="line">    <span class="keyword">for</span> (name, p1), (name2, p2) <span class="keyword">in</span> <span class="built_in">zip</span>(params.items(), new_params.items()):</span><br><span class="line">        <span class="comment"># 如果是cnn层，则直接移植(copy)参数。进入else</span></span><br><span class="line">        <span class="comment"># 如果是FC层(full connection)，或者该参数只有一个数字(例如batchnorm的tracenum等等资讯)，那么就直接复制。</span></span><br><span class="line">        <span class="keyword">if</span> name.startswith(<span class="string">&#x27;cnn&#x27;</span>) <span class="keyword">and</span> p1.size() != torch.Size([]) <span class="keyword">and</span> now_processed != <span class="built_in">len</span>(selected_idx):</span><br><span class="line">            <span class="comment"># 当处理到Pointwise的weight時，让now_processed+1，表示该层的移植已经完成。</span></span><br><span class="line">            <span class="keyword">if</span> name.startswith(<span class="string">f&#x27;cnn.<span class="subst">&#123;now_processed&#125;</span>.3&#x27;</span>):</span><br><span class="line">                now_processed += <span class="number">1</span></span><br><span class="line"></span><br><span class="line">            <span class="comment"># 如果是pointwise，weight会被上一层的pruning和下一层的pruning所影响，因此需要特判。</span></span><br><span class="line">            <span class="keyword">if</span> name.endswith(<span class="string">&#x27;3.weight&#x27;</span>):</span><br><span class="line">                <span class="comment"># 如果是最后一层cnn，則输出的neuron不需要prune掉。</span></span><br><span class="line">                <span class="keyword">if</span> <span class="built_in">len</span>(selected_idx) == now_processed:</span><br><span class="line">                    new_params[name] = p1[:,selected_idx[now_processed-<span class="number">1</span>]]</span><br><span class="line">                <span class="comment"># 反之，就依照上层和下层所选择的index進行移植。</span></span><br><span class="line">                <span class="comment"># 这里需要注意的是 Conv2d(x,y,1)的weight shape是(y,x,1,1)，顺序是反的。</span></span><br><span class="line">                <span class="keyword">else</span>:</span><br><span class="line">                    new_params[name] = p1[selected_idx[now_processed]][:,selected_idx[now_processed-<span class="number">1</span>]]</span><br><span class="line">            <span class="keyword">else</span>:</span><br><span class="line">               <span class="comment"># 如果不是pointwise层，该层的weight 按 选择的神经元进行剪枝</span></span><br><span class="line">                new_params[name] = p1[selected_idx[now_processed]]</span><br><span class="line">        <span class="keyword">else</span>:</span><br><span class="line">            <span class="comment"># 如果是cnn层，则直接移植(copy)参数 </span></span><br><span class="line">            <span class="comment"># 如果是FC层(full connection)，或者该参数只有一个数字(例如batchnorm的tracenum等等资讯)，那么就直接复制。</span></span><br><span class="line">            new_params[name] = p1</span><br><span class="line"></span><br><span class="line">    <span class="comment"># 让新 model load进来，被我们筛选过的parameters，并回传new_model。        </span></span><br><span class="line">    new_model.load_state_dict(new_params)</span><br><span class="line">    <span class="keyword">return</span> new_model</span><br></pre></td></tr></table></figure>
+
+
+
+<h3 id="MobileNetV1-VS-MobileNetV2"><a href="#MobileNetV1-VS-MobileNetV2" class="headerlink" title="MobileNetV1 VS MobileNetV2"></a>MobileNetV1 VS MobileNetV2</h3><h4 id="MobileNetV1-Depthwise-Pointwise"><a href="#MobileNetV1-Depthwise-Pointwise" class="headerlink" title="MobileNetV1: Depthwise + Pointwise"></a>MobileNetV1: Depthwise + Pointwise</h4><ol>
+<li>Depthwise</li>
+</ol>
+<p>Depthwise卷积是指不跨通道的卷积，也就是说Feature Map的每个通道有一个独立的卷积核，并且这个卷积核作用且仅作用在这个通道之上</p>
+<p><img src="https://pic3.zhimg.com/80/v2-6bda18bee53b68c4cf54ca0c7a14289e_720w.jpg"></p>
+<ol start="2">
+<li><p>Pointwise</p>
+<p>Depthwise卷积的操作虽然非常高效，但是它仅相当于对当前的Feature Map的一个通道施加了一个过滤器，并不会合并若干个特征从而生成新的特征，而且由于在Depthwise卷积中输出Feature Map的通道数等于输入Feature Map的通道数，因此它并没有升维或者降维的功能。</p>
+<p>为了解决这些问题，v1中引入了Pointwise卷积用于特征合并以及升维或者降维。很自然的我们可以想到使用 <img src="https://www.zhihu.com/equation?tex=1%5Ctimes1" alt="[公式]"> 卷积来完成这个功能。Pointwise的参数数量为 <img src="https://www.zhihu.com/equation?tex=M%5Ctimes+N" alt="[公式]"> ，计算量为：</p>
+<p><img src="https://www.zhihu.com/equation?tex=+M%5Ctimes+N+%5Ctimes+D_W+%5Ctimes+D_H+%5Ctag5"></p>
+<p><img src="https://pic4.zhimg.com/80/v2-b6820a655633454e8e736d42ea947ccf_720w.jpg"></p>
+</li>
+</ol>
+<p>综上，合并1.2中的Depthwise卷积和1.3中的Pointwise卷积便是v1中介绍的Depthwise Separable卷积。它的一组操作（一次Depthwise卷积加一次Pointwise卷积）的参数数量为： <img src="https://www.zhihu.com/equation?tex=D_K+%5Ctimes+D_K+%5Ctimes+M+++M%5Ctimes+N" alt="[公式]"> 是普通卷积的</p>
+<p><img src="https://www.zhihu.com/equation?tex=+%5Cfrac%7BD_K+%5Ctimes+D_K+%5Ctimes+M+++M%5Ctimes+N%7D%7BD_K+%5Ctimes+D_K+%5Ctimes+M+%5Ctimes+N%7D+=+%5Cfrac%7B1%7D%7BN%7D+++%5Cfrac%7B1%7D%7BD_K%5E2%7D+%5Ctag6"></p>
+<h4 id="MobileNetV2-MobileNetV1-ResNet"><a href="#MobileNetV2-MobileNetV1-ResNet" class="headerlink" title="MobileNetV2: MobileNetV1  + ResNet"></a>MobileNetV2: MobileNetV1  + ResNet</h4><p>MobileNetV1缺点</p>
+<p>ReLU一定会带来信息损耗，而且这种损耗是没有办法恢复的，ReLU的信息损耗是当通道数非常少的时候更为明显。</p>
+<p><img src="https://pic3.zhimg.com/80/v2-4d1f28fc3bf1740bdf8ef329e0190892_720w.jpg"></p>
+<p>根据对上面提到的信息损耗问题分析，我们可以有两种解决方案：</p>
+<ol>
+<li><p>既然是ReLU导致的信息损耗，那么我们就将ReLU替换成线性激活函数；</p>
+</li>
+<li><p>如果比较多的通道数能减少信息损耗，那么我们就使用更多的通道。</p>
+</li>
+</ol>
+<p>我们当然不能把ReLU全部换成线性激活函数，不然网络将会退化为单层神经网络，一个折中方案是在输出Feature Map的通道数较少的时候也就是bottleneck部分使用线性激活函数，其它时候使用ReLU。代码片段如下：</p>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">def</span> <span class="title function_">_bottleneck</span>(<span class="params">inputs, nb_filters, t</span>):</span><br><span class="line">    x = Conv2D(filters=nb_filters * t, kernel_size=(<span class="number">1</span>,<span class="number">1</span>), padding=<span class="string">&#x27;same&#x27;</span>)(inputs)</span><br><span class="line">    x = Activation(relu6)(x)</span><br><span class="line">    x = DepthwiseConv2D(kernel_size=(<span class="number">3</span>,<span class="number">3</span>), padding=<span class="string">&#x27;same&#x27;</span>)(x)</span><br><span class="line">    x = Activation(relu6)(x)</span><br><span class="line">    x = Conv2D(filters=nb_filters, kernel_size=(<span class="number">1</span>,<span class="number">1</span>), padding=<span class="string">&#x27;same&#x27;</span>)(x)</span><br><span class="line">    <span class="comment"># do not use activation function</span></span><br><span class="line">    <span class="keyword">if</span> <span class="keyword">not</span> K.get_variable_shape(inputs)[<span class="number">3</span>] == nb_filters:</span><br><span class="line">        inputs = Conv2D(filters=nb_filters, kernel_size=(<span class="number">1</span>,<span class="number">1</span>), padding=<span class="string">&#x27;same&#x27;</span>)(inputs)</span><br><span class="line">    outputs = add([x, inputs])</span><br><span class="line">    <span class="keyword">return</span> outputs</span><br></pre></td></tr></table></figure>
+
+<p><img src="https://pic4.zhimg.com/80/v2-a35cdf3973e076467108de12fd24b287_720w.jpg"></p>
+<p>图7便是结合了残差网络和线性激活函数的MobileNet v2的一个block，最右侧是v1。</p>
+<p>反残差：Inverted Residual</p>
+<p>当激活函数使用ReLU时，我们可以通过增加通道数来减少信息的损耗，使用参数 <img src="https://www.zhihu.com/equation?tex=t" alt="[公式]"> 来控制，该层的通道数是输入Feature Map的 <img src="https://www.zhihu.com/equation?tex=t" alt="[公式]"> 倍。传统的残差块的 <img src="https://www.zhihu.com/equation?tex=t" alt="[公式]"> 一般取小于1的小数，常见的取值为0.1，而在v2中这个值一般是介于 <img src="https://www.zhihu.com/equation?tex=5-10" alt="[公式]"> 之间的数，在作者的实验中， <img src="https://www.zhihu.com/equation?tex=t=6" alt="[公式]"> 。考虑到残差网络和v2的 <img src="https://www.zhihu.com/equation?tex=t" alt="[公式]"> 的不同取值范围，他们分别形成了锥子形（两头小中间大）和沙漏形（两头大中间小)的结构，如图8所示，其中斜线Feature Map表示使用的是线性激活函数。这也就是为什么这种形式的卷积block被叫做Interved Residual block，因为他把short-cut转移到了bottleneck层。</p>
+<p><img src="https://pic4.zhimg.com/80/v2-648ca4e9e7b575bc5d288a64772dc79f_720w.jpg"></p>
+<h4 id="结论"><a href="#结论" class="headerlink" title="结论"></a>结论</h4><p>obileNet v1最主要的贡献是使用了Depthwise Separable Convolution，它又可以拆分成Depthwise卷积和Pointwise卷积。MobileNet v2主要是将残差网络和Depthwise Separable卷积进行了结合。通过分析单通道的流形特征对残差块进行了改进，包括对中间层的扩展(d)以及bottleneck层的线性激活(c)。Depthwise Separable Convolution的分离式设计直接将模型压缩了8倍左右，但是精度并没有损失非常严重，这一点还是非常震撼的。</p>
+<h3 id="ShufferNetV1-VS-ShufferNetV2"><a href="#ShufferNetV1-VS-ShufferNetV2" class="headerlink" title="ShufferNetV1    VS  ShufferNetV2"></a>ShufferNetV1    VS  ShufferNetV2</h3><h4 id="ShufferNetV1"><a href="#ShufferNetV1" class="headerlink" title="ShufferNetV1"></a>ShufferNetV1</h4><p>实际上比如ResNeXt模型中1x1卷积基本上占据了93.4%的乘加运算。那么不如也对1x1卷积采用channel sparse connection，那样计算量就可以降下来了。但是group convolution存在另外一个弊端，</p>
+<p>如图1-a所示，其中GConv是group convolution，这里分组数是3。可以看到当堆积GConv层后一个问题是不同组之间的特征图是不通信的，这就好像分了三个互不相干的路，大家各走各的，这目测会降低网络的特征提取能力。这样你也可以理解为什么Xception，MobileNet等网络采用密集的1x1卷积，因为要保证group convolution之后不同组的特征图之间的信息交流。</p>
+<p>但是达到上面那个目的，我们不一定非要采用dense pointwise convolution。</p>
+<p>如图1-b所示，你可以对group convolution之后的特征图进行“重组”，这样可以保证接下了采用的group convolution其输入来自不同的组，因此信息可以在不同组之间流转。</p>
+<p>这个操作等价于图2-c，即group convolution之后对channels进行shuffle，但并不是随机的，其实是“均匀地打乱”。在程序上实现channel shuffle是非常容易的：假定将输入层分为 <img src="https://www.zhihu.com/equation?tex=g" alt="[公式]"> 组，总通道数为 <img src="https://www.zhihu.com/equation?tex=g%5Ctimes+n" alt="[公式]"> ，首先你将通道那个维度拆分为 <img src="https://www.zhihu.com/equation?tex=(g,n)" alt="[公式]"> 两个维度，然后将这两个维度转置变成 <img src="https://www.zhihu.com/equation?tex=(n,g)" alt="[公式]"> ，最后重新reshape成一个维度。如果你不太理解这个操作，你可以试着动手去试一下，发现仅需要简单的维度操作和转置就可以实现均匀的shuffle。利用channel shuffle就可以充分发挥group convolution的优点，而避免其缺点。</p>
+<p><img src="https://pic3.zhimg.com/80/v2-f8ddc33fb1f578bf7f51a4b6e5407426_720w.jpg"></p>
+<p>ShuffleNet的基本单元</p>
+<p>如图2-a所示，这是一个包含3层的残差单元：首先是1x1卷积，然后是3x3的depthwise convolution（DWConv，主要是为了降低计算量），这里的3x3卷积是瓶颈层（bottleneck），紧接着是1x1卷积，最后是一个短路连接，将输入直接加到输出上。</p>
+<p><img src="https://pic1.zhimg.com/80/v2-a8d5297a16f7bcc40a31d427cf062e58_720w.jpg"></p>
+<h4 id="shufferNetV2"><a href="#shufferNetV2" class="headerlink" title="shufferNetV2"></a>shufferNetV2</h4><p>指导准则 ：</p>
+<p><strong>（G1）同等通道大小最小化内存访问量</strong> 对于轻量级CNN网络，常采用深度可分割卷积（depthwise separable convolutions），其中点卷积（ pointwise convolution）即1x1卷积复杂度最大。这里假定输入和输出特征的通道数分别为 <img src="https://www.zhihu.com/equation?tex=c_%7B1%7D" alt="[公式]"> 和 <img src="https://www.zhihu.com/equation?tex=c_%7B2%7D" alt="[公式]"> ，特征图的空间大小为 <img src="https://www.zhihu.com/equation?tex=h%5Ctimes+w" alt="[公式]"> ，那么1x1卷积的FLOPs为 <img src="https://www.zhihu.com/equation?tex=B=hwc_1c_2" alt="[公式]"> 。对应的MAC为 <img src="https://www.zhihu.com/equation?tex=hw(c_1+c_2)+c_1c_2" alt="[公式]"> （这里假定内存足够），根据均值不等式，固定 <img src="https://www.zhihu.com/equation?tex=B" alt="[公式]"> 时，MAC存在下限（令 <img src="https://www.zhihu.com/equation?tex=c_2=%5Cfrac%7BB%7D%7Bhwc_1%7D" alt="[公式]"> ）：</p>
+<p><img src="https://www.zhihu.com/equation?tex=%5C%5CMAC+%5Cgeq+2%5Csqrt%7BhwB%7D+%5Cfrac%7BB%7D%7Bhw%7D" alt="[公式]"></p>
+<p>仅当 <img src="https://www.zhihu.com/equation?tex=c_1=c_2" alt="[公式]"> 时，MAC取最小值，这个理论分析也通过实验得到证实，如表1所示，通道比为1:1时速度更快。</p>
+<p><strong>（G2）过量使用组卷积会增加MAC</strong> 组卷积（group convolution）是常用的设计组件，因为它可以减少复杂度却不损失模型容量。但是这里发现，分组过多会增加MAC。对于组卷积，FLOPs为 <img src="https://www.zhihu.com/equation?tex=B=hwc_1c_2/g" alt="[公式]"> （其中 <img src="https://www.zhihu.com/equation?tex=g" alt="[公式]"> 是组数），而对应的MAC为 <img src="https://www.zhihu.com/equation?tex=hw(c_1+c_2)+c_1c_2/g" alt="[公式]"> 。如果固定输入 <img src="https://www.zhihu.com/equation?tex=c_1%5Ctimes+h+%5Ctimes+w" alt="[公式]"> 以及 <img src="https://www.zhihu.com/equation?tex=B" alt="[公式]"> ，那么MAC为： <img src="https://www.zhihu.com/equation?tex=+%5C%5CMAC+=+hwc_1+++Bg/c_1+++B/hw" alt="[公式]"> 可以看到，当 <img src="https://www.zhihu.com/equation?tex=g" alt="[公式]"> 增加时，MAC会同时增加。这点也通过实验证实，所以明智之举是不要使用太大 <img src="https://www.zhihu.com/equation?tex=g" alt="[公式]"> 的组卷积。</p>
+<p><strong>（G3）网络碎片化会降低并行度</strong> 一些网络如Inception，以及Auto ML自动产生的网络NASNET-A，它们倾向于采用“多路”结构，即存在一个lock中很多不同的小卷积或者pooling，这很容易造成网络碎片化，减低模型的并行度，相应速度会慢，这也可以通过实验得到证明。</p>
+<p><strong>（G4）不能忽略元素级操作</strong> 对于元素级（element-wise operators）比如ReLU和Add，虽然它们的FLOPs较小，但是却需要较大的MAC。这里实验发现如果将ResNet中残差单元中的ReLU和shortcut移除的话，速度有20%的提升。</p>
+<p><img src="https://pic2.zhimg.com/80/v2-83d494ec03595ac2af9c8c933ee7804d_720w.jpg"></p>
+<p>在ShuffleNetv1的模块中，大量使用了1x1组卷积，这违背了<strong>G2</strong>原则，另外v1采用了类似ResNet中的瓶颈层（bottleneck layer），输入和输出通道数不同，这违背了<strong>G1</strong>原则。同时使用过多的组，也违背了<strong>G3</strong>原则。短路连接中存在大量的元素级Add运算，这违背了<strong>G4</strong>原则。</p>
+<p>为了改善v1的缺陷，v2版本引入了一种新的运算：channel split。具体来说，在开始时先将输入特征图在通道维度分成两个分支：通道数分别为 <img src="https://www.zhihu.com/equation?tex=c%27" alt="[公式]"> 和 <img src="https://www.zhihu.com/equation?tex=c-c%27" alt="[公式]"> ，实际实现时 <img src="https://www.zhihu.com/equation?tex=c%27=c/2" alt="[公式]"> 。左边分支做同等映射，右边的分支包含3个连续的卷积，并且输入和输出通道相同，这符合<strong>G1</strong>。而且两个1x1卷积不再是组卷积，这符合<strong>G2</strong>，另外两个分支相当于已经分成两组。两个分支的输出不再是Add元素，而是concat在一起，紧接着是对两个分支concat结果进行channle shuffle，以保证两个分支信息交流。其实concat和channel shuffle可以和下一个模块单元的channel split合成一个元素级运算，这符合原则<strong>G4</strong>。</p>
+<p>对于下采样模块，不再有channel split，而是每个分支都是直接copy一份输入，每个分支都有stride&#x3D;2的下采样，最后concat在一起后，特征图空间大小减半，但是通道数翻倍。</p>
+<p>ShuffleNetv2的整体结构如表2所示，基本与v1类似，其中设定每个block的channel数，如0.5x，1x，可以调整模型的复杂度。</p>
+<h3 id="SqueezeNet"><a href="#SqueezeNet" class="headerlink" title="SqueezeNet"></a>SqueezeNet</h3><p><strong>在不大幅降低模型精度的前提下，最大程度的提高运算速度</strong>。</p>
+<p>提高运算所读有两个可以调整的方向：</p>
+<ol>
+<li>减少可学习参数的数量；</li>
+<li>减少整个网络的计算量。</li>
+</ol>
+<p>这个方向带来的效果是非常明显的：</p>
+<ol>
+<li>减少模型训练和测试时候的计算量，单个step的速度更快；</li>
+<li>减小模型文件的大小，更利于模型的保存和传输；</li>
+<li>可学习参数更少，网络占用的显存更小。</li>
+</ol>
+<h4 id="SqueezeNet的压缩策略"><a href="#SqueezeNet的压缩策略" class="headerlink" title="SqueezeNet的压缩策略"></a>SqueezeNet的压缩策略</h4><p>SqueezeNet的模型压缩使用了3个策略：</p>
+<ol>
+<li><p>将 <img src="https://www.zhihu.com/equation?tex=3%5Ctimes3" alt="[公式]"> 卷积替换成 <img src="https://www.zhihu.com/equation?tex=1%5Ctimes1" alt="[公式]"> 卷积：通过这一步，一个卷积操作的参数数量减少了9倍；</p>
+</li>
+<li><p>减少 <img src="https://www.zhihu.com/equation?tex=3%5Ctimes3" alt="[公式]"> 卷积的通道数：一个 <img src="https://www.zhihu.com/equation?tex=3%5Ctimes3" alt="[公式]"> 卷积的计算量是 <img src="https://www.zhihu.com/equation?tex=3%5Ctimes3%5Ctimes+M+%5Ctimes+N" alt="[公式]"> （其中 <img src="https://www.zhihu.com/equation?tex=M" alt="[公式]"> ， <img src="https://www.zhihu.com/equation?tex=N" alt="[公式]"> 分别是输入Feature Map和输出Feature Map的通道数），作者任务这样一个计算量过于庞大，因此希望将 <img src="https://www.zhihu.com/equation?tex=M" alt="[公式]"> ， <img src="https://www.zhihu.com/equation?tex=N" alt="[公式]"> 减小以减少参数数量；</p>
+</li>
+<li><p>将降采样后置：作者认为较大的Feature Map含有更多的信息，因此将降采样往分类层移动。注意这样的操作虽然会提升网络的精度，但是它有一个非常严重的缺点：即会增加网络的计算量。</p>
+</li>
+</ol>
+<h4 id="Fire模块"><a href="#Fire模块" class="headerlink" title="Fire模块"></a>Fire模块</h4><p>SqueezeNet是由若干个Fire模块结合卷积网络中卷积层，降采样层，全连接等层组成的。一个Fire模块由Squeeze部分和Expand部分组成（注意区分和Momenta的<a target="_blank" rel="noopener" href="https://zhuanlan.zhihu.com/p/47494490">SENet</a>[4]的区别）。Squeeze部分是一组连续的 <img src="https://www.zhihu.com/equation?tex=1%5Ctimes1" alt="[公式]"> 卷积组成，Expand部分则是由一组连续的 <img src="https://www.zhihu.com/equation?tex=1%5Ctimes1" alt="[公式]"> 卷积和一组连续的 <img src="https://www.zhihu.com/equation?tex=3%5Ctimes3" alt="[公式]"> 卷积cancatnate组成，因此 <img src="https://www.zhihu.com/equation?tex=3%5Ctimes3" alt="[公式]"> 卷积需要使用same卷积，Fire模块的结构见图1。在Fire模块中，Squeeze部分 <img src="https://www.zhihu.com/equation?tex=1%5Ctimes1" alt="[公式]"> 卷积的<strong>通道</strong>数记做 <img src="https://www.zhihu.com/equation?tex=s_%7B1x1%7D" alt="[公式]"> ，Expand部分 <img src="https://www.zhihu.com/equation?tex=1%5Ctimes1" alt="[公式]"> 卷积和 <img src="https://www.zhihu.com/equation?tex=3%5Ctimes3" alt="[公式]"> 卷积的<strong>通道</strong>数分别记做 <img src="https://www.zhihu.com/equation?tex=e_%7B1x1%7D" alt="[公式]"> 和 <img src="https://www.zhihu.com/equation?tex=e_%7B3x3%7D" alt="[公式]"> （论文图画的不好，不要错误的理解成卷积的层数）。在Fire模块中，作者建议 <img src="https://www.zhihu.com/equation?tex=s_%7B1x1%7D+%3C+e_%7B1x1%7D+++e_%7B3x3%7D" alt="[公式]"> ，这么做相当于在两个 <img src="https://www.zhihu.com/equation?tex=3%5Ctimes3" alt="[公式]"> 卷积的中间加入了瓶颈层，作者的实验中的一个策略是 <img src="https://www.zhihu.com/equation?tex=s_%7B1x1%7D+=+%5Cfrac%7Be_%7B1x1%7D%7D%7B4%7D+=+%5Cfrac%7Be_%7B3x3%7D%7D%7B4%7D" alt="[公式]"> 。图1中 <img src="https://www.zhihu.com/equation?tex=s_%7B1x1%7D=3" alt="[公式]"> ， <img src="https://www.zhihu.com/equation?tex=e_%7B1x1%7D+=+e_%7B3x3%7D+=+4" alt="[公式]"> 。</p>
+<p><img src="https://pic3.zhimg.com/80/v2-5fde12f060519e493cb059484514f88a_720w.jpg"></p>
+<p>下面代码片段是Keras实现的Fire模块，注意拼接Feature Map的时候使用的是Cancatnate操作，这样不必要求 <img src="https://www.zhihu.com/equation?tex=e_%7B1x1%7D+=+e_%7B3x3%7D" alt="[公式]"> 。</p>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">def</span> <span class="title function_">fire_model</span>(<span class="params">x, s_1x1, e_1x1, e_3x3, fire_name</span>):</span><br><span class="line">    <span class="comment"># squeeze part</span></span><br><span class="line">    squeeze_x = Conv2D(kernel_size=(<span class="number">1</span>,<span class="number">1</span>),filters=s_1x1,padding=<span class="string">&#x27;same&#x27;</span>,activation=<span class="string">&#x27;relu&#x27;</span>,name=fire_name+<span class="string">&#x27;_s1&#x27;</span>)(x)</span><br><span class="line">    <span class="comment"># expand part</span></span><br><span class="line">    expand_x_1 = Conv2D(kernel_size=(<span class="number">1</span>,<span class="number">1</span>),filters=e_1x1,padding=<span class="string">&#x27;same&#x27;</span>,activation=<span class="string">&#x27;relu&#x27;</span>,name=fire_name+<span class="string">&#x27;_e1&#x27;</span>)(squeeze_x)</span><br><span class="line">    expand_x_3 = Conv2D(kernel_size=(<span class="number">3</span>,<span class="number">3</span>),filters=e_3x3,padding=<span class="string">&#x27;same&#x27;</span>,activation=<span class="string">&#x27;relu&#x27;</span>,name=fire_name+<span class="string">&#x27;_e3&#x27;</span>)(squeeze_x)</span><br><span class="line">    expand = merge([expand_x_1, expand_x_3], mode=<span class="string">&#x27;concat&#x27;</span>, concat_axis=<span class="number">3</span>)</span><br><span class="line">    <span class="keyword">return</span> expand</span><br></pre></td></tr></table></figure>
+
+<p><img src="https://pic1.zhimg.com/80/v2-921ca51e1265508f3bf8a55261a1b878_720w.jpg"></p>
+<p>具体完整网络架构</p>
+<p><img src="https://pic3.zhimg.com/80/v2-5f8ff8cb94babde05e69365336e77a62_720w.jpg"></p>
+
+    </div>
+
+    
+    
+    
+
+      <footer class="post-footer">
+          <div class="post-tags">
+              <a href="/tags/%E6%A8%A1%E5%9E%8B%E5%8E%8B%E7%BC%A9/" rel="tag"># 模型压缩</a>
+          </div>
+
+        
+
+
+        
+    <div class="post-nav">
+      <div class="post-nav-item">
+    <a href="/2022/05/19/mysql-learning/" rel="prev" title="mysql学习专题">
+      <i class="fa fa-chevron-left"></i> mysql学习专题
+    </a></div>
+      <div class="post-nav-item">
+    <a href="/2022/07/08/nn-practice/" rel="next" title="DL代码练习">
+      DL代码练习 <i class="fa fa-chevron-right"></i>
+    </a></div>
+    </div>
+      </footer>
+    
+  </article>
+  
+  
+  
+
+
+
+          </div>
+          
+
+<script>
+  window.addEventListener('tabs:register', () => {
+    let { activeClass } = CONFIG.comments;
+    if (CONFIG.comments.storage) {
+      activeClass = localStorage.getItem('comments_active') || activeClass;
+    }
+    if (activeClass) {
+      let activeTab = document.querySelector(`a[href="#comment-${activeClass}"]`);
+      if (activeTab) {
+        activeTab.click();
+      }
+    }
+  });
+  if (CONFIG.comments.storage) {
+    window.addEventListener('tabs:click', event => {
+      if (!event.target.matches('.tabs-comment .tab-content .tab-pane')) return;
+      let commentClass = event.target.classList[1];
+      localStorage.setItem('comments_active', commentClass);
+    });
+  }
+</script>
+
+        </div>
+          
+  
+  <div class="toggle sidebar-toggle">
+    <span class="toggle-line toggle-line-first"></span>
+    <span class="toggle-line toggle-line-middle"></span>
+    <span class="toggle-line toggle-line-last"></span>
+  </div>
+
+  <aside class="sidebar">
+    <div class="sidebar-inner">
+
+      <ul class="sidebar-nav motion-element">
+        <li class="sidebar-nav-toc">
+          文章目录
+        </li>
+        <li class="sidebar-nav-overview">
+          站点概览
+        </li>
+      </ul>
+
+      <!--noindex-->
+      <div class="post-toc-wrap sidebar-panel">
+          <div class="post-toc motion-element"><ol class="nav"><li class="nav-item nav-level-2"><a class="nav-link" href="#%E6%A8%A1%E5%9E%8B%E5%8E%8B%E7%BC%A9%E6%96%B9%E6%B3%95"><span class="nav-number">1.</span> <span class="nav-text">模型压缩方法</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#%E7%9F%A5%E8%AF%86%E8%92%B8%E9%A6%8F"><span class="nav-number">1.1.</span> <span class="nav-text">知识蒸馏</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E7%BD%91%E7%BB%9C%E5%89%AA%E6%9E%9D"><span class="nav-number">1.2.</span> <span class="nav-text">网络剪枝</span></a><ol class="nav-child"><li class="nav-item nav-level-4"><a class="nav-link" href="#Weight-amp-Neuron-Pruning"><span class="nav-number">1.2.1.</span> <span class="nav-text">Weight &amp; Neuron Pruning</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#What-to-Prune"><span class="nav-number">1.2.2.</span> <span class="nav-text">What to Prune?</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#%E8%A6%81%E6%80%8E%E4%B9%88%E6%93%8D%E4%BD%9C"><span class="nav-number">1.2.3.</span> <span class="nav-text">要怎么操作?</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#%E4%B8%80%E4%BA%9B%E6%93%8D%E4%BD%9C%E7%BB%86%E8%8A%82"><span class="nav-number">1.2.4.</span> <span class="nav-text">一些操作细节</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#code%EF%BC%9A"><span class="nav-number">1.2.5.</span> <span class="nav-text">code：</span></a></li></ol></li><li class="nav-item nav-level-3"><a class="nav-link" href="#MobileNetV1-VS-MobileNetV2"><span class="nav-number">1.3.</span> <span class="nav-text">MobileNetV1 VS MobileNetV2</span></a><ol class="nav-child"><li class="nav-item nav-level-4"><a class="nav-link" href="#MobileNetV1-Depthwise-Pointwise"><span class="nav-number">1.3.1.</span> <span class="nav-text">MobileNetV1: Depthwise + Pointwise</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#MobileNetV2-MobileNetV1-ResNet"><span class="nav-number">1.3.2.</span> <span class="nav-text">MobileNetV2: MobileNetV1  + ResNet</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#%E7%BB%93%E8%AE%BA"><span class="nav-number">1.3.3.</span> <span class="nav-text">结论</span></a></li></ol></li><li class="nav-item nav-level-3"><a class="nav-link" href="#ShufferNetV1-VS-ShufferNetV2"><span class="nav-number">1.4.</span> <span class="nav-text">ShufferNetV1    VS  ShufferNetV2</span></a><ol class="nav-child"><li class="nav-item nav-level-4"><a class="nav-link" href="#ShufferNetV1"><span class="nav-number">1.4.1.</span> <span class="nav-text">ShufferNetV1</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#shufferNetV2"><span class="nav-number">1.4.2.</span> <span class="nav-text">shufferNetV2</span></a></li></ol></li><li class="nav-item nav-level-3"><a class="nav-link" href="#SqueezeNet"><span class="nav-number">1.5.</span> <span class="nav-text">SqueezeNet</span></a><ol class="nav-child"><li class="nav-item nav-level-4"><a class="nav-link" href="#SqueezeNet%E7%9A%84%E5%8E%8B%E7%BC%A9%E7%AD%96%E7%95%A5"><span class="nav-number">1.5.1.</span> <span class="nav-text">SqueezeNet的压缩策略</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#Fire%E6%A8%A1%E5%9D%97"><span class="nav-number">1.5.2.</span> <span class="nav-text">Fire模块</span></a></li></ol></li></ol></li></ol></div>
+      </div>
+      <!--/noindex-->
+
+      <div class="site-overview-wrap sidebar-panel">
+        <div class="site-author motion-element" itemprop="author" itemscope itemtype="http://schema.org/Person">
+    <img class="site-author-image" itemprop="image" alt="Promise Chan"
+      src="/images/header.jpg">
+  <p class="site-author-name" itemprop="name">Promise Chan</p>
+  <div class="site-description" itemprop="description">Coding & upgrading</div>
+</div>
+<div class="site-state-wrap motion-element">
+  <nav class="site-state">
+      <div class="site-state-item site-state-posts">
+          <a href="/archives/">
+        
+          <span class="site-state-item-count">12</span>
+          <span class="site-state-item-name">日志</span>
+        </a>
+      </div>
+      <div class="site-state-item site-state-categories">
+            <a href="/categories/">
+          
+        <span class="site-state-item-count">5</span>
+        <span class="site-state-item-name">分类</span></a>
+      </div>
+      <div class="site-state-item site-state-tags">
+            <a href="/tags/">
+          
+        <span class="site-state-item-count">15</span>
+        <span class="site-state-item-name">标签</span></a>
+      </div>
+  </nav>
+</div>
+  <div class="links-of-author motion-element">
+      <span class="links-of-author-item">
+        <a href="https://github.com/promiseChan" title="GitHub → https:&#x2F;&#x2F;github.com&#x2F;promiseChan" rel="noopener" target="_blank"><i class="fa fa-fw fa-fab fa-github"></i>GitHub</a>
+      </span>
+  </div>
+
+
+
+      </div>
+
+    </div>
+  </aside>
+  <div id="sidebar-dimmer"></div>
+
+
+      </div>
+    </main>
+
+    <footer class="footer">
+      <div class="footer-inner">
+        
+
+        
+
+<div class="copyright">
+  
+  &copy; 
+  <span itemprop="copyrightYear">2022</span>
+  <span class="with-love">
+    <i class="fa fa-fa fa-heart"></i>
+  </span>
+  <span class="author" itemprop="copyrightHolder">Promise Chan</span>
+</div>
+  <div class="powered-by">由 <a href="https://hexo.io/" class="theme-link" rel="noopener" target="_blank">Hexo</a> & <a href="https://mist.theme-next.org/" class="theme-link" rel="noopener" target="_blank">NexT.Mist</a> 强力驱动
+  </div><a href="https://icp.gov.moe/?keyword=20180708" rel="external nofollow noreferrer" target="_blank" data-pjax-state="" style="
+    border-bottom-width: 0px;
+">萌 ICP 备 20180708 号</a>
+<!-- 网站运行时间的设置 -->
+<span id="timeDate">载入天数...</span>
+<span id="times">载入时分秒...</span>
+<script>
+    var now = new Date();
+    function createtime() {
+        var grt= new Date("03/10/2022 22:00:00");//此处修改你的建站时间，注意格式
+        now.setTime(now.getTime()+250);
+        days = (now - grt ) / 1000 / 60 / 60 / 24; dnum = Math.floor(days);
+        hours = (now - grt ) / 1000 / 60 / 60 - (24 * dnum); hnum = Math.floor(hours);
+        if(String(hnum).length ==1 ){hnum = "0" + hnum;} minutes = (now - grt ) / 1000 /60 - (24 * 60 * dnum) - (60 * hnum);
+        mnum = Math.floor(minutes); if(String(mnum).length ==1 ){mnum = "0" + mnum;}
+        seconds = (now - grt ) / 1000 - (24 * 60 * 60 * dnum) - (60 * 60 * hnum) - (60 * mnum);
+        snum = Math.round(seconds); if(String(snum).length ==1 ){snum = "0" + snum;}
+        document.getElementById("timeDate").innerHTML = "小站在混沌中存活了 "+dnum+" 天 ";
+        document.getElementById("times").innerHTML = hnum + " 小时 " + mnum + " 分 " + snum + " 秒";
+    }
+setInterval("createtime()",250);
+</script>
+
+        
+
+
+
+
+
+
+
+
+      </div>
+    </footer>
+  </div>
+
+  
+  <script src="/lib/anime.min.js"></script>
+  <script src="/lib/velocity/velocity.min.js"></script>
+  <script src="/lib/velocity/velocity.ui.min.js"></script>
+
+<script src="/js/utils.js"></script>
+
+<script src="/js/motion.js"></script>
+
+
+<script src="/js/schemes/muse.js"></script>
+
+
+<script src="/js/next-boot.js"></script>
+
+
+
+
+  
+
+
+
+
+  
+<script src="/js/local-search.js"></script>
+
+
+
+
+
+
+
+
+
+
+
+
+
+  
+
+  
+
+  
+
+<script src="/live2dw/lib/L2Dwidget.min.js?094cbace49a39548bed64abff5988b05"></script><script>L2Dwidget.init({"log":false,"pluginJsPath":"lib/","pluginModelPath":"assets/","pluginRootPath":"live2dw/","tagMode":false});</script></body>
+</html>

@@ -1,0 +1,675 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+  <meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=2">
+<meta name="theme-color" content="#222">
+<meta name="generator" content="Hexo 6.0.0">
+  <link rel="apple-touch-icon" sizes="180x180" href="/images/apple-touch-icon-next.png">
+  <link rel="icon" type="image/png" sizes="32x32" href="/images/favicon-32x32-next.png">
+  <link rel="icon" type="image/png" sizes="16x16" href="/images/favicon-16x16-next.png">
+  <link rel="mask-icon" href="/images/logo.svg" color="#222">
+
+<link rel="stylesheet" href="/css/main.css">
+
+
+<link rel="stylesheet" href="/lib/font-awesome/css/font-awesome.min.css">
+
+<script id="hexo-configurations">
+    var NexT = window.NexT || {};
+    var CONFIG = {"hostname":"example.com","root":"/","scheme":"Mist","version":"7.8.0","exturl":false,"sidebar":{"position":"left","display":"always","padding":18,"offset":12,"onmobile":false},"copycode":{"enable":false,"show_result":false,"style":"mac"},"back2top":{"enable":true,"sidebar":false,"scrollpercent":false},"bookmark":{"enable":false,"color":"#222","save":"auto"},"fancybox":false,"mediumzoom":false,"lazyload":false,"pangu":false,"comments":{"style":"tabs","active":null,"storage":true,"lazyload":false,"nav":null},"algolia":{"hits":{"per_page":10},"labels":{"input_placeholder":"Search for Posts","hits_empty":"We didn't find any results for the search: ${query}","hits_stats":"${hits} results found in ${time} ms"}},"localsearch":{"enable":true,"trigger":"auto","top_n_per_article":1,"unescape":false,"preload":false},"motion":{"enable":true,"async":false,"transition":{"post_block":"fadeIn","post_header":"slideDownIn","post_body":"slideDownIn","coll_header":"slideLeftIn","sidebar":"slideUpIn"}},"path":"search.xml"};
+  </script>
+
+  <meta name="description" content="不定时更新, 该时间段学到、想到的联邦学习知识">
+<meta property="og:type" content="article">
+<meta property="og:title" content="联邦学习心得">
+<meta property="og:url" content="http://example.com/2022/03/11/my-federated-learning/index.html">
+<meta property="og:site_name" content="PromiseChanの博客">
+<meta property="og:description" content="不定时更新, 该时间段学到、想到的联邦学习知识">
+<meta property="og:locale" content="zh_CN">
+<meta property="article:published_time" content="2022-03-11T15:17:25.000Z">
+<meta property="article:modified_time" content="2022-10-15T16:59:30.306Z">
+<meta property="article:author" content="Promise Chan">
+<meta property="article:tag" content="心得">
+<meta property="article:tag" content="分析">
+<meta name="twitter:card" content="summary">
+
+<link rel="canonical" href="http://example.com/2022/03/11/my-federated-learning/">
+
+
+<script id="page-configurations">
+  // https://hexo.io/docs/variables.html
+  CONFIG.page = {
+    sidebar: "",
+    isHome : false,
+    isPost : true,
+    lang   : 'zh-CN'
+  };
+</script>
+
+  <title>联邦学习心得 | PromiseChanの博客</title>
+  
+
+
+
+
+
+
+  <noscript>
+  <style>
+  .use-motion .brand,
+  .use-motion .menu-item,
+  .sidebar-inner,
+  .use-motion .post-block,
+  .use-motion .pagination,
+  .use-motion .comments,
+  .use-motion .post-header,
+  .use-motion .post-body,
+  .use-motion .collection-header { opacity: initial; }
+
+  .use-motion .site-title,
+  .use-motion .site-subtitle {
+    opacity: initial;
+    top: initial;
+  }
+
+  .use-motion .logo-line-before i { left: initial; }
+  .use-motion .logo-line-after i { right: initial; }
+  </style>
+</noscript>
+
+<!-- hexo injector head_end start -->
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/katex@0.12.0/dist/katex.min.css">
+
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/hexo-math@4.0.0/dist/style.css">
+<!-- hexo injector head_end end --></head>
+
+<body itemscope itemtype="http://schema.org/WebPage">
+  <div class="container use-motion">
+    <div class="headband"></div>
+
+    <header class="header" itemscope itemtype="http://schema.org/WPHeader">
+      <div class="header-inner"><div class="site-brand-container">
+  <div class="site-nav-toggle">
+    <div class="toggle" aria-label="切换导航栏">
+      <span class="toggle-line toggle-line-first"></span>
+      <span class="toggle-line toggle-line-middle"></span>
+      <span class="toggle-line toggle-line-last"></span>
+    </div>
+  </div>
+
+  <div class="site-meta">
+
+    <a href="/" class="brand" rel="start">
+      <span class="logo-line-before"><i></i></span>
+      <h1 class="site-title">PromiseChanの博客</h1>
+      <span class="logo-line-after"><i></i></span>
+    </a>
+  </div>
+
+  <div class="site-nav-right">
+    <div class="toggle popup-trigger">
+        <i class="fa fa-search fa-fw fa-lg"></i>
+    </div>
+  </div>
+</div>
+
+
+
+
+<nav class="site-nav">
+  <ul id="menu" class="menu">
+        <li class="menu-item menu-item-home">
+
+    <a href="/" rel="section"><i class="fa fa-fw fa-fa fa-home"></i>首页</a>
+
+  </li>
+        <li class="menu-item menu-item-archives">
+
+    <a href="/archives/" rel="section"><i class="fa fa-fw fa-fa fa-archive"></i>归档</a>
+
+  </li>
+        <li class="menu-item menu-item-tags">
+
+    <a href="/tags/" rel="section"><i class="fa fa-fw fa-fa fa-tags"></i>标签</a>
+
+  </li>
+        <li class="menu-item menu-item-categories">
+
+    <a href="/categories/" rel="section"><i class="fa fa-fw fa-fa fa-th"></i>分类</a>
+
+  </li>
+      <li class="menu-item menu-item-search">
+        <a role="button" class="popup-trigger"><i class="fa fa-search fa-fw"></i>搜索
+        </a>
+      </li>
+  </ul>
+</nav>
+
+
+
+  <div class="search-pop-overlay">
+    <div class="popup search-popup">
+        <div class="search-header">
+  <span class="search-icon">
+    <i class="fa fa-search"></i>
+  </span>
+  <div class="search-input-container">
+    <input autocomplete="off" autocapitalize="off"
+           placeholder="搜索..." spellcheck="false"
+           type="search" class="search-input">
+  </div>
+  <span class="popup-btn-close">
+    <i class="fa fa-times-circle"></i>
+  </span>
+</div>
+<div id="search-result">
+  <div id="no-result">
+    <i class="fa fa-spinner fa-pulse fa-5x fa-fw"></i>
+  </div>
+</div>
+
+    </div>
+  </div>
+
+</div>
+    </header>
+
+    
+  <div class="back-to-top">
+    <i class="fa fa-arrow-up"></i>
+    <span>0%</span>
+  </div>
+
+
+    <main class="main">
+      <div class="main-inner">
+        <div class="content-wrap">
+          
+
+          <div class="content post posts-expand">
+            
+
+    
+  
+  
+  <article itemscope itemtype="http://schema.org/Article" class="post-block" lang="zh-CN">
+    <link itemprop="mainEntityOfPage" href="http://example.com/2022/03/11/my-federated-learning/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="image" content="/images/header.jpg">
+      <meta itemprop="name" content="Promise Chan">
+      <meta itemprop="description" content="Coding & upgrading">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="PromiseChanの博客">
+    </span>
+      <header class="post-header">
+        <h1 class="post-title" itemprop="name headline">
+          联邦学习心得
+        </h1>
+
+        <div class="post-meta">
+            <span class="post-meta-item">
+              <span class="post-meta-item-icon">
+                <i class="fa fa-calendar-o"></i>
+              </span>
+              <span class="post-meta-item-text">发表于</span>
+
+              <time title="创建时间：2022-03-11 23:17:25" itemprop="dateCreated datePublished" datetime="2022-03-11T23:17:25+08:00">2022-03-11</time>
+            </span>
+              <span class="post-meta-item">
+                <span class="post-meta-item-icon">
+                  <i class="fa fa-calendar-check-o"></i>
+                </span>
+                <span class="post-meta-item-text">更新于</span>
+                <time title="修改时间：2022-10-16 00:59:30" itemprop="dateModified" datetime="2022-10-16T00:59:30+08:00">2022-10-16</time>
+              </span>
+            <span class="post-meta-item">
+              <span class="post-meta-item-icon">
+                <i class="fa fa-folder-o"></i>
+              </span>
+              <span class="post-meta-item-text">分类于</span>
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+                  <a href="/categories/python/" itemprop="url" rel="index"><span itemprop="name">python</span></a>
+                </span>
+                  ，
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+                  <a href="/categories/python/federated-learning/" itemprop="url" rel="index"><span itemprop="name">federated-learning</span></a>
+                </span>
+            </span>
+
+          
+
+        </div>
+      </header>
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+        <p>不定时更新, 该时间段学到、想到的联邦学习知识</p>
+<span id="more"></span>
+
+
+
+<h1 id="arxiv-downloader"><a href="#arxiv-downloader" class="headerlink" title="arxiv downloader"></a>arxiv downloader</h1><figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">wget -U NoSuchBrowser/1.0 https://arxiv.org/pdf/你需要下载的论文.pdf</span><br></pre></td></tr></table></figure>
+
+
+
+<h1 id="联邦学习现状、关键问题、发展方向"><a href="#联邦学习现状、关键问题、发展方向" class="headerlink" title="联邦学习现状、关键问题、发展方向"></a>联邦学习现状、关键问题、发展方向</h1><h2 id="1-问题定义"><a href="#1-问题定义" class="headerlink" title="1 问题定义"></a>1 问题定义</h2><h3 id="1-1-典型目标函数"><a href="#1-1-典型目标函数" class="headerlink" title="1.1 典型目标函数"></a>1.1 典型目标函数</h3><p>典型联邦学习问题: </p>
+<p><strong>数百万远程设备</strong>上<strong>学习单个全局模型</strong>。</p>
+<p>约束: 设备生成的数据被本地存储和处理，只有<strong>中间更新周期性地与中央服务器进行通信</strong>。</p>
+<p>因此目标通常是最小化以下目标函数：</p>
+<p>$  \min_{w} F(w), \text { where } F(w):&#x3D;\sum_{k&#x3D;1}^{m} p_{k} F_{k}(w) $<br>m 是设备总数， $  p_k ≥ 0 $  并且 $ ∑_kp_k &#x3D; 1 $<br>$ F_k $(w)  是第 k 个设备的本地目标函数（一般是个loss损失函数）</p>
+<p>例如：$F_{k}(w)&#x3D;\frac{1}{n_{k}} \sum_{j_{k}&#x3D;1}^{n_{k}} f_{j_{k}}\left(w ; x_{j_{k}}, y_{j_{k}}\right)$，表示第k个客户端上，所有训练样本的损失值取平均</p>
+<p>一般, 第k 个客户端的$ p_k $ ：  $ p_k &#x3D; 1&#x2F;n $ 或者  $ p_k &#x3D; n_k&#x2F;n $  , $ n &#x3D; ∑_k n_k $ (即，n&#x3D;所有客户端的训练数据)</p>
+<h2 id="2-核心挑战"><a href="#2-核心挑战" class="headerlink" title="2. 核心挑战"></a>2. 核心挑战</h2><h3 id="2-1-挑战1：昂贵的沟通"><a href="#2-1-挑战1：昂贵的沟通" class="headerlink" title="2.1 挑战1：昂贵的沟通"></a>2.1 挑战1：昂贵的沟通</h3><p>为了使模型与联邦网络中的设备生成的数据相匹配，因此有必要开发通信效率高的方法,作为训练过程的一部分</p>
+<p><strong>迭代地发送小消息或模型更新</strong>，而不是通过网络发送整个数据集</p>
+<p>为了减少通信，需要考虑的<strong>两个关键方面是：</strong></p>
+<p><strong>（i）减少通信回合的总数，</strong></p>
+<p><strong>（ii）在每一回合减少发送的消息大小。</strong></p>
+<h3 id="2-2-挑战2：系统异构性"><a href="#2-2-挑战2：系统异构性" class="headerlink" title="2.2 挑战2：系统异构性"></a>2.2 挑战2：系统异构性</h3><p>硬件（CPU，内存）、网络连接（3G，4G，5G，wifi）和电源（电池电量）的变化，联邦网络中每个设备的存储、计算和通信能力可能不同。</p>
+<p>同时活跃的设备通常仅占一小部分，例如，一百万个设备网络中的数百个活跃设备</p>
+<p>因此，必须：</p>
+<p><strong>(i) 预计参与人数较少</strong></p>
+<p><strong>(ii) 容忍异构硬件</strong></p>
+<p><strong>(iii) 对网络中的已下线设备具有鲁棒性。</strong></p>
+<h3 id="2-3-挑战3：统计异质性"><a href="#2-3-挑战3：统计异质性" class="headerlink" title="2.3 挑战3：统计异质性"></a>2.3 挑战3：统计异质性</h3><p>设备经常以<strong>non-IID</strong>的方式在网络上生成和收集数据，例如，移动电话用户在下一个单词预测任务的上下文中使用了不同的语言</p>
+<p><strong>各设备</strong>的数据点的<strong>数量可能有很大的变化</strong>，并且可能存在捕获设备之间的关系及其相关分布的底层结构</p>
+<h3 id="2-4-挑战4：隐私问题"><a href="#2-4-挑战4：隐私问题" class="headerlink" title="2.4 挑战4：隐私问题"></a>2.4 挑战4：隐私问题</h3><p>联邦学习通过共享模型更新（例如梯度信息）而不是原始数据，朝着保护在每个设备上生成的数据迈出了一步</p>
+<p>然而，在整个训练过程中模型更新的通信仍然可以向第三方或中央服务器显示敏感信息。</p>
+<p>虽然最近的方法旨在<strong>使用安全多方计算或差异隐私等工具增强联邦学习的隐私性</strong>，</p>
+<p><strong>但这些方法通常以降低模型性能或系统效率为代价提供隐私</strong>。</p>
+<p><strong>在理论和经验上理解和平衡这些权衡</strong>是实现私有联邦学习系统的一个相当大的挑战。</p>
+<h2 id="3-解决方案"><a href="#3-解决方案" class="headerlink" title="3.解决方案"></a>3.解决方案</h2><h3 id="3-1-高效通信"><a href="#3-1-高效通信" class="headerlink" title="3.1 高效通信"></a>3.1 高效通信</h3><p>几个一般的方向，我们将其分为（1）局部本地更新方法，（2）压缩方案和（3）去中心化训练</p>
+<h4 id="3-1-1-局部本地更新方法"><a href="#3-1-1-局部本地更新方法" class="headerlink" title="3.1.1  局部本地更新方法"></a>3.1.1  局部本地更新方法</h4><p>联邦学习最常用的方法是联邦平均（FedAvg），这是一种基于局部随机梯度下降（SGD）平均更新的方法。</p>
+<p>FedAvg在经验上表现得很好，特别是在非凸问题上,<strong>但它没有收敛性保证，并且在实际情况下，当数据是异构的时，它可能会发散</strong></p>
+<p><strong>FedAVG通过增加了节点本地结算量</strong>，<strong>减少了通信量</strong></p>
+<p>FedSGD VS FedAVG</p>
+<table>
+<thead>
+<tr>
+<th>类型</th>
+<th>client</th>
+<th>server</th>
+</tr>
+</thead>
+<tbody><tr>
+<td>FedSGD</td>
+<td>1.接受 server下发的全局权重W <br>2.使用全局权重W和本地数据进行训练，计算出当前梯度g <br>3. <strong>把客户端的梯度g  发给服务端</strong> （每完成一次训练就发一次）</td>
+<td>1.<strong>接受 client上送的梯度g1,g2</strong>… <br/>2. 计算 全局梯度G &#x3D; g1 + g2 + …<br/>3. 全局权重W &#x3D; α*G <br/>4. 把全局权重W广播给所有client</td>
+</tr>
+<tr>
+<td>FedAVG</td>
+<td>1.接受 server下发的全局权重W <br/>2.使用全局权重W和本地数据进行训练，计算出当前梯度g <br/>3. 客户端的梯度g  更新本地权重 w <br>4. 重复 执行 2-3  一共 n 次 <br>5. <strong>发送 本地训练 n 次后的 权重w 给server</strong></td>
+<td>1.<strong>接受 client上送的权重w1,w2</strong>… <br/>2. 计算 全局权重 W &#x3D; (  g1 + g2 + …) &#x2F; m <br/>3.把全局权重W广播给所有client</td>
+</tr>
+</tbody></table>
+<h4 id="3-1-2-压缩消息"><a href="#3-1-2-压缩消息" class="headerlink" title="3.1.2 压缩消息"></a>3.1.2 压缩消息</h4><p>虽然本地局部更新方法可以减少通信的总轮数，</p>
+<p>但<strong>模型压缩方案</strong>（如稀疏化、子采样和量化）可以<strong>显著减少</strong>每轮通信的<strong>消息大小</strong>。</p>
+<p>一些在联邦设置中的<strong>实用策略</strong>，例如</p>
+<p>1）强制更新模型变得稀疏和低秩；</p>
+<p>2）使用结构化随机旋转执行量化；</p>
+<p>3）使用有损压缩和随机失活来减少服务器到设备的通信；</p>
+<p>4）应用Golomb无损编码。</p>
+<h4 id="3-1-3-去中心化训练"><a href="#3-1-3-去中心化训练" class="headerlink" title="3.1.3 去中心化训练"></a>3.1.3 去中心化训练</h4><p>在联邦学习中，星形网络（中央服务器连接到设备网络）是主要的通信拓扑结构；</p>
+<p>去中心化拓扑（其中设备只与它们的邻居通信）作为一种潜在的替代方案。</p>
+<p>在数据中心环境中，当在低带宽或高延迟的网络上操作时，去中心化训练被证明比中心化训练更快；</p>
+<p>在联邦学习中，<strong>去中心化算法理论</strong>上可以<strong>降低中央服务器上的高通信成本</strong>。</p>
+<p>最近的一些工作研究了中心化训练。然而，它们要么局限于线性模型，要么假设设备完全参与。</p>
+<p>最后，还提出了层级通信模式，以进一步减轻中央服务器的负担，</p>
+<p><strong>首先</strong>利用<strong>边缘服务器聚合</strong>来自<strong>边缘设备</strong>的更新</p>
+<p>然后<strong>依赖云服务器聚合</strong>来自<strong>边缘服务器</strong>的更新。</p>
+<p>虽然这是一种有前途的减少通信的方法，但<strong>它不适用于所有网络，因为这种类型的物理层次可能不存在或先验已知</strong>。</p>
+<h3 id="3-2-系统异质性"><a href="#3-2-系统异质性" class="headerlink" title="3.2 系统异质性"></a>3.2 系统异质性</h3><p>关键方向分为：(i) 异步通信，(ii) 主动设备采样，和(iii) 容错。如第2.1.3节所述，我们在下面的讨论中假设了星形拓扑。</p>
+<h4 id="3-2-1-异步通信"><a href="#3-2-1-异步通信" class="headerlink" title="3.2.1 异步通信"></a>3.2.1 异步通信</h4><p>同步方案在设备变化面前，它们更容易受到掉队者的影响。</p>
+<p>异步方案是一种很有吸引力的方法来减轻异构环境中的掉队问题，特别是在共享内存系统中。</p>
+<p>然而，<strong>异步方案通常依赖于有界延迟假设来控制过时的程度</strong>，对于设备k来说，这取决于自设备k从中央服务器拉取到的已更新的其他设备的数量。在联邦设置中，经典的有界延迟假设可能是不现实的，在联邦设置中，延迟可能是小时到天的顺序，或是完全无界的。</p>
+<h4 id="3-2-2-主动采样"><a href="#3-2-2-主动采样" class="headerlink" title="3.2.2 主动采样"></a>3.2.2 主动采样</h4><p>在联邦网络中，通常只有一小部分设备参与每一轮的训练。然而，绝大多数联邦方法，是被动的，因为它们的目的不是影响哪些设备参与。</p>
+<p>另一种方法是在每一轮中积极选择参与设备。目的是让服务器在预定义的时间窗口内<strong>聚合尽可能多的设备更新</strong>。</p>
+<p>同样，激励机制以鼓励具有更高质量数据的设备参与学习过程时，虽然这些方法主要关注系统可变性以执行主动采样，但我们注意到，也值得考虑基于底层统计结构主动采样一组小型但具有足够代表性的设备。</p>
+<h4 id="3-2-3-容错"><a href="#3-2-3-容错" class="headerlink" title="3.2.3 容错"></a>3.2.3 容错</h4><p>   一种实用的策略是简单地忽略这种设备故障，如果故障设备具有特定的数据特性，则可能会在设备采样方案中引入偏差。例如，由于网络连接不良，来自偏远地区的设备可能更容易丢失，因此经过训练的联邦模型将偏向于具有良好网络条件的设备。 </p>
+<p>   编码计算是通过引入算法冗余来容忍设备故障的另一种选择。最近的研究探索了使用代码加速分布式机器学习训练的方法。例如，在存在偏离者的情况下，梯度编码及其变体小心地跨计算节点复制数据块（以及这些数据块上的梯度计算），以获得真实梯度的精确或不精确重构。虽然这对于联邦设置来说似乎是一种很有前途的方法，<strong>但是这些方法在联邦网络中面临着根本的挑战，因为由于隐私限制和网络规模的限制，跨设备共享数据&#x2F;复制通常是不可行的</strong></p>
+<h3 id="3-3-统计异质性"><a href="#3-3-统计异质性" class="headerlink" title="3.3 统计异质性"></a>3.3 统计异质性</h3><h4 id="3-3-1异构数据Feb框架"><a href="#3-3-1异构数据Feb框架" class="headerlink" title="3.3.1异构数据Feb框架"></a>3.3.1异构数据Feb框架</h4><p><strong>通过诸如元学习和多任务学习的方法来对统计异质性进行建模。</strong>例如，MOCHA，一个为联邦设置设计的优化框架，可以通过学习每个设备的独立但相关的模型来实现个性化，同时通过多任务学习利用共享的表示。但其扩展到大规模网络的能力有限，且仅限于凸目标。</p>
+<p><strong>一种方法将星型拓扑建模为贝叶斯网络，并在学习期间执行变分推理</strong>。但推广到大型联邦网络是昂贵的。</p>
+<p>在对联邦数据建模时，<strong>考虑精度以外的问题（如公平性）可能也很重要</strong>。尤其是，天真地求解如（1）中的总损失函数可能隐含地对某些设备有利或不利，<strong>因为所学习的模型可能偏向于具有较大数据量的设备</strong>，或者（如果相等地加权设备）偏向于通常出现的设备组。</p>
+<h4 id="3-3-2-非-IID-数据的收敛保证"><a href="#3-3-2-非-IID-数据的收敛保证" class="headerlink" title="3.3.2 非 IID 数据的收敛保证"></a>3.3.2 非 IID 数据的收敛保证</h4><p>当数据在网络中的不同设备上分布不一致时，FedAvg等方法在实践中已经被证明是不同的。</p>
+<p>在I.I.D.设置中分析了并行SGD和相关变体，它们使本地更新与FedAvg相似。然而，结果依赖于一个前提，即每个局部解算器是同一随机过程的副本（由于I.I.D.假设），这在典型的联邦设置中不是这样的。</p>
+<p>为了了解FedAvg在统计异质环境中的性能，FedProx最近被提出。<strong>FedProx对FedAvg方法做了一个小的修改，以确保在理论和实践上的收敛性。</strong></p>
+<p><strong>FedProx也可以解释为FedAvg的一个通用的、重新参数化的版本，它在考虑设备之间的系统异构性方面具有实际的影响</strong>。</p>
+<h3 id="3-4-隐私"><a href="#3-4-隐私" class="headerlink" title="3.4 隐私"></a>3.4 隐私</h3><p>隐私问题常常促使人们需要在联邦设置中将每个设备上的原始数据保存在本地。但是，作为训练过程的一部分，</p>
+<p><strong>共享其他信息（如模型更新）也可能泄漏敏感的用户信息</strong></p>
+<h4 id="3-4-1-机器学习中的隐私"><a href="#3-4-1-机器学习中的隐私" class="headerlink" title="3.4.1 机器学习中的隐私"></a>3.4.1 机器学习中的隐私</h4><p>用差分隐私来传递噪声数据草图、用同态加密来操作加密数据、以及安全的功能评估或多方计算。</p>
+<p><strong>差分隐私</strong>最广泛地使用。简单地说，如果一个输入元素的变化不会导致输出分布的太大差异，那么随机化机制是差异私有的；这意味着不能得出任何关于在学习过程中是否使用特定样本的结论。对于基于梯度的学习方法，一种流行的方法是<strong>通过在每次迭代时随机扰动中间输出来应用差分隐私</strong>。差别隐私和模型精度之间存在着固有的权衡，因为增加更多的噪声会带来更大的隐私，但可能会严重影响精度。</p>
+<p><strong>同态加密</strong>目前它应用于<strong>有限的设置，例如训练线性模型或仅涉及少数实体</strong></p>
+<p>当敏感数据集分布在不同的数据所有者之间时，另一个自然的选择是通过安全功能评估（SFE）或安全多方计算（SMC）来执行隐私保护学习。由此产生的协议可以使多个当事方协作计算商定的函数，而不泄漏任何当事方的输入信息。</p>
+<p>然而，<strong>这些方法可能不适用于大规模机器学习场景，因为它们会带来大量额外的通信和计算成本。</strong></p>
+<h4 id="3-4-2-联邦学习中的隐私"><a href="#3-4-2-联邦学习中的隐私" class="headerlink" title="3.4.2 联邦学习中的隐私"></a>3.4.2 联邦学习中的隐私</h4><p>除了提供严格的隐私保证外，还需要开发计算成本低、通信效率高、能够容忍掉线设备的方法，而所有这些都不会过度损害准确性。</p>
+<p>尽管联邦学习中有各种各样的隐私定义，但通常它们可以分为两类：<strong>全局隐私和局部隐私</strong>。</p>
+<p><strong>全局隐私</strong>：在每一轮生成的<strong>模型更新</strong>对<strong>中央服务器以外</strong>的所有不受信任的第三方都是<strong>隐私的</strong></p>
+<p><strong>本地隐私</strong>：进一步要求<strong>更新对服务器也是隐私</strong>的</p>
+<p>引入一个SMC协议来保护单个模型的更新，会产生显著的额外通信成本。<strong>中心服务器无法看到任何本地更新</strong>，但<strong>仍可以在每轮中观察精确的聚合结果</strong>。</p>
+<p>此外，<strong>差分隐私可以与模型压缩技术相结合</strong>，以减少通信，同时获得隐私利益</p>
+<h2 id="4-未来发展方向"><a href="#4-未来发展方向" class="headerlink" title="4. 未来发展方向"></a>4. 未来发展方向</h2><h3 id="4-1-极端的通讯方案"><a href="#4-1-极端的通讯方案" class="headerlink" title="4.1 极端的通讯方案"></a>4.1 极端的通讯方案</h3><p>众所周知，机器学习的优化方法可以容忍精度的不足；这个错误实际上有助于泛化</p>
+<p>联邦学习中有多少交流是必要的，还有待观察</p>
+<h3 id="4-2-通信降低和Pareto-frontier"><a href="#4-2-通信降低和Pareto-frontier" class="headerlink" title="4.2 通信降低和Pareto frontier"></a>4.2 通信降低和Pareto frontier</h3><p>特别是，最有用的技术将展示Pareto frontier的改进，在相同的通信预算下，在理想情况下，在广泛的通信&#x2F;精度剖面上，实现比任何其他方法更高的精度。为了有效地进行神经网络推理，已经进行了类似的综合分析，并且为了以有意义的方式比较用于联邦学习的通信简化技术是必要的。</p>
+<h3 id="4-3-新的异步模型"><a href="#4-3-新的异步模型" class="headerlink" title="4.3 新的异步模型"></a>4.3 新的异步模型</h3><p>分布式优化中最常研究的两种通信方案是批量同步方法和异步方法（假设延迟是有界的）</p>
+<h3 id="4-4-异质性诊断"><a href="#4-4-异质性诊断" class="headerlink" title="4.4 异质性诊断"></a>4.4 异质性诊断</h3><p>（i）是否存在简单的诊断以快速确定联邦网络中的异质性水平？</p>
+<p>（ii）是否可以开发类似的诊断来量化与系统相关的异质性的数量？</p>
+<p>（iii）是否可以利用当前或新的异质性定义来进一步改进联邦优化方法的收敛性？</p>
+<h3 id="4-5-细微的隐私限制"><a href="#4-5-细微的隐私限制" class="headerlink" title="4.5 细微的隐私限制"></a>4.5 细微的隐私限制</h3><p>在实践中，可能有必要在更细粒度级别上定义隐私。 提供一种较弱的隐私形式，以换取更精确的模型。开发处理混合（设备特定或样本特定）隐私限制的方法是未来工作的一个有趣和持续的方向。</p>
+<h3 id="4-6-超越监督学习"><a href="#4-6-超越监督学习" class="headerlink" title="4.6 超越监督学习"></a>4.6 超越监督学习</h3><p>迄今为止讨论的方法都是随着监督学习的任务而发展起来的，即他们假设联邦网络中的所有数据都存在标签</p>
+<p>实际上，在实际的联邦网络中生成的许多数据可能是未标记或弱标记的。此外，目前的问题可能不是将模型与（1）中所示的数据拟合，而是执行一些探索性数据分析、确定聚合统计数据或运行更复杂的任务，如强化学习。在联邦网络中解决监督学习以外的问题可能需要解决可伸缩性、异构性和隐私性方面的类似挑战。</p>
+<h3 id="4-7-产品性联邦学习"><a href="#4-7-产品性联邦学习" class="headerlink" title="4.7 产品性联邦学习"></a>4.7 产品性联邦学习</h3><p>在产品环境中运行联邦学习时还需要考虑一些实际问题。</p>
+<p>尤其是概念漂移（当底层数据生成模型随时间变化时）；</p>
+<p>日变化（当设备在一天或一周的不同时间表现出不同的行为时）；</p>
+<p>冷启动问题（当新设备进入网络时）等问题必须小心处理</p>
+<h3 id="4-8-基准"><a href="#4-8-基准" class="headerlink" title="4.8 基准"></a>4.8 基准</h3><p>以现实世界的环境、假设和数据集为基础</p>
+<p>进一步建立在现有的实现和基准工具上，以促进经验结果的可重复性和联邦学习的新解决方案的传播。</p>
+<h2 id="5-TFF框架-tensorflow-fedrate-framwork"><a href="#5-TFF框架-tensorflow-fedrate-framwork" class="headerlink" title="5. TFF框架(tensorflow fedrate  framwork)"></a>5. TFF框架(tensorflow fedrate  framwork)</h2><ul>
+<li><p>构造数据集</p>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line">emnist_train, emnist_test = tff.simulation.datasets.emnist.load_data()</span><br><span class="line">example_dataset = emnist_train.create_tf_dataset_for_client(emnist_train.client_ids[<span class="number">0</span>])</span><br><span class="line">example_element = <span class="built_in">next</span>(<span class="built_in">iter</span>(example_dataset))</span><br><span class="line">example_element[<span class="string">&#x27;label&#x27;</span>].numpy()</span><br></pre></td></tr></table></figure>
+</li>
+<li><p>每个客户端创建数据集</p>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line">sample_clients = emnist_train.client_ids[<span class="number">0</span>:NUM_CLIENTS]</span><br><span class="line">federated_train_data = make_federated_data(emnist_train, sample_clients)</span><br><span class="line"><span class="built_in">print</span>(<span class="string">&#x27;Number of client datasets:&#123;l&#125;&#x27;</span>.<span class="built_in">format</span>(l=<span class="built_in">len</span>(federated_train_data)))</span><br><span class="line"><span class="built_in">print</span>(<span class="string">&#x27;First_dataset: &#123;d&#125;&#x27;</span>.<span class="built_in">format</span>(d = federated_train_data[<span class="number">0</span>]))</span><br></pre></td></tr></table></figure>
+</li>
+<li><p>构造 keras模型</p>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">def</span> <span class="title function_">create_keras_model</span>():</span><br><span class="line">    <span class="keyword">return</span> tf.keras.models.Sequential([</span><br><span class="line">        tf.keras.layers.Input(shape = (<span class="number">784</span>,)),</span><br><span class="line">        tf.keras.layers.Dense(<span class="number">10</span>, kernel_initializer = <span class="string">&#x27;zeros&#x27;</span>),</span><br><span class="line">        tf.keras.layers.Softmax(),       </span><br><span class="line">    ])</span><br><span class="line">example_element = <span class="built_in">next</span>(<span class="built_in">iter</span>(example_dataset))</span><br><span class="line">example_element[<span class="string">&#x27;label&#x27;</span>].numpy()</span><br><span class="line"></span><br><span class="line"><span class="keyword">def</span> <span class="title function_">model_fn</span>():</span><br><span class="line">    <span class="comment">#必须在这里创建一个新模型</span></span><br><span class="line">    keras_model = create_keras_model()</span><br><span class="line">    <span class="keyword">return</span> tff.learning.from_keras_model(</span><br><span class="line">        keras_model,</span><br><span class="line">        input_spec=preprocess_example_dataset.element_spec,</span><br><span class="line">        loss = tf.keras.losses.SparseCategoricalCrossentropy(),</span><br><span class="line">        metrics=[tf.keras.metrics.SparseCategoricalCrossentropy()]    </span><br><span class="line">    )</span><br></pre></td></tr></table></figure>
+</li>
+<li><p>构造迭代器（每一轮要做什么）</p>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line">iterative_process = tff.learning.build_federated_averaging_process(</span><br><span class="line">model_fn,</span><br><span class="line">client_optimizer_fn= <span class="keyword">lambda</span>: tf.keras.optimizers.SGD(learning_rate=<span class="number">0.02</span>),</span><br><span class="line">server_optimizer_fn= <span class="keyword">lambda</span>: tf.keras.optimizers.SGD(learning_rate=<span class="number">1</span>))</span><br></pre></td></tr></table></figure>
+</li>
+<li><p>训练</p>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br></pre></td><td class="code"><pre><span class="line">NUM_ROUNDS = <span class="number">11</span></span><br><span class="line">trainer = tff.learning.build_federated_averaging_process(</span><br><span class="line">            model_fn,</span><br><span class="line">            client_optimizer_fn=<span class="keyword">lambda</span>:tf.keras.optimizers.SGD(<span class="number">0.1</span>))</span><br><span class="line"></span><br><span class="line">state = trainer.initialize()</span><br><span class="line"><span class="keyword">for</span> round_num <span class="keyword">in</span> <span class="built_in">range</span>(<span class="number">2</span>,NUM_ROUNDS):</span><br><span class="line">    state, metrics = iterative_process.<span class="built_in">next</span>(state, federated_train_data)</span><br><span class="line">    <span class="built_in">print</span>(<span class="string">&#x27;round&#123;:2d&#125;, metrics = &#123;&#125;&#x27;</span>.<span class="built_in">format</span>(round_num, metrics))</span><br></pre></td></tr></table></figure></li>
+</ul>
+
+    </div>
+
+    
+    
+    
+
+      <footer class="post-footer">
+          <div class="post-tags">
+              <a href="/tags/%E5%BF%83%E5%BE%97/" rel="tag"># 心得</a>
+              <a href="/tags/%E5%88%86%E6%9E%90/" rel="tag"># 分析</a>
+          </div>
+
+        
+
+
+        
+    <div class="post-nav">
+      <div class="post-nav-item">
+    <a href="/2022/03/11/my-cs-learning%20copy/" rel="prev" title="学习总结">
+      <i class="fa fa-chevron-left"></i> 学习总结
+    </a></div>
+      <div class="post-nav-item">
+    <a href="/2022/03/23/trojan-setup/" rel="next" title="trojan搭建小记">
+      trojan搭建小记 <i class="fa fa-chevron-right"></i>
+    </a></div>
+    </div>
+      </footer>
+    
+  </article>
+  
+  
+  
+
+
+
+          </div>
+          
+
+<script>
+  window.addEventListener('tabs:register', () => {
+    let { activeClass } = CONFIG.comments;
+    if (CONFIG.comments.storage) {
+      activeClass = localStorage.getItem('comments_active') || activeClass;
+    }
+    if (activeClass) {
+      let activeTab = document.querySelector(`a[href="#comment-${activeClass}"]`);
+      if (activeTab) {
+        activeTab.click();
+      }
+    }
+  });
+  if (CONFIG.comments.storage) {
+    window.addEventListener('tabs:click', event => {
+      if (!event.target.matches('.tabs-comment .tab-content .tab-pane')) return;
+      let commentClass = event.target.classList[1];
+      localStorage.setItem('comments_active', commentClass);
+    });
+  }
+</script>
+
+        </div>
+          
+  
+  <div class="toggle sidebar-toggle">
+    <span class="toggle-line toggle-line-first"></span>
+    <span class="toggle-line toggle-line-middle"></span>
+    <span class="toggle-line toggle-line-last"></span>
+  </div>
+
+  <aside class="sidebar">
+    <div class="sidebar-inner">
+
+      <ul class="sidebar-nav motion-element">
+        <li class="sidebar-nav-toc">
+          文章目录
+        </li>
+        <li class="sidebar-nav-overview">
+          站点概览
+        </li>
+      </ul>
+
+      <!--noindex-->
+      <div class="post-toc-wrap sidebar-panel">
+          <div class="post-toc motion-element"><ol class="nav"><li class="nav-item nav-level-1"><a class="nav-link" href="#arxiv-downloader"><span class="nav-number">1.</span> <span class="nav-text">arxiv downloader</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#%E8%81%94%E9%82%A6%E5%AD%A6%E4%B9%A0%E7%8E%B0%E7%8A%B6%E3%80%81%E5%85%B3%E9%94%AE%E9%97%AE%E9%A2%98%E3%80%81%E5%8F%91%E5%B1%95%E6%96%B9%E5%90%91"><span class="nav-number">2.</span> <span class="nav-text">联邦学习现状、关键问题、发展方向</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#1-%E9%97%AE%E9%A2%98%E5%AE%9A%E4%B9%89"><span class="nav-number">2.1.</span> <span class="nav-text">1 问题定义</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#1-1-%E5%85%B8%E5%9E%8B%E7%9B%AE%E6%A0%87%E5%87%BD%E6%95%B0"><span class="nav-number">2.1.1.</span> <span class="nav-text">1.1 典型目标函数</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#2-%E6%A0%B8%E5%BF%83%E6%8C%91%E6%88%98"><span class="nav-number">2.2.</span> <span class="nav-text">2. 核心挑战</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#2-1-%E6%8C%91%E6%88%981%EF%BC%9A%E6%98%82%E8%B4%B5%E7%9A%84%E6%B2%9F%E9%80%9A"><span class="nav-number">2.2.1.</span> <span class="nav-text">2.1 挑战1：昂贵的沟通</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#2-2-%E6%8C%91%E6%88%982%EF%BC%9A%E7%B3%BB%E7%BB%9F%E5%BC%82%E6%9E%84%E6%80%A7"><span class="nav-number">2.2.2.</span> <span class="nav-text">2.2 挑战2：系统异构性</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#2-3-%E6%8C%91%E6%88%983%EF%BC%9A%E7%BB%9F%E8%AE%A1%E5%BC%82%E8%B4%A8%E6%80%A7"><span class="nav-number">2.2.3.</span> <span class="nav-text">2.3 挑战3：统计异质性</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#2-4-%E6%8C%91%E6%88%984%EF%BC%9A%E9%9A%90%E7%A7%81%E9%97%AE%E9%A2%98"><span class="nav-number">2.2.4.</span> <span class="nav-text">2.4 挑战4：隐私问题</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#3-%E8%A7%A3%E5%86%B3%E6%96%B9%E6%A1%88"><span class="nav-number">2.3.</span> <span class="nav-text">3.解决方案</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#3-1-%E9%AB%98%E6%95%88%E9%80%9A%E4%BF%A1"><span class="nav-number">2.3.1.</span> <span class="nav-text">3.1 高效通信</span></a><ol class="nav-child"><li class="nav-item nav-level-4"><a class="nav-link" href="#3-1-1-%E5%B1%80%E9%83%A8%E6%9C%AC%E5%9C%B0%E6%9B%B4%E6%96%B0%E6%96%B9%E6%B3%95"><span class="nav-number">2.3.1.1.</span> <span class="nav-text">3.1.1  局部本地更新方法</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#3-1-2-%E5%8E%8B%E7%BC%A9%E6%B6%88%E6%81%AF"><span class="nav-number">2.3.1.2.</span> <span class="nav-text">3.1.2 压缩消息</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#3-1-3-%E5%8E%BB%E4%B8%AD%E5%BF%83%E5%8C%96%E8%AE%AD%E7%BB%83"><span class="nav-number">2.3.1.3.</span> <span class="nav-text">3.1.3 去中心化训练</span></a></li></ol></li><li class="nav-item nav-level-3"><a class="nav-link" href="#3-2-%E7%B3%BB%E7%BB%9F%E5%BC%82%E8%B4%A8%E6%80%A7"><span class="nav-number">2.3.2.</span> <span class="nav-text">3.2 系统异质性</span></a><ol class="nav-child"><li class="nav-item nav-level-4"><a class="nav-link" href="#3-2-1-%E5%BC%82%E6%AD%A5%E9%80%9A%E4%BF%A1"><span class="nav-number">2.3.2.1.</span> <span class="nav-text">3.2.1 异步通信</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#3-2-2-%E4%B8%BB%E5%8A%A8%E9%87%87%E6%A0%B7"><span class="nav-number">2.3.2.2.</span> <span class="nav-text">3.2.2 主动采样</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#3-2-3-%E5%AE%B9%E9%94%99"><span class="nav-number">2.3.2.3.</span> <span class="nav-text">3.2.3 容错</span></a></li></ol></li><li class="nav-item nav-level-3"><a class="nav-link" href="#3-3-%E7%BB%9F%E8%AE%A1%E5%BC%82%E8%B4%A8%E6%80%A7"><span class="nav-number">2.3.3.</span> <span class="nav-text">3.3 统计异质性</span></a><ol class="nav-child"><li class="nav-item nav-level-4"><a class="nav-link" href="#3-3-1%E5%BC%82%E6%9E%84%E6%95%B0%E6%8D%AEFeb%E6%A1%86%E6%9E%B6"><span class="nav-number">2.3.3.1.</span> <span class="nav-text">3.3.1异构数据Feb框架</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#3-3-2-%E9%9D%9E-IID-%E6%95%B0%E6%8D%AE%E7%9A%84%E6%94%B6%E6%95%9B%E4%BF%9D%E8%AF%81"><span class="nav-number">2.3.3.2.</span> <span class="nav-text">3.3.2 非 IID 数据的收敛保证</span></a></li></ol></li><li class="nav-item nav-level-3"><a class="nav-link" href="#3-4-%E9%9A%90%E7%A7%81"><span class="nav-number">2.3.4.</span> <span class="nav-text">3.4 隐私</span></a><ol class="nav-child"><li class="nav-item nav-level-4"><a class="nav-link" href="#3-4-1-%E6%9C%BA%E5%99%A8%E5%AD%A6%E4%B9%A0%E4%B8%AD%E7%9A%84%E9%9A%90%E7%A7%81"><span class="nav-number">2.3.4.1.</span> <span class="nav-text">3.4.1 机器学习中的隐私</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#3-4-2-%E8%81%94%E9%82%A6%E5%AD%A6%E4%B9%A0%E4%B8%AD%E7%9A%84%E9%9A%90%E7%A7%81"><span class="nav-number">2.3.4.2.</span> <span class="nav-text">3.4.2 联邦学习中的隐私</span></a></li></ol></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#4-%E6%9C%AA%E6%9D%A5%E5%8F%91%E5%B1%95%E6%96%B9%E5%90%91"><span class="nav-number">2.4.</span> <span class="nav-text">4. 未来发展方向</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#4-1-%E6%9E%81%E7%AB%AF%E7%9A%84%E9%80%9A%E8%AE%AF%E6%96%B9%E6%A1%88"><span class="nav-number">2.4.1.</span> <span class="nav-text">4.1 极端的通讯方案</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#4-2-%E9%80%9A%E4%BF%A1%E9%99%8D%E4%BD%8E%E5%92%8CPareto-frontier"><span class="nav-number">2.4.2.</span> <span class="nav-text">4.2 通信降低和Pareto frontier</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#4-3-%E6%96%B0%E7%9A%84%E5%BC%82%E6%AD%A5%E6%A8%A1%E5%9E%8B"><span class="nav-number">2.4.3.</span> <span class="nav-text">4.3 新的异步模型</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#4-4-%E5%BC%82%E8%B4%A8%E6%80%A7%E8%AF%8A%E6%96%AD"><span class="nav-number">2.4.4.</span> <span class="nav-text">4.4 异质性诊断</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#4-5-%E7%BB%86%E5%BE%AE%E7%9A%84%E9%9A%90%E7%A7%81%E9%99%90%E5%88%B6"><span class="nav-number">2.4.5.</span> <span class="nav-text">4.5 细微的隐私限制</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#4-6-%E8%B6%85%E8%B6%8A%E7%9B%91%E7%9D%A3%E5%AD%A6%E4%B9%A0"><span class="nav-number">2.4.6.</span> <span class="nav-text">4.6 超越监督学习</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#4-7-%E4%BA%A7%E5%93%81%E6%80%A7%E8%81%94%E9%82%A6%E5%AD%A6%E4%B9%A0"><span class="nav-number">2.4.7.</span> <span class="nav-text">4.7 产品性联邦学习</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#4-8-%E5%9F%BA%E5%87%86"><span class="nav-number">2.4.8.</span> <span class="nav-text">4.8 基准</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#5-TFF%E6%A1%86%E6%9E%B6-tensorflow-fedrate-framwork"><span class="nav-number">2.5.</span> <span class="nav-text">5. TFF框架(tensorflow fedrate  framwork)</span></a></li></ol></li></ol></div>
+      </div>
+      <!--/noindex-->
+
+      <div class="site-overview-wrap sidebar-panel">
+        <div class="site-author motion-element" itemprop="author" itemscope itemtype="http://schema.org/Person">
+    <img class="site-author-image" itemprop="image" alt="Promise Chan"
+      src="/images/header.jpg">
+  <p class="site-author-name" itemprop="name">Promise Chan</p>
+  <div class="site-description" itemprop="description">Coding & upgrading</div>
+</div>
+<div class="site-state-wrap motion-element">
+  <nav class="site-state">
+      <div class="site-state-item site-state-posts">
+          <a href="/archives/">
+        
+          <span class="site-state-item-count">12</span>
+          <span class="site-state-item-name">日志</span>
+        </a>
+      </div>
+      <div class="site-state-item site-state-categories">
+            <a href="/categories/">
+          
+        <span class="site-state-item-count">5</span>
+        <span class="site-state-item-name">分类</span></a>
+      </div>
+      <div class="site-state-item site-state-tags">
+            <a href="/tags/">
+          
+        <span class="site-state-item-count">15</span>
+        <span class="site-state-item-name">标签</span></a>
+      </div>
+  </nav>
+</div>
+  <div class="links-of-author motion-element">
+      <span class="links-of-author-item">
+        <a href="https://github.com/promiseChan" title="GitHub → https:&#x2F;&#x2F;github.com&#x2F;promiseChan" rel="noopener" target="_blank"><i class="fa fa-fw fa-fab fa-github"></i>GitHub</a>
+      </span>
+  </div>
+
+
+
+      </div>
+
+    </div>
+  </aside>
+  <div id="sidebar-dimmer"></div>
+
+
+      </div>
+    </main>
+
+    <footer class="footer">
+      <div class="footer-inner">
+        
+
+        
+
+<div class="copyright">
+  
+  &copy; 
+  <span itemprop="copyrightYear">2022</span>
+  <span class="with-love">
+    <i class="fa fa-fa fa-heart"></i>
+  </span>
+  <span class="author" itemprop="copyrightHolder">Promise Chan</span>
+</div>
+  <div class="powered-by">由 <a href="https://hexo.io/" class="theme-link" rel="noopener" target="_blank">Hexo</a> & <a href="https://mist.theme-next.org/" class="theme-link" rel="noopener" target="_blank">NexT.Mist</a> 强力驱动
+  </div><a href="https://icp.gov.moe/?keyword=20180708" rel="external nofollow noreferrer" target="_blank" data-pjax-state="" style="
+    border-bottom-width: 0px;
+">萌 ICP 备 20180708 号</a>
+<!-- 网站运行时间的设置 -->
+<span id="timeDate">载入天数...</span>
+<span id="times">载入时分秒...</span>
+<script>
+    var now = new Date();
+    function createtime() {
+        var grt= new Date("03/10/2022 22:00:00");//此处修改你的建站时间，注意格式
+        now.setTime(now.getTime()+250);
+        days = (now - grt ) / 1000 / 60 / 60 / 24; dnum = Math.floor(days);
+        hours = (now - grt ) / 1000 / 60 / 60 - (24 * dnum); hnum = Math.floor(hours);
+        if(String(hnum).length ==1 ){hnum = "0" + hnum;} minutes = (now - grt ) / 1000 /60 - (24 * 60 * dnum) - (60 * hnum);
+        mnum = Math.floor(minutes); if(String(mnum).length ==1 ){mnum = "0" + mnum;}
+        seconds = (now - grt ) / 1000 - (24 * 60 * 60 * dnum) - (60 * 60 * hnum) - (60 * mnum);
+        snum = Math.round(seconds); if(String(snum).length ==1 ){snum = "0" + snum;}
+        document.getElementById("timeDate").innerHTML = "小站在混沌中存活了 "+dnum+" 天 ";
+        document.getElementById("times").innerHTML = hnum + " 小时 " + mnum + " 分 " + snum + " 秒";
+    }
+setInterval("createtime()",250);
+</script>
+
+        
+
+
+
+
+
+
+
+
+      </div>
+    </footer>
+  </div>
+
+  
+  <script src="/lib/anime.min.js"></script>
+  <script src="/lib/velocity/velocity.min.js"></script>
+  <script src="/lib/velocity/velocity.ui.min.js"></script>
+
+<script src="/js/utils.js"></script>
+
+<script src="/js/motion.js"></script>
+
+
+<script src="/js/schemes/muse.js"></script>
+
+
+<script src="/js/next-boot.js"></script>
+
+
+
+
+  
+
+
+
+
+  
+<script src="/js/local-search.js"></script>
+
+
+
+
+
+
+
+
+
+
+
+
+
+  
+
+  
+      
+
+<script>
+  if (typeof MathJax === 'undefined') {
+    window.MathJax = {
+      loader: {
+        source: {
+          '[tex]/amsCd': '[tex]/amscd',
+          '[tex]/AMScd': '[tex]/amscd'
+        }
+      },
+      tex: {
+        inlineMath: {'[+]': [['$', '$']]},
+        tags: 'ams'
+      },
+      options: {
+        renderActions: {
+          findScript: [10, doc => {
+            document.querySelectorAll('script[type^="math/tex"]').forEach(node => {
+              const display = !!node.type.match(/; *mode=display/);
+              const math = new doc.options.MathItem(node.textContent, doc.inputJax[0], display);
+              const text = document.createTextNode('');
+              node.parentNode.replaceChild(text, node);
+              math.start = {node: text, delim: '', n: 0};
+              math.end = {node: text, delim: '', n: 0};
+              doc.math.push(math);
+            });
+          }, '', false],
+          insertedScript: [200, () => {
+            document.querySelectorAll('mjx-container').forEach(node => {
+              let target = node.parentNode;
+              if (target.nodeName.toLowerCase() === 'li') {
+                target.parentNode.classList.add('has-jax');
+              }
+            });
+          }, '', false]
+        }
+      }
+    };
+    (function () {
+      var script = document.createElement('script');
+      script.src = '//cdn.jsdelivr.net/npm/mathjax@3/es5/tex-mml-chtml.js';
+      script.defer = true;
+      document.head.appendChild(script);
+    })();
+  } else {
+    MathJax.startup.document.state(0);
+    MathJax.texReset();
+    MathJax.typeset();
+  }
+</script>
+
+    
+
+  
+
+<script src="/live2dw/lib/L2Dwidget.min.js?094cbace49a39548bed64abff5988b05"></script><script>L2Dwidget.init({"log":false,"pluginJsPath":"lib/","pluginModelPath":"assets/","pluginRootPath":"live2dw/","tagMode":false});</script></body>
+</html>

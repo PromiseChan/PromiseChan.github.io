@@ -1,0 +1,805 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+  <meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=2">
+<meta name="theme-color" content="#222">
+<meta name="generator" content="Hexo 6.0.0">
+  <link rel="apple-touch-icon" sizes="180x180" href="/images/apple-touch-icon-next.png">
+  <link rel="icon" type="image/png" sizes="32x32" href="/images/favicon-32x32-next.png">
+  <link rel="icon" type="image/png" sizes="16x16" href="/images/favicon-16x16-next.png">
+  <link rel="mask-icon" href="/images/logo.svg" color="#222">
+
+<link rel="stylesheet" href="/css/main.css">
+
+
+<link rel="stylesheet" href="/lib/font-awesome/css/font-awesome.min.css">
+
+<script id="hexo-configurations">
+    var NexT = window.NexT || {};
+    var CONFIG = {"hostname":"example.com","root":"/","scheme":"Mist","version":"7.8.0","exturl":false,"sidebar":{"position":"left","display":"always","padding":18,"offset":12,"onmobile":false},"copycode":{"enable":false,"show_result":false,"style":"mac"},"back2top":{"enable":true,"sidebar":false,"scrollpercent":false},"bookmark":{"enable":false,"color":"#222","save":"auto"},"fancybox":false,"mediumzoom":false,"lazyload":false,"pangu":false,"comments":{"style":"tabs","active":null,"storage":true,"lazyload":false,"nav":null},"algolia":{"hits":{"per_page":10},"labels":{"input_placeholder":"Search for Posts","hits_empty":"We didn't find any results for the search: ${query}","hits_stats":"${hits} results found in ${time} ms"}},"localsearch":{"enable":true,"trigger":"auto","top_n_per_article":1,"unescape":false,"preload":false},"motion":{"enable":true,"async":false,"transition":{"post_block":"fadeIn","post_header":"slideDownIn","post_body":"slideDownIn","coll_header":"slideLeftIn","sidebar":"slideUpIn"}},"path":"search.xml"};
+  </script>
+
+  <meta name="description" content="不定时更新, 该时间段学到的新知识新技能">
+<meta property="og:type" content="article">
+<meta property="og:title" content="学习总结">
+<meta property="og:url" content="http://example.com/2022/03/11/my-cs-learning%20copy/index.html">
+<meta property="og:site_name" content="PromiseChanの博客">
+<meta property="og:description" content="不定时更新, 该时间段学到的新知识新技能">
+<meta property="og:locale" content="zh_CN">
+<meta property="og:image" content="https://images2015.cnblogs.com/blog/37237/201610/37237-20161018212454826-385810739.png">
+<meta property="og:image" content="https://www.ibm.com/developerworks/cn/opensource/os-cn-elk/img006.png">
+<meta property="article:published_time" content="2022-03-10T16:41:29.000Z">
+<meta property="article:modified_time" content="2022-10-15T16:59:30.306Z">
+<meta property="article:author" content="Promise Chan">
+<meta property="article:tag" content="心得">
+<meta property="article:tag" content="分析">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:image" content="https://images2015.cnblogs.com/blog/37237/201610/37237-20161018212454826-385810739.png">
+
+<link rel="canonical" href="http://example.com/2022/03/11/my-cs-learning%20copy/">
+
+
+<script id="page-configurations">
+  // https://hexo.io/docs/variables.html
+  CONFIG.page = {
+    sidebar: "",
+    isHome : false,
+    isPost : true,
+    lang   : 'zh-CN'
+  };
+</script>
+
+  <title>学习总结 | PromiseChanの博客</title>
+  
+
+
+
+
+
+
+  <noscript>
+  <style>
+  .use-motion .brand,
+  .use-motion .menu-item,
+  .sidebar-inner,
+  .use-motion .post-block,
+  .use-motion .pagination,
+  .use-motion .comments,
+  .use-motion .post-header,
+  .use-motion .post-body,
+  .use-motion .collection-header { opacity: initial; }
+
+  .use-motion .site-title,
+  .use-motion .site-subtitle {
+    opacity: initial;
+    top: initial;
+  }
+
+  .use-motion .logo-line-before i { left: initial; }
+  .use-motion .logo-line-after i { right: initial; }
+  </style>
+</noscript>
+
+<!-- hexo injector head_end start -->
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/katex@0.12.0/dist/katex.min.css">
+
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/hexo-math@4.0.0/dist/style.css">
+<!-- hexo injector head_end end --></head>
+
+<body itemscope itemtype="http://schema.org/WebPage">
+  <div class="container use-motion">
+    <div class="headband"></div>
+
+    <header class="header" itemscope itemtype="http://schema.org/WPHeader">
+      <div class="header-inner"><div class="site-brand-container">
+  <div class="site-nav-toggle">
+    <div class="toggle" aria-label="切换导航栏">
+      <span class="toggle-line toggle-line-first"></span>
+      <span class="toggle-line toggle-line-middle"></span>
+      <span class="toggle-line toggle-line-last"></span>
+    </div>
+  </div>
+
+  <div class="site-meta">
+
+    <a href="/" class="brand" rel="start">
+      <span class="logo-line-before"><i></i></span>
+      <h1 class="site-title">PromiseChanの博客</h1>
+      <span class="logo-line-after"><i></i></span>
+    </a>
+  </div>
+
+  <div class="site-nav-right">
+    <div class="toggle popup-trigger">
+        <i class="fa fa-search fa-fw fa-lg"></i>
+    </div>
+  </div>
+</div>
+
+
+
+
+<nav class="site-nav">
+  <ul id="menu" class="menu">
+        <li class="menu-item menu-item-home">
+
+    <a href="/" rel="section"><i class="fa fa-fw fa-fa fa-home"></i>首页</a>
+
+  </li>
+        <li class="menu-item menu-item-archives">
+
+    <a href="/archives/" rel="section"><i class="fa fa-fw fa-fa fa-archive"></i>归档</a>
+
+  </li>
+        <li class="menu-item menu-item-tags">
+
+    <a href="/tags/" rel="section"><i class="fa fa-fw fa-fa fa-tags"></i>标签</a>
+
+  </li>
+        <li class="menu-item menu-item-categories">
+
+    <a href="/categories/" rel="section"><i class="fa fa-fw fa-fa fa-th"></i>分类</a>
+
+  </li>
+      <li class="menu-item menu-item-search">
+        <a role="button" class="popup-trigger"><i class="fa fa-search fa-fw"></i>搜索
+        </a>
+      </li>
+  </ul>
+</nav>
+
+
+
+  <div class="search-pop-overlay">
+    <div class="popup search-popup">
+        <div class="search-header">
+  <span class="search-icon">
+    <i class="fa fa-search"></i>
+  </span>
+  <div class="search-input-container">
+    <input autocomplete="off" autocapitalize="off"
+           placeholder="搜索..." spellcheck="false"
+           type="search" class="search-input">
+  </div>
+  <span class="popup-btn-close">
+    <i class="fa fa-times-circle"></i>
+  </span>
+</div>
+<div id="search-result">
+  <div id="no-result">
+    <i class="fa fa-spinner fa-pulse fa-5x fa-fw"></i>
+  </div>
+</div>
+
+    </div>
+  </div>
+
+</div>
+    </header>
+
+    
+  <div class="back-to-top">
+    <i class="fa fa-arrow-up"></i>
+    <span>0%</span>
+  </div>
+
+
+    <main class="main">
+      <div class="main-inner">
+        <div class="content-wrap">
+          
+
+          <div class="content post posts-expand">
+            
+
+    
+  
+  
+  <article itemscope itemtype="http://schema.org/Article" class="post-block" lang="zh-CN">
+    <link itemprop="mainEntityOfPage" href="http://example.com/2022/03/11/my-cs-learning%20copy/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="image" content="/images/header.jpg">
+      <meta itemprop="name" content="Promise Chan">
+      <meta itemprop="description" content="Coding & upgrading">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="PromiseChanの博客">
+    </span>
+      <header class="post-header">
+        <h1 class="post-title" itemprop="name headline">
+          学习总结
+        </h1>
+
+        <div class="post-meta">
+            <span class="post-meta-item">
+              <span class="post-meta-item-icon">
+                <i class="fa fa-calendar-o"></i>
+              </span>
+              <span class="post-meta-item-text">发表于</span>
+
+              <time title="创建时间：2022-03-11 00:41:29" itemprop="dateCreated datePublished" datetime="2022-03-11T00:41:29+08:00">2022-03-11</time>
+            </span>
+              <span class="post-meta-item">
+                <span class="post-meta-item-icon">
+                  <i class="fa fa-calendar-check-o"></i>
+                </span>
+                <span class="post-meta-item-text">更新于</span>
+                <time title="修改时间：2022-10-16 00:59:30" itemprop="dateModified" datetime="2022-10-16T00:59:30+08:00">2022-10-16</time>
+              </span>
+            <span class="post-meta-item">
+              <span class="post-meta-item-icon">
+                <i class="fa fa-folder-o"></i>
+              </span>
+              <span class="post-meta-item-text">分类于</span>
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+                  <a href="/categories/java/" itemprop="url" rel="index"><span itemprop="name">java</span></a>
+                </span>
+                  ，
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+                  <a href="/categories/java/python/" itemprop="url" rel="index"><span itemprop="name">python</span></a>
+                </span>
+            </span>
+
+          
+
+        </div>
+      </header>
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+        <p>不定时更新, 该时间段学到的新知识新技能</p>
+<span id="more"></span>
+
+<h2 id="java-分析"><a href="#java-分析" class="headerlink" title="java 分析"></a>java 分析</h2><h3 id="书籍"><a href="#书籍" class="headerlink" title="书籍"></a>书籍</h3><pre><code>1,/root/下载/java 分析/《_深入理解Java虚拟机_JVM高级特性与最佳实践 第2版_220_.pdf》
+
+2./root/下载/java 分析/深入理解Java虚拟机：JVM高级特性与最佳实践（第3版）周志明.pdf
+
+3/root/下载/java 分析/《IntelliJ IDEA快捷键大全@www.java1234.com.pdf》
+</code></pre>
+<h3 id="远程debug"><a href="#远程debug" class="headerlink" title="远程debug"></a>远程debug</h3><figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">## jvm 参数中加入以下命令</span><br><span class="line">-Xdebug</span><br><span class="line">-Xrunjdwp:transport=dt_socket,address=<span class="number">5005</span>,server=y,suspend=n</span><br></pre></td></tr></table></figure>
+
+<h3 id="jstack-x2F-javacore-导出"><a href="#jstack-x2F-javacore-导出" class="headerlink" title="jstack&#x2F;javacore 导出"></a>jstack&#x2F;javacore 导出</h3><p>供程序卡死时分析使用</p>
+<figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">jstack &lt;pid&gt; </span><br><span class="line">or</span><br><span class="line">kill -3 pid</span><br></pre></td></tr></table></figure>
+
+<h3 id="heapdump-生成"><a href="#heapdump-生成" class="headerlink" title="heapdump 生成"></a>heapdump 生成</h3><p>供程序内存溢出(OOM) 、程序内存使用现状 分析使用</p>
+<figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br></pre></td><td class="code"><pre><span class="line">1. 默认会有coredump文件生成,以.dmp 文件结尾</span><br><span class="line">手工生成dmp文件命令: gcore &lt;pid&gt;</span><br><span class="line"></span><br><span class="line">2.IBM JDK需要用coredump转成heapdump</span><br><span class="line">2.1 生成解析后的zip包,在当前目录下生成 core.xxx.dmp.zip</span><br><span class="line">ibm_jdk/jre/bin/jextract core.xxx.dmp</span><br><span class="line">2.2 从zip包中提取中heapdump文件(.phd)</span><br><span class="line">ibm_jdk/bin/jdmpview -core  core.xxx.dmp heapdump</span><br><span class="line"></span><br><span class="line">3. Oracle JDK可直接生成heapdump</span><br><span class="line">./jmap -dump:live,format=b,file=heap.hprof &lt;pid&gt;</span><br><span class="line">heap.hprof 是heapdump文件的文件名</span><br></pre></td></tr></table></figure>
+
+<p>3.gc文件生成</p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">-Xloggc:./tmp/gc.log -XX:+PrintGCDetails -XX:+PrintGCDateStamps</span><br></pre></td></tr></table></figure>
+
+<figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">实时查看</span><br><span class="line">5秒钟打印一次，一共打印20次。</span><br><span class="line">jstat -gc pid 5000 20</span><br></pre></td></tr></table></figure>
+
+<h3 id="class-not-found-分析"><a href="#class-not-found-分析" class="headerlink" title="class  not  found 分析"></a>class  not  found 分析</h3><figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line">class_info = jad class_full_name</span><br><span class="line"></span><br><span class="line"><span class="keyword">if</span> contains class_info:</span><br><span class="line">	differenct classloader( echo other no dependency) -&gt;  classpath settings wrong</span><br><span class="line"><span class="keyword">else</span> <span class="keyword">if</span> <span class="keyword">not</span> class_info:</span><br><span class="line">	jvm <span class="keyword">not</span> loaded classes <span class="keyword">in</span> jar -&gt; jvm progress start error</span><br></pre></td></tr></table></figure>
+
+<h3 id="arthas-分析"><a href="#arthas-分析" class="headerlink" title="arthas 分析"></a>arthas 分析</h3><ol>
+<li><p>查看JVM class命令</p>
+<figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">sc -d -f demo.MathGame </span><br></pre></td></tr></table></figure>
+
+
+</li>
+<li><p>查看方法的入参和异常</p>
+<figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">watch *.CommonTest test &#x27;&#123;params,returnObj,throwExp&#125;&#x27; -x 5 -e</span><br></pre></td></tr></table></figure></li>
+</ol>
+<h3 id="tomcat-类加载机制"><a href="#tomcat-类加载机制" class="headerlink" title="tomcat 类加载机制"></a>tomcat 类加载机制</h3><p>tomcat 打破了双亲委派机制，jvm 默认类加载器appclassloader 会启动tomcat自定义的类加载器</p>
+<p><img src="https://images2015.cnblogs.com/blog/37237/201610/37237-20161018212454826-385810739.png"></p>
+<p>自定义的类加载 parallelwebappclassloader 会分别加载webapps 下的各个应用jar包，完成各个应用的启动相互隔离</p>
+<p>也因此，springboot 项目出现明明 jvm 里面已经加载了某个class，但是 springboot仍然报错 no class found，是因为这个class 可能被其他classloader加载了，单与使用到这个class的类所在的类加载器不一致，且使用类为父加载器，那个class为子类加载，导致找不到class</p>
+<h2 id="dubbo-分析"><a href="#dubbo-分析" class="headerlink" title="dubbo 分析"></a>dubbo 分析</h2><pre><code>1./root/下载/dubbo 分析/《dubbo源码分析系列@www.java1234.com.pdf》
+
+2./root/下载/dubbo 分析/ 《dubbo源码解析2.0@www.java1234.com.pdf》
+
+3.dubbo spi 加载流程
+</code></pre>
+<ol>
+<li><p>注册中心，服务提供者，服务消费者三者之间均为长连接，监控中心除外</p>
+</li>
+<li><p>注册中心通过长连接感知服务提供者的存在，服务提供者宕机，注册中心将立即推送事件通知消费者</p>
+</li>
+<li><p>注册中心和监控中心全部宕机，不影响已运行的提供者和消费者，消费者在本地缓存了提供者列表</p>
+</li>
+<li><p>注册中心和监控中心都是可选的，服务消费者可以直连服务提供者</p>
+</li>
+<li><p>整体流程</p>
+<p>提供方：</p>
+<p> 首先暴露到本地netty，用dubboProtocal 读取预先获取到的协议（dubbo，http）以及端口    </p>
+<p> registryProtocal ：用registryService注册服务-&gt;zk</p>
+<p> 并且保存每一条调用传过来的url，需要的invoker，到map中，这样与消费方netty通信时，就知道，到底用哪个invoker去执行了对外暴露服务</p>
+<p>消费方：</p>
+<p> 启动时，读取配置，从zk获取服务提供方列表，并缓存到本地</p>
+<p> 执行调用逻辑时，生成一个代理对象proxy，所有的服务调用，使用proxy类生成的对象统一完成</p>
+<pre><code> proxy中，首先进行一系列预处理，
+ 
+ 然后用dubboReference创建一个netty客户端，设置自己的ip，port，
+ 
+ 如果没有缓存，从zk上订阅服务，获取服务具体提供方的ip:port; 包装成调用url-&gt;调用invoker的缓存， 如果有缓然后从缓存中选择一个提供方ip:port 
+ 
+ 用netty框架进行网络通信，向提供方传输序列化后的参数（包括要调用的服务名，入参等）
+ 
+ 提供方nettyChannel接受到请求，开始处理，
+ 
+ 通过一个proxy对象，统一完成调用过程，中间进过一些逻辑判断，根据url，从本读缓存中，读取url对应invoker，在dubboInvoker中完成服务具体实现接口的调用，包括拦截器中的处理
+ 
+ 并将结果用netty网络通信传输后返回给消费方
+</code></pre>
+</li>
+<li></li>
+</ol>
+<h3 id="dubbo-2-7-新特性"><a href="#dubbo-2-7-新特性" class="headerlink" title="dubbo 2.7 新特性"></a>dubbo 2.7 新特性</h3><h4 id="元数据"><a href="#元数据" class="headerlink" title="元数据"></a>元数据</h4><ol>
+<li><p>元数据：描述数据的数据，</p>
+<p>在服务治理中，例如<strong>服务接口名，重试次数，版本号</strong>等等都可以理解为元数据</p>
+</li>
+<li><p>Dubbo 2.7 进行改动，只将真正属于服务治理的数据发布到注册中心之中，大大降低了注册中心的负荷。</p>
+<p>同时，将全量的元数据发布到另外的组件中：元数据中心。</p>
+<p>元数据中心目前支持 redis（推荐），zookeeper。</p>
+<p>示例：使用 zookeeper 作为元数据中心</p>
+<figure class="highlight xml"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line"><span class="tag">&lt;<span class="name">dubbo:metadata-report</span> <span class="attr">address</span>=<span class="string">&quot;zookeeper://127.0.0.1:2181&quot;</span>/&gt;</span></span><br></pre></td></tr></table></figure>
+</li>
+<li><p>2.7 中，如果不进行额外的配置，zookeeper 中的数据格式仍然会和 Dubbo 2.6 保持一致，保持兼容性</p>
+<p>开启简化：</p>
+<figure class="highlight xml"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line"><span class="tag">&lt;<span class="name">dubbo:registry</span> <span class="attr">address</span>=<span class="string">“zookeeper://127.0.0.1:2181”</span> <span class="attr">simplified</span>=<span class="string">&quot;true&quot;</span>/&gt;</span></span><br></pre></td></tr></table></figure>
+
+<p>实例：</p>
+<p>原来：dubbo%3A%2F%2F192.168.43.178%3A28087%2Forg.apache.dubbo.demo.DemoService%3Fanyhost%3Dtrue%26application%3Ddemo-provider%26deprecated%3Dfalse%26dubbo%3D2.0.2%26dynamic%3Dtrue%26generic%3Dfalse%26interface%3Dorg.apache.dubbo.demo.DemoService%26metadata-type%3Dremote%26methods%3DsayHello%2CsayHelloAsync%26pid%3D6414%26release%3D%26side%3Dprovider%26timestamp%3D1594308439251</p>
+<p>现在：dubbo:&#x2F;&#x2F;30.5.120.185:20880&#x2F;org.apache.dubbo.demo.api.DemoService? application&#x3D;demo-provider&amp; dubbo&#x3D;2.0.2&amp; release&#x3D;2.7.0&amp; timestamp&#x3D;1552975501873</p>
+<p>对于那些非必要的服务信息，仍然全量存储在元数据中心之中</p>
+<p>{“parameters”:{“side”:”provider”,”release”:”2.7.8-SNAPSHOT”,”methods”:”sayHello,sayHelloAsync”,”deprecated”:”false”,”qos.port”:”22222”,”dubbo”:”2.0.2”,”interface”:”org.apache.dubbo.demo.DemoService”,”generic”:”false”,”timeout”:”300”,”revision”:”2.7.8-SNAPSHOT”,”metadata-type”:”remote”,”application”:”demo-provider”,”dynamic”:”true”,”anyhost”:”true”},”canonicalName”:”org.apache.dubbo.demo.DemoService”,”codeSource”:”dubbo-demo-interface-2.7.8-SNAPSHOT.jar”,”methods”:[{“name”:”sayHelloAsync”,”parameterTypes”:[“java.lang.String”],”returnType”:”java.util.concurrent.CompletableFuture”},{“name”:”sayHello”,”parameterTypes”:[“java.lang.String”],”returnType”:”java.lang.String”}],”types”:[{“type”:”java.lang.String”,”typeBuilderName”:”org.apache.dubbo.metadata.definition.builder.DefaultTypeBuilder”},{“type”:”char”,”typeBuilderName”:”org.apache.dubbo.metadata.definition.builder.DefaultTypeBuilder”},{“type”:”int”,”typeBuilderName”:”org.apache.dubbo.metadata.definition.builder.DefaultTypeBuilder”},{“type”:”java.util.concurrent.CompletableFuture”,”properties”:{“result”:{“type”:”java.lang.Object”,”typeBuilderName”:”org.apache.dubbo.metadata.definition.builder.DefaultTypeBuilder”},”stack”:{“type”:”java.util.concurrent.CompletableFuture$Completion”,”properties”:{“next”:{“type”:”java.util.concurrent.CompletableFuture$Completion”,”$ref”:”java.util.concurrent.CompletableFuture$Completion”,”typeBuilderName”:”org.apache.dubbo.metadata.definition.builder.DefaultTypeBuilder”},”status”:{“type”:”int”,”typeBuilderName”:”org.apache.dubbo.metadata.definition.builder.DefaultTypeBuilder”}},”typeBuilderName”:”org.apache.dubbo.metadata.definition.builder.DefaultTypeBuilder”}},”typeBuilderName”:”org.apache.dubbo.metadata.definition.builder.DefaultTypeBuilder”},{“type”:”java.lang.Object”,”typeBuilderName”:”org.apache.dubbo.metadata.definition.builder.DefaultTypeBuilder”},{“type”:”java.util.concurrent.CompletableFuture$Completion”,”properties”:{“next”:{“type”:”java.util.concurrent.CompletableFuture$Completion”,”$ref”:”java.util.concurrent.CompletableFuture$Completion”,”typeBuilderName”:”org.apache.dubbo.metadata.definition.builder.DefaultTypeBuilder”},”status”:{“type”:”int”,”typeBuilderName”:”org.apache.dubbo.metadata.definition.builder.DefaultTypeBuilder”}},”typeBuilderName”:”org.apache.dubbo.metadata.definition.builder.DefaultTypeBuilder”}]}</p>
+</li>
+<li><p>元数据路径</p>
+</li>
+<li><p>管理平台与元数据交互</p>
+</li>
+<li></li>
+</ol>
+<h4 id="配置中心"><a href="#配置中心" class="headerlink" title="配置中心"></a>配置中心</h4><ol>
+<li><p>在 Dubbo 中，配置中心主要承担了两个作用</p>
+<ul>
+<li>外部化配置。启动配置的集中式存储</li>
+<li>服务治理。服务治理规则的存储与通知</li>
+</ul>
+<p>示例：使用 Zookeeper 作为配置中心</p>
+<figure class="highlight xml"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line"><span class="tag">&lt;<span class="name">dubbo:config-center</span> <span class="attr">address</span>=<span class="string">&quot;zookeeper://127.0.0.1:2181&quot;</span>/&gt;</span></span><br></pre></td></tr></table></figure></li>
+</ol>
+<h2 id="Netty"><a href="#Netty" class="headerlink" title="Netty"></a>Netty</h2><h3 id="入门"><a href="#入门" class="headerlink" title="入门"></a>入门</h3><pre><code>1.（netty-server 、netty-client 模板）：/root/code/IdeaProjects/netty-project
+
+### 指南
+
+/root/下载/netty 分析/《Netty权威指南 PDF电子书下载 带目录书签 完整版.pdf》
+</code></pre>
+<h2 id="Nginx"><a href="#Nginx" class="headerlink" title="Nginx"></a>Nginx</h2><h3 id="启动命令"><a href="#启动命令" class="headerlink" title="启动命令"></a>启动命令</h3><p>Nginx 启动命令的格式: Nginx 执行文件- c Ng inx 配置文件所在地址</p>
+<p>( 1 )用默认配置文件直接启动。<br>&#x2F;usr&#x2F;local&#x2F;nginx&#x2F;sbin&#x2F;nginx<br>或<br>nginx<br>(2 )指定配置文件启动。<br>nginx - c &#x2F;usr&#x2F;local&#x2F;nginx&#x2F;conf&#x2F;nginx . conf<br>(3 )其他方式启动。<br>service nginx start</p>
+<h3 id="停止-Nginx"><a href="#停止-Nginx" class="headerlink" title="停止 Nginx"></a>停止 Nginx</h3><p>停止 Nginx 的 方法有 3 种 : 从容停止、快速停止和强制停止 。一般都是通过发送系统信号<br>给主进程 的 方式来停止 Ng inx o<br>( 1) 查看 Nginx 的主进程号 。<br>ps - ef I grep nginx<br>15| 直播系统开发:基于 Nginx 与 Nginx-rtmp-module<br>该命令在 1.3 . 3 节中介绍过 ,这里不 再赘述 。<br>( 2 )从容停止。<br>kill</p>
+<ul>
+<li><p>QUIT 主进程号<br>或<br>kill</p>
+</li>
+<li><p>QUIT<br>&#x2F;usr&#x2F;local&#x2F;nginx&#x2F;logs&#x2F;nginx .pid<br>如果在 nginx.conf 配置文件中指 定 了 pid 文件存放的路径 ,则该文件 中存放的就是 Nginx<br>当前的主进程号,其默认被放在 Nginx 安装目录 的 logs 目 录下。<br>(3 )快速停止 。<br>kill</p>
+</li>
+<li><p>TERM 主进程号<br>(4 )强制停止 。<br>pkill<br>-9<br>口 gin x<br>( 5 )其他停止方式 。<br>还可以用其他方式停止 Nginx 服务 :<br>service nginx stop<br>或<br>nginx - s stop</p>
+</li>
+</ul>
+<h3 id="重启"><a href="#重启" class="headerlink" title="重启"></a>重启</h3><p>  如果修改了 N ginx 的 配置文件 , 要想让新配置的文件生效 ,就得重启 Nginx 。同样 ,可以<br>  发送系统信号给 Ngi nx 主进程来重启 Nginx 。<br>  C I )验证配置文件的正确性 。<br>  验证配置文件的正确性使用以下命令:<br>  nginx - t<br>  该命令会默认检查&#x2F;usr&#x2F;local&#x2F;nginx&#x2F;conf&#x2F;nginx.conf 文件 。 如果要测试指 定 的配置文件,则执<br>  行以下命令(该命令中的文件路径要改成待测试的配置文件路径) :<br>  nginx -t -c &#x2F;usr&#x2F;local&#x2F;nginx&#x2F;conf&#x2F;nginx.conf</p>
+<h3 id="全链路配置"><a href="#全链路配置" class="headerlink" title="全链路配置"></a>全链路配置</h3><ol>
+<li><p>首先$request_id 放在HEADER 中传到后端（&lt;&#x3D;&gt;  zpkin 中的 trace_id）</p>
+<p>proxy_set_header HTTP_REQUEST_ID $request_id</p>
+</li>
+<li><p>设置前后调用关系</p>
+<p>例如 zpkin中的spanid</p>
+</li>
+</ol>
+<h2 id="docker"><a href="#docker" class="headerlink" title="docker"></a>docker</h2><h3 id="常用命令"><a href="#常用命令" class="headerlink" title="常用命令"></a>常用命令</h3><figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br></pre></td><td class="code"><pre><span class="line">docker inspect 容器名字或者 ID | grep -i logpath</span><br><span class="line"></span><br><span class="line">docker ps | grep 容器id</span><br><span class="line"></span><br><span class="line">docker  run -it 镜像id</span><br><span class="line"></span><br><span class="line">docker exec -it 容器id bash</span><br><span class="line"></span><br><span class="line">docker cp 源 容器id:目的</span><br><span class="line"><span class="meta"></span></span><br><span class="line"><span class="meta"># </span><span class="language-bash">容器抓包</span></span><br><span class="line">docker ps | grep xxx 获取容器id/name</span><br><span class="line">docker inspect --format &quot;&#123;&#123;.State.Pid&#125;&#125;&quot; container_id/name 获取PID</span><br><span class="line">nsenter -n -t container_id/name</span><br><span class="line"></span><br><span class="line"></span><br><span class="line">docker logs 容器id | grep 关键词</span><br></pre></td></tr></table></figure>
+
+
+
+
+
+<h2 id="ELK-搭建（日志中心基本搭建）"><a href="#ELK-搭建（日志中心基本搭建）" class="headerlink" title="ELK 搭建（日志中心基本搭建）"></a>ELK 搭建（日志中心基本搭建）</h2><h3 id="架构"><a href="#架构" class="headerlink" title="架构"></a>架构</h3><p>（filebeat ：logstash-forwarder 的升级版）</p>
+<p><img src="https://www.ibm.com/developerworks/cn/opensource/os-cn-elk/img006.png" alt="图 6. 实验系统架构"></p>
+<p><a target="_blank" rel="noopener" href="https://www.ibm.com/developerworks/cn/opensource/os-cn-elk-filebeat/index.html">https://www.ibm.com/developerworks/cn/opensource/os-cn-elk-filebeat/index.html</a></p>
+<h3 id="Spring-cloud-集成-Sleuth"><a href="#Spring-cloud-集成-Sleuth" class="headerlink" title="Spring cloud 集成 Sleuth"></a>Spring cloud 集成 Sleuth</h3><ol>
+<li>demo ：&#x2F;root&#x2F;code&#x2F;IdeaProjects&#x2F;cloud-sleuth-parent</li>
+<li>zipkin-server 作为服务端; backend作为提供方服务;client 作为消费方服务</li>
+<li>不直接使用http传送链路信息;使用rabbitMQ作为分布式消息中间件</li>
+<li>backend 和 client 的链路信息发到MQ; zipkin 从MQ消费链路信息;并且zipkin获取到后存入mysql</li>
+</ol>
+<h3 id="logback-新增json文件"><a href="#logback-新增json文件" class="headerlink" title="logback 新增json文件"></a>logback 新增json文件</h3><ol>
+<li><p>定义一个log 文件</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">&lt;property name=&quot;LOG_FILE&quot; value=&quot;$&#123;LOG_FILE&#125;&quot;/&gt;</span><br><span class="line">使用：-D 参数加上，即启动参数中加上 -DLOG_FILE=/root/logs/cloud.log</span><br></pre></td></tr></table></figure>
+</li>
+<li><p>设置滚动策略</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line">&lt;rollingPolicy class=&quot;ch.qos.logback.core.rolling.TimeBasedRollingPolicy&quot;&gt;</span><br><span class="line">    &lt;fileNamePattern&gt;$&#123;LOG_FILE&#125;.json.%d&#123;yyyy-MM-dd&#125;.gz&lt;/fileNamePattern&gt;</span><br><span class="line">    &lt;maxHistory&gt;7&lt;/maxHistory&gt;</span><br><span class="line">&lt;/rollingPolicy&gt;</span><br></pre></td></tr></table></figure>
+
+<ol start="3">
+<li>设置具体执行哪些打印策略，以及需要记录哪些级别的日志</li>
+</ol>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line"> &lt;root level=&quot;INFO&quot;&gt;</span><br><span class="line">        &lt;appender-ref ref=&quot;console&quot;/&gt;</span><br><span class="line">        &lt;!-- uncomment this to have also JSON logs--&gt;</span><br><span class="line">        &lt;appender-ref ref=&quot;logstash&quot;/&gt;</span><br><span class="line">&lt;!--        &lt;appender-ref ref=&quot;flatfile&quot;/&gt;--&gt;</span><br><span class="line">    &lt;/root&gt;</span><br></pre></td></tr></table></figure></li>
+</ol>
+<h3 id="Elasticsearch-全文搜索引擎"><a href="#Elasticsearch-全文搜索引擎" class="headerlink" title="Elasticsearch 全文搜索引擎"></a>Elasticsearch 全文搜索引擎</h3><ol>
+<li><p>底层使用开源库：<a target="_blank" rel="noopener" href="https://lucene.apache.org/">Lucene</a>，但是不能直接使用，需要使用api调用</p>
+</li>
+<li><p>分布式数据库 </p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">## 不能用root用户启动</span></span><br><span class="line"><span class="comment">## 需要切换到其他用户 su elasticsearch</span></span><br><span class="line">./bin/elasticsearch </span><br></pre></td></tr></table></figure>
+</li>
+<li><p>流程</p>
+<p>p -&gt; rabbit    c -&gt; rabbit</p>
+<p>rabbitMQ -&gt; zipkin &lt;-&gt; elasticsearch</p>
+</li>
+<li><p>原理</p>
+<p>Elastic 会索引所有字段，经过处理后写入一个反向索引（Inverted Index）。查找数据的时候，直接查找该索引。</p>
+<p>所以，Elastic 数据管理的顶层单位就叫做 Index（索引）。它是单个数据库的同义词。每个 Index （即数据库）的名字必须是小写。</p>
+<p>下面的命令可以查看当前节点的所有 Index。</p>
+<p><a target="_blank" rel="noopener" href="http://www.ruanyifeng.com/blog/2017/08/elasticsearch.html">http://www.ruanyifeng.com/blog/2017/08/elasticsearch.html</a></p>
+</li>
+<li><p>elasticsearch使用教程</p>
+<p>查看所有index（数据库）：<a target="_blank" rel="noopener" href="http://localhost:9200/_cat/indices?v">http://localhost:9200/_cat/indices?v</a></p>
+<p>查看所有type：<a target="_blank" rel="noopener" href="http://localhost:9200/_mapping?pretty=true">http://localhost:9200/_mapping?pretty=true</a></p>
+<p>查看某个index下的所有数据：<a target="_blank" rel="noopener" href="http://localhost:9200/zipkin-2020-07-01?pretty=true">http://localhost:9200/zipkin-2020-07-01?pretty=true</a></p>
+</li>
+</ol>
+<h3 id="filebeat-配置"><a href="#filebeat-配置" class="headerlink" title="filebeat 配置"></a>filebeat 配置</h3><ol>
+<li><p>原理：采集配置中的log文件，发送到logstash或者elasticsearch中</p>
+</li>
+<li><ul>
+<li>input_type: log<ul>
+<li>paths:<ul>
+<li>&#x2F;root&#x2F;code&#x2F;IdeaProjects&#x2F;cloud-sleuth-parent&#x2F;microservice-zipkin-client-backend&#x2F;logs&#x2F;backend.log.json</li>
+</ul>
+</li>
+</ul>
+</li>
+</ul>
+<p>output.elasticsearch:</p>
+<pre><code>      hosts: [&quot;localhost:9200&quot;]
+</code></pre>
+<p>output.logstash</p>
+<pre><code> hosts: [&quot;localhost:5044&quot;]
+</code></pre>
+</li>
+<li><p>启动：.&#x2F;filebeat -e -c filebeat.yml -d “publish”</p>
+</li>
+<li></li>
+</ol>
+<h3 id="logstash-配置"><a href="#logstash-配置" class="headerlink" title="logstash 配置"></a>logstash 配置</h3><ol>
+<li><p>参考：<a target="_blank" rel="noopener" href="https://www.cnblogs.com/cjsblog/p/9459781.html">https://www.cnblogs.com/cjsblog/p/9459781.html</a></p>
+</li>
+<li><p>设置pipline ，对接fileabeat发过来的日志</p>
+</li>
+<li><p>发送到elasticsearch</p>
+</li>
+</ol>
+<h3 id="logstash-优化"><a href="#logstash-优化" class="headerlink" title="logstash 优化"></a>logstash 优化</h3><p>logstash 使用grok filter 时，因为使用正则表达式，则对cpu、内存消耗较大</p>
+<p>问题复现：特殊字符分割的日志，使用grok 匹配后转成json 格式，直接写正则匹配后压测，1并发持续压测，出现丢数据现象，基本上1小时入es一次，每次持续1-2分钟</p>
+<p>优化思路：    借鉴条带化技术，kafka使用单独topic发送并且携带加密鉴权，消费前认证 + logstash 逻辑优化</p>
+<p>具体实现：</p>
+<pre><code>kafka 添加sm512 加密配置
+
+logstash 放弃使用正则匹配，改为字符串分割，保存到数组中，构造输出的json 格式，key：xx,value = array[i]
+</code></pre>
+<h3 id="kafka-方面的调优"><a href="#kafka-方面的调优" class="headerlink" title="kafka 方面的调优"></a>kafka 方面的调优</h3><p>1.消费方个数 &lt;&#x3D; kafka的 partion个数</p>
+<p>2.实现重复消费： 对消费方进行分组，即设置groupid</p>
+<h2 id="Prometheus-监控报警搭建"><a href="#Prometheus-监控报警搭建" class="headerlink" title="Prometheus 监控报警搭建"></a>Prometheus 监控报警搭建</h2><h3 id="工作流程"><a href="#工作流程" class="headerlink" title="工作流程"></a>工作流程</h3><p>（1）客户端 安装 xxx_exporter ， 暴露监控数据获取的接口</p>
+<p>（2）Prometheus Server 定时查询 exporter 暴露的接口，将查询到的监控数据，落 TSDB（时序数据库）</p>
+<p>（3）Prometheus Server 暴露接口，可以查询某段时间内的监控数据</p>
+<p>（4）AlertManager ：告警模块，可以用一套告警集群对接 不同的Prometheus Server 集群</p>
+<h3 id="Prometheus-Server-端"><a href="#Prometheus-Server-端" class="headerlink" title="Prometheus Server 端"></a>Prometheus Server 端</h3><p>启动时 ： 需要指定配置文件路径</p>
+<h3 id="exporter-编写"><a href="#exporter-编写" class="headerlink" title="exporter 编写"></a>exporter 编写</h3><pre><code>默认使用go 语言编写 : 定义 /metrics 接口 ，接口按采集格式，返回采集数据
+
+有四类指标：Counter (累加指标)、Gauge (测量指标)、Summary (概略图)（占比）、Histogram (直方图)（占比）
+
+https://www.jianshu.com/p/9646ce49f722
+</code></pre>
+<h3 id="alertManager-报警rule-规则编写"><a href="#alertManager-报警rule-规则编写" class="headerlink" title="alertManager 报警rule 规则编写"></a>alertManager 报警rule 规则编写</h3><h3 id="prom-sql-监控查询sql-编写"><a href="#prom-sql-监控查询sql-编写" class="headerlink" title="prom sql 监控查询sql 编写"></a>prom sql 监控查询sql 编写</h3><h2 id="linux-运维"><a href="#linux-运维" class="headerlink" title="linux 运维"></a>linux 运维</h2><h3 id="linux挂载ftp服务器目录"><a href="#linux挂载ftp服务器目录" class="headerlink" title="linux挂载ftp服务器目录"></a>linux挂载ftp服务器目录</h3><figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">sudo mount &quot;\\\192.168.10.22\FTPServer&quot; /ftp_tmp -o username=user,password=abcdefg -t cifs</span><br></pre></td></tr></table></figure>
+
+
+
+
+
+
+
+<h2 id="AI"><a href="#AI" class="headerlink" title="AI"></a>AI</h2><h3 id="理论书籍"><a href="#理论书籍" class="headerlink" title="理论书籍"></a>理论书籍</h3><pre><code>1.《机器学习》周志华
+</code></pre>
+<h3 id="实战类-书籍"><a href="#实战类-书籍" class="headerlink" title="实战类 书籍"></a>实战类 书籍</h3><pre><code>1./root/下载/AI 分析/《584756 大数据架构详解：从数据获取到深度学习.pdf》
+</code></pre>
+<h3 id="工作实践"><a href="#工作实践" class="headerlink" title="工作实践"></a>工作实践</h3><pre><code>报警压缩：zabbix
+</code></pre>
+<p>(1)时间聚合</p>
+<p>(2)内容相似度</p>
+<p>(3)关联性</p>
+<h2 id="Spring-Cloud"><a href="#Spring-Cloud" class="headerlink" title="Spring Cloud"></a>Spring Cloud</h2><pre><code>###     ZUUL
+</code></pre>
+<ol>
+<li><p>拦截器类型 （pre、route、post、error 四种）</p>
+</li>
+<li><p>拦截器用法</p>
+<p>type：设置类型</p>
+<p>run：逻辑</p>
+<p>order：同一类型的优先级：数字越小、优先级越大</p>
+</li>
+<li></li>
+</ol>
+<pre><code>###     Ribbon
+
+### 指南
+</code></pre>
+<p>&#x2F;root&#x2F;下载&#x2F; Spring Cloud 分析&#x2F;《687039_Spring Cloud微服务全栈技术与案例解析.pdf》</p>
+<h2 id="IELTS"><a href="#IELTS" class="headerlink" title="IELTS"></a>IELTS</h2><h2 id="算法"><a href="#算法" class="headerlink" title="算法"></a>算法</h2><h3 id="各种loss-函数的选择："><a href="#各种loss-函数的选择：" class="headerlink" title="各种loss 函数的选择："></a>各种loss 函数的选择：</h3><table>
+<thead>
+<tr>
+<th>2&#x2F;3…分类一般用：</th>
+<th>log-loss</th>
+<th></th>
+</tr>
+</thead>
+<tbody><tr>
+<td>回归场景</td>
+<td>平方loss,即l2-loss</td>
+<td></td>
+</tr>
+<tr>
+<td>异常点检测</td>
+<td>l1-loss，即分位数回归：0.5，均方误差</td>
+<td></td>
+</tr>
+<tr>
+<td>平滑</td>
+<td>Huber-loss： loss -&gt;0,mSE;los-&gt;∞,mae</td>
+<td></td>
+</tr>
+</tbody></table>
+<ul>
+<li><p><input disabled="" type="checkbox"> 
+修改loss：设置多个loss（即包含辅助loss）</p>
+<ul>
+<li><p><input disabled="" type="checkbox"> 
+两种方式：</p>
+<p>1）每个loss 有权重 ，然后累加和</p>
+<p>2） 不设置权重，进行concat 操作，构造出 [ loss1 ; loss2 ] ，然后反向传播，其实是对每个loss求了梯度，两个互不影响 ，这一种一般效果好，但是训练速度慢</p>
+</li>
+</ul>
+</li>
+<li><p><input disabled="" type="checkbox"> 
+调整bert参数</p>
+</li>
+<li><p><input disabled="" type="checkbox"> 
+创建 传统特征工程</p>
+</li>
+<li><p><input disabled="" type="checkbox"> 
+stacking: bert + 传统特征</p>
+</li>
+</ul>
+
+    </div>
+
+    
+    
+    
+
+      <footer class="post-footer">
+          <div class="post-tags">
+              <a href="/tags/%E5%BF%83%E5%BE%97/" rel="tag"># 心得</a>
+              <a href="/tags/%E5%88%86%E6%9E%90/" rel="tag"># 分析</a>
+          </div>
+
+        
+
+
+        
+    <div class="post-nav">
+      <div class="post-nav-item"></div>
+      <div class="post-nav-item">
+    <a href="/2022/03/11/my-federated-learning/" rel="next" title="联邦学习心得">
+      联邦学习心得 <i class="fa fa-chevron-right"></i>
+    </a></div>
+    </div>
+      </footer>
+    
+  </article>
+  
+  
+  
+
+
+
+          </div>
+          
+
+<script>
+  window.addEventListener('tabs:register', () => {
+    let { activeClass } = CONFIG.comments;
+    if (CONFIG.comments.storage) {
+      activeClass = localStorage.getItem('comments_active') || activeClass;
+    }
+    if (activeClass) {
+      let activeTab = document.querySelector(`a[href="#comment-${activeClass}"]`);
+      if (activeTab) {
+        activeTab.click();
+      }
+    }
+  });
+  if (CONFIG.comments.storage) {
+    window.addEventListener('tabs:click', event => {
+      if (!event.target.matches('.tabs-comment .tab-content .tab-pane')) return;
+      let commentClass = event.target.classList[1];
+      localStorage.setItem('comments_active', commentClass);
+    });
+  }
+</script>
+
+        </div>
+          
+  
+  <div class="toggle sidebar-toggle">
+    <span class="toggle-line toggle-line-first"></span>
+    <span class="toggle-line toggle-line-middle"></span>
+    <span class="toggle-line toggle-line-last"></span>
+  </div>
+
+  <aside class="sidebar">
+    <div class="sidebar-inner">
+
+      <ul class="sidebar-nav motion-element">
+        <li class="sidebar-nav-toc">
+          文章目录
+        </li>
+        <li class="sidebar-nav-overview">
+          站点概览
+        </li>
+      </ul>
+
+      <!--noindex-->
+      <div class="post-toc-wrap sidebar-panel">
+          <div class="post-toc motion-element"><ol class="nav"><li class="nav-item nav-level-2"><a class="nav-link" href="#java-%E5%88%86%E6%9E%90"><span class="nav-number">1.</span> <span class="nav-text">java 分析</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#%E4%B9%A6%E7%B1%8D"><span class="nav-number">1.1.</span> <span class="nav-text">书籍</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E8%BF%9C%E7%A8%8Bdebug"><span class="nav-number">1.2.</span> <span class="nav-text">远程debug</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#jstack-x2F-javacore-%E5%AF%BC%E5%87%BA"><span class="nav-number">1.3.</span> <span class="nav-text">jstack&#x2F;javacore 导出</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#heapdump-%E7%94%9F%E6%88%90"><span class="nav-number">1.4.</span> <span class="nav-text">heapdump 生成</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#class-not-found-%E5%88%86%E6%9E%90"><span class="nav-number">1.5.</span> <span class="nav-text">class  not  found 分析</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#arthas-%E5%88%86%E6%9E%90"><span class="nav-number">1.6.</span> <span class="nav-text">arthas 分析</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#tomcat-%E7%B1%BB%E5%8A%A0%E8%BD%BD%E6%9C%BA%E5%88%B6"><span class="nav-number">1.7.</span> <span class="nav-text">tomcat 类加载机制</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#dubbo-%E5%88%86%E6%9E%90"><span class="nav-number">2.</span> <span class="nav-text">dubbo 分析</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#dubbo-2-7-%E6%96%B0%E7%89%B9%E6%80%A7"><span class="nav-number">2.1.</span> <span class="nav-text">dubbo 2.7 新特性</span></a><ol class="nav-child"><li class="nav-item nav-level-4"><a class="nav-link" href="#%E5%85%83%E6%95%B0%E6%8D%AE"><span class="nav-number">2.1.1.</span> <span class="nav-text">元数据</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#%E9%85%8D%E7%BD%AE%E4%B8%AD%E5%BF%83"><span class="nav-number">2.1.2.</span> <span class="nav-text">配置中心</span></a></li></ol></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#Netty"><span class="nav-number">3.</span> <span class="nav-text">Netty</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#%E5%85%A5%E9%97%A8"><span class="nav-number">3.1.</span> <span class="nav-text">入门</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#Nginx"><span class="nav-number">4.</span> <span class="nav-text">Nginx</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#%E5%90%AF%E5%8A%A8%E5%91%BD%E4%BB%A4"><span class="nav-number">4.1.</span> <span class="nav-text">启动命令</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E5%81%9C%E6%AD%A2-Nginx"><span class="nav-number">4.2.</span> <span class="nav-text">停止 Nginx</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E9%87%8D%E5%90%AF"><span class="nav-number">4.3.</span> <span class="nav-text">重启</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E5%85%A8%E9%93%BE%E8%B7%AF%E9%85%8D%E7%BD%AE"><span class="nav-number">4.4.</span> <span class="nav-text">全链路配置</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#docker"><span class="nav-number">5.</span> <span class="nav-text">docker</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#%E5%B8%B8%E7%94%A8%E5%91%BD%E4%BB%A4"><span class="nav-number">5.1.</span> <span class="nav-text">常用命令</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#ELK-%E6%90%AD%E5%BB%BA%EF%BC%88%E6%97%A5%E5%BF%97%E4%B8%AD%E5%BF%83%E5%9F%BA%E6%9C%AC%E6%90%AD%E5%BB%BA%EF%BC%89"><span class="nav-number">6.</span> <span class="nav-text">ELK 搭建（日志中心基本搭建）</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#%E6%9E%B6%E6%9E%84"><span class="nav-number">6.1.</span> <span class="nav-text">架构</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#Spring-cloud-%E9%9B%86%E6%88%90-Sleuth"><span class="nav-number">6.2.</span> <span class="nav-text">Spring cloud 集成 Sleuth</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#logback-%E6%96%B0%E5%A2%9Ejson%E6%96%87%E4%BB%B6"><span class="nav-number">6.3.</span> <span class="nav-text">logback 新增json文件</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#Elasticsearch-%E5%85%A8%E6%96%87%E6%90%9C%E7%B4%A2%E5%BC%95%E6%93%8E"><span class="nav-number">6.4.</span> <span class="nav-text">Elasticsearch 全文搜索引擎</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#filebeat-%E9%85%8D%E7%BD%AE"><span class="nav-number">6.5.</span> <span class="nav-text">filebeat 配置</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#logstash-%E9%85%8D%E7%BD%AE"><span class="nav-number">6.6.</span> <span class="nav-text">logstash 配置</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#logstash-%E4%BC%98%E5%8C%96"><span class="nav-number">6.7.</span> <span class="nav-text">logstash 优化</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#kafka-%E6%96%B9%E9%9D%A2%E7%9A%84%E8%B0%83%E4%BC%98"><span class="nav-number">6.8.</span> <span class="nav-text">kafka 方面的调优</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#Prometheus-%E7%9B%91%E6%8E%A7%E6%8A%A5%E8%AD%A6%E6%90%AD%E5%BB%BA"><span class="nav-number">7.</span> <span class="nav-text">Prometheus 监控报警搭建</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#%E5%B7%A5%E4%BD%9C%E6%B5%81%E7%A8%8B"><span class="nav-number">7.1.</span> <span class="nav-text">工作流程</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#Prometheus-Server-%E7%AB%AF"><span class="nav-number">7.2.</span> <span class="nav-text">Prometheus Server 端</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#exporter-%E7%BC%96%E5%86%99"><span class="nav-number">7.3.</span> <span class="nav-text">exporter 编写</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#alertManager-%E6%8A%A5%E8%AD%A6rule-%E8%A7%84%E5%88%99%E7%BC%96%E5%86%99"><span class="nav-number">7.4.</span> <span class="nav-text">alertManager 报警rule 规则编写</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#prom-sql-%E7%9B%91%E6%8E%A7%E6%9F%A5%E8%AF%A2sql-%E7%BC%96%E5%86%99"><span class="nav-number">7.5.</span> <span class="nav-text">prom sql 监控查询sql 编写</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#linux-%E8%BF%90%E7%BB%B4"><span class="nav-number">8.</span> <span class="nav-text">linux 运维</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#linux%E6%8C%82%E8%BD%BDftp%E6%9C%8D%E5%8A%A1%E5%99%A8%E7%9B%AE%E5%BD%95"><span class="nav-number">8.1.</span> <span class="nav-text">linux挂载ftp服务器目录</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#AI"><span class="nav-number">9.</span> <span class="nav-text">AI</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#%E7%90%86%E8%AE%BA%E4%B9%A6%E7%B1%8D"><span class="nav-number">9.1.</span> <span class="nav-text">理论书籍</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E5%AE%9E%E6%88%98%E7%B1%BB-%E4%B9%A6%E7%B1%8D"><span class="nav-number">9.2.</span> <span class="nav-text">实战类 书籍</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E5%B7%A5%E4%BD%9C%E5%AE%9E%E8%B7%B5"><span class="nav-number">9.3.</span> <span class="nav-text">工作实践</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#Spring-Cloud"><span class="nav-number">10.</span> <span class="nav-text">Spring Cloud</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#IELTS"><span class="nav-number">11.</span> <span class="nav-text">IELTS</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E7%AE%97%E6%B3%95"><span class="nav-number">12.</span> <span class="nav-text">算法</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#%E5%90%84%E7%A7%8Dloss-%E5%87%BD%E6%95%B0%E7%9A%84%E9%80%89%E6%8B%A9%EF%BC%9A"><span class="nav-number">12.1.</span> <span class="nav-text">各种loss 函数的选择：</span></a></li></ol></li></ol></div>
+      </div>
+      <!--/noindex-->
+
+      <div class="site-overview-wrap sidebar-panel">
+        <div class="site-author motion-element" itemprop="author" itemscope itemtype="http://schema.org/Person">
+    <img class="site-author-image" itemprop="image" alt="Promise Chan"
+      src="/images/header.jpg">
+  <p class="site-author-name" itemprop="name">Promise Chan</p>
+  <div class="site-description" itemprop="description">Coding & upgrading</div>
+</div>
+<div class="site-state-wrap motion-element">
+  <nav class="site-state">
+      <div class="site-state-item site-state-posts">
+          <a href="/archives/">
+        
+          <span class="site-state-item-count">12</span>
+          <span class="site-state-item-name">日志</span>
+        </a>
+      </div>
+      <div class="site-state-item site-state-categories">
+            <a href="/categories/">
+          
+        <span class="site-state-item-count">5</span>
+        <span class="site-state-item-name">分类</span></a>
+      </div>
+      <div class="site-state-item site-state-tags">
+            <a href="/tags/">
+          
+        <span class="site-state-item-count">15</span>
+        <span class="site-state-item-name">标签</span></a>
+      </div>
+  </nav>
+</div>
+  <div class="links-of-author motion-element">
+      <span class="links-of-author-item">
+        <a href="https://github.com/promiseChan" title="GitHub → https:&#x2F;&#x2F;github.com&#x2F;promiseChan" rel="noopener" target="_blank"><i class="fa fa-fw fa-fab fa-github"></i>GitHub</a>
+      </span>
+  </div>
+
+
+
+      </div>
+
+    </div>
+  </aside>
+  <div id="sidebar-dimmer"></div>
+
+
+      </div>
+    </main>
+
+    <footer class="footer">
+      <div class="footer-inner">
+        
+
+        
+
+<div class="copyright">
+  
+  &copy; 
+  <span itemprop="copyrightYear">2022</span>
+  <span class="with-love">
+    <i class="fa fa-fa fa-heart"></i>
+  </span>
+  <span class="author" itemprop="copyrightHolder">Promise Chan</span>
+</div>
+  <div class="powered-by">由 <a href="https://hexo.io/" class="theme-link" rel="noopener" target="_blank">Hexo</a> & <a href="https://mist.theme-next.org/" class="theme-link" rel="noopener" target="_blank">NexT.Mist</a> 强力驱动
+  </div><a href="https://icp.gov.moe/?keyword=20180708" rel="external nofollow noreferrer" target="_blank" data-pjax-state="" style="
+    border-bottom-width: 0px;
+">萌 ICP 备 20180708 号</a>
+<!-- 网站运行时间的设置 -->
+<span id="timeDate">载入天数...</span>
+<span id="times">载入时分秒...</span>
+<script>
+    var now = new Date();
+    function createtime() {
+        var grt= new Date("03/10/2022 22:00:00");//此处修改你的建站时间，注意格式
+        now.setTime(now.getTime()+250);
+        days = (now - grt ) / 1000 / 60 / 60 / 24; dnum = Math.floor(days);
+        hours = (now - grt ) / 1000 / 60 / 60 - (24 * dnum); hnum = Math.floor(hours);
+        if(String(hnum).length ==1 ){hnum = "0" + hnum;} minutes = (now - grt ) / 1000 /60 - (24 * 60 * dnum) - (60 * hnum);
+        mnum = Math.floor(minutes); if(String(mnum).length ==1 ){mnum = "0" + mnum;}
+        seconds = (now - grt ) / 1000 - (24 * 60 * 60 * dnum) - (60 * 60 * hnum) - (60 * mnum);
+        snum = Math.round(seconds); if(String(snum).length ==1 ){snum = "0" + snum;}
+        document.getElementById("timeDate").innerHTML = "小站在混沌中存活了 "+dnum+" 天 ";
+        document.getElementById("times").innerHTML = hnum + " 小时 " + mnum + " 分 " + snum + " 秒";
+    }
+setInterval("createtime()",250);
+</script>
+
+        
+
+
+
+
+
+
+
+
+      </div>
+    </footer>
+  </div>
+
+  
+  <script src="/lib/anime.min.js"></script>
+  <script src="/lib/velocity/velocity.min.js"></script>
+  <script src="/lib/velocity/velocity.ui.min.js"></script>
+
+<script src="/js/utils.js"></script>
+
+<script src="/js/motion.js"></script>
+
+
+<script src="/js/schemes/muse.js"></script>
+
+
+<script src="/js/next-boot.js"></script>
+
+
+
+
+  
+
+
+
+
+  
+<script src="/js/local-search.js"></script>
+
+
+
+
+
+
+
+
+
+
+
+
+
+  
+
+  
+
+  
+
+<script src="/live2dw/lib/L2Dwidget.min.js?094cbace49a39548bed64abff5988b05"></script><script>L2Dwidget.init({"log":false,"pluginJsPath":"lib/","pluginModelPath":"assets/","pluginRootPath":"live2dw/","tagMode":false});</script></body>
+</html>
