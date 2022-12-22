@@ -32,20 +32,22 @@
     var CONFIG = {"hostname":"example.com","root":"/","scheme":"Mist","version":"7.8.0","exturl":false,"sidebar":{"position":"left","display":"always","padding":18,"offset":12,"onmobile":false},"copycode":{"enable":false,"show_result":false,"style":"mac"},"back2top":{"enable":true,"sidebar":false,"scrollpercent":false},"bookmark":{"enable":false,"color":"#222","save":"auto"},"fancybox":false,"mediumzoom":false,"lazyload":false,"pangu":false,"comments":{"style":"tabs","active":null,"storage":true,"lazyload":false,"nav":null},"algolia":{"hits":{"per_page":10},"labels":{"input_placeholder":"Search for Posts","hits_empty":"We didn't find any results for the search: ${query}","hits_stats":"${hits} results found in ${time} ms"}},"localsearch":{"enable":true,"trigger":"auto","top_n_per_article":1,"unescape":false,"preload":false},"motion":{"enable":true,"async":false,"transition":{"post_block":"fadeIn","post_header":"slideDownIn","post_body":"slideDownIn","coll_header":"slideLeftIn","sidebar":"slideUpIn"}},"path":"search.xml"};
   </script>
 
-  <meta name="description" content="Coding &amp; upgrading">
-<meta property="og:type" content="website">
-<meta property="og:title" content="标签">
-<meta property="og:url" content="http://example.com/tags/index.html">
+  <meta name="description" content="pysyft 学习专栏">
+<meta property="og:type" content="article">
+<meta property="og:title" content="pysyft学习">
+<meta property="og:url" content="http://example.com/2022/12/22/my-pysyft/index.html">
 <meta property="og:site_name" content="PromiseChanの博客">
-<meta property="og:description" content="Coding &amp; upgrading">
+<meta property="og:description" content="pysyft 学习专栏">
 <meta property="og:locale" content="zh_CN">
-<meta property="article:published_time" content="2022-03-11T14:31:26.000Z">
-<meta property="article:modified_time" content="2022-10-15T16:59:30.336Z">
+<meta property="article:published_time" content="2022-12-22T15:30:19.000Z">
+<meta property="article:modified_time" content="2022-12-22T15:47:12.827Z">
 <meta property="article:author" content="Promise Chan">
-<meta property="article:tag" content="java, python, machine-learning">
+<meta property="article:tag" content="心得">
+<meta property="article:tag" content="实战">
+<meta property="article:tag" content="pysyft">
 <meta name="twitter:card" content="summary">
 
-<link rel="canonical" href="http://example.com/tags/">
+<link rel="canonical" href="http://example.com/2022/12/22/my-pysyft/">
 
 
 <script id="page-configurations">
@@ -53,13 +55,12 @@
   CONFIG.page = {
     sidebar: "",
     isHome : false,
-    isPost : false,
+    isPost : true,
     lang   : 'zh-CN'
   };
 </script>
 
-  <title>标签 | PromiseChanの博客
-</title>
+  <title>pysyft学习 | PromiseChanの博客</title>
   
 
 
@@ -198,51 +199,101 @@
       <div class="main-inner">
         <div class="content-wrap">
           
-  
-  
 
-          <div class="content page posts-expand">
+          <div class="content post posts-expand">
             
 
     
-    
-    
-    <div class="post-block" lang="zh-CN">
+  
+  
+  <article itemscope itemtype="http://schema.org/Article" class="post-block" lang="zh-CN">
+    <link itemprop="mainEntityOfPage" href="http://example.com/2022/12/22/my-pysyft/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="image" content="/images/header.jpg">
+      <meta itemprop="name" content="Promise Chan">
+      <meta itemprop="description" content="Coding & upgrading">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="PromiseChanの博客">
+    </span>
       <header class="post-header">
+        <h1 class="post-title" itemprop="name headline">
+          pysyft学习
+        </h1>
 
-<h1 class="post-title" itemprop="name headline">标签
-</h1>
+        <div class="post-meta">
+            <span class="post-meta-item">
+              <span class="post-meta-item-icon">
+                <i class="fa fa-calendar-o"></i>
+              </span>
+              <span class="post-meta-item-text">发表于</span>
+              
 
-<div class="post-meta">
+              <time title="创建时间：2022-12-22 23:30:19 / 修改时间：23:47:12" itemprop="dateCreated datePublished" datetime="2022-12-22T23:30:19+08:00">2022-12-22</time>
+            </span>
+
+          
+
+        </div>
+      </header>
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+        <p>pysyft 学习专栏</p>
+<span id="more"></span>
+
+<h2 id="1-环境搭建"><a href="#1-环境搭建" class="headerlink" title="1.环境搭建"></a>1.环境搭建</h2><p>pysyft 目前不是稳定的框架，因此选择了0.2.9版本</p>
+<p>因为0.2.x 版本有完善的github文档</p>
+<h3 id="1-python-3-7"><a href="#1-python-3-7" class="headerlink" title="(1)python-3.7"></a>(1)python-3.7</h3><p>网上经常说的3.6 不行，会报其他依赖需要python&gt;&#x3D;3.7.x</p>
+<figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">conda create -n env_pysyft python=3.7</span><br></pre></td></tr></table></figure>
+
+<h3 id="2-pytorch-1-4-0"><a href="#2-pytorch-1-4-0" class="headerlink" title="(2) pytorch-1.4.0"></a>(2) pytorch-1.4.0</h3><figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">conda activate env_pysyft</span><br><span class="line">conda install pytorch==1.4.0 torchvision==0.5.0 cpuonly -c https://mirrors.tuna.tsinghua.edu.cn/anaconda/cloud/pytorch/</span><br></pre></td></tr></table></figure>
+
+<h3 id="3-syft-0-2-9"><a href="#3-syft-0-2-9" class="headerlink" title="(3) syft-0.2.9"></a>(3) syft-0.2.9</h3><figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">pip install syft==0.2.9  -i https://pypi.tuna.tsinghua.edu.cn/simple</span><br></pre></td></tr></table></figure>
+
+<h3 id="4-protobuf-3-20-3"><a href="#4-protobuf-3-20-3" class="headerlink" title="(4)   protobuf-3.20.3"></a>(4)   protobuf-3.20.3</h3><figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta"># </span><span class="language-bash">syft 需要低版本 protobuf, 但是pytorch-1.4.0 用的是高版本</span></span><br><span class="line"><span class="meta"># </span><span class="language-bash">需要 3.19.0 &lt;= protobuf &lt;=3.20.x</span></span><br><span class="line">pip uninstall protobug</span><br><span class="line">pip install -i https://pypi.tuna.tsinghua.edu.cn/simple protobuf==3.20.3</span><br></pre></td></tr></table></figure>
+
+<p>至此，安装完 pysyft-0.2.9 环境</p>
+<h2 id="2-demo-验证"><a href="#2-demo-验证" class="headerlink" title="2. demo 验证"></a>2. demo 验证</h2><figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">import</span> sys</span><br><span class="line"></span><br><span class="line"><span class="keyword">import</span> torch</span><br><span class="line"><span class="keyword">from</span> torch.nn <span class="keyword">import</span> Parameter</span><br><span class="line"><span class="keyword">import</span> torch.nn <span class="keyword">as</span> nn</span><br><span class="line"><span class="keyword">import</span> torch.nn.functional <span class="keyword">as</span> F</span><br><span class="line"></span><br><span class="line"><span class="keyword">import</span> syft <span class="keyword">as</span> sy</span><br><span class="line"><span class="comment"># 创建本地hook，用于连接远程存放数据的服务器</span></span><br><span class="line">hook = sy.TorchHook(torch)</span><br><span class="line"><span class="comment"># 创建一个名为bob的存放数据的服务器</span></span><br><span class="line">bob = sy.VirtualWorker(hook, <span class="built_in">id</span>=<span class="string">&quot;bob&quot;</span>)</span><br><span class="line"></span><br><span class="line">x = torch.tensor([<span class="number">1</span>,<span class="number">2</span>,<span class="number">3</span>,<span class="number">4</span>,<span class="number">5</span>])</span><br><span class="line">y = torch.tensor([<span class="number">1</span>,<span class="number">1</span>,<span class="number">1</span>,<span class="number">1</span>,<span class="number">1</span>])</span><br><span class="line"><span class="comment"># 操作的是 x的指针，x数据在 bob 机器上</span></span><br><span class="line">x_ptr = x.send(bob)</span><br><span class="line"><span class="comment"># 操作的是 y 的指针，y数据在 bob 机器上</span></span><br><span class="line">y_ptr = y.send(bob)</span><br><span class="line"><span class="comment"># 定义需要优化的目标函数</span></span><br><span class="line">z = x_ptr + x_ptr</span><br><span class="line"><span class="comment"># 获取目标函数运算后的结果</span></span><br><span class="line"><span class="built_in">print</span>(z.get())</span><br><span class="line"><span class="comment"># 发出反向传播命令</span></span><br><span class="line">z.backward()</span><br><span class="line"><span class="comment"># 获取x 的梯度</span></span><br><span class="line">x = x.get()</span><br><span class="line"><span class="built_in">print</span>(x.grad)</span><br></pre></td></tr></table></figure>
+
+
+    </div>
+
+    
+    
+    
+
+      <footer class="post-footer">
+          <div class="post-tags">
+              <a href="/tags/%E5%BF%83%E5%BE%97/" rel="tag"># 心得</a>
+              <a href="/tags/%E5%AE%9E%E6%88%98/" rel="tag"># 实战</a>
+              <a href="/tags/pysyft/" rel="tag"># pysyft</a>
+          </div>
+
+        
+
+
+        
+    <div class="post-nav">
+      <div class="post-nav-item">
+    <a href="/2022/12/09/idea-stream-debug/" rel="prev" title="idea调试java stream插件">
+      <i class="fa fa-chevron-left"></i> idea调试java stream插件
+    </a></div>
+      <div class="post-nav-item"></div>
+    </div>
+      </footer>
+    
+  </article>
+  
+  
   
 
-</div>
-
-</header>
-
-      
-      
-      
-      <div class="post-body">
-          <div class="tag-cloud">
-            <div class="tag-cloud-title">
-              目前共计 24 个标签
-            </div>
-            <div class="tag-cloud-tags">
-              <a href="/tags/BumbleBee/" style="font-size: 12px; color: #ccc">BumbleBee</a> <a href="/tags/IDEA/" style="font-size: 12px; color: #ccc">IDEA</a> <a href="/tags/JAVA-Stream/" style="font-size: 12px; color: #ccc">JAVA Stream</a> <a href="/tags/MAT/" style="font-size: 12px; color: #ccc">MAT</a> <a href="/tags/copilot/" style="font-size: 12px; color: #ccc">copilot</a> <a href="/tags/debug/" style="font-size: 12px; color: #ccc">debug</a> <a href="/tags/docker/" style="font-size: 12px; color: #ccc">docker</a> <a href="/tags/dubbo-SPI-Filter/" style="font-size: 12px; color: #ccc">dubbo SPI Filter</a> <a href="/tags/eBPF/" style="font-size: 12px; color: #ccc">eBPF</a> <a href="/tags/kali/" style="font-size: 12px; color: #ccc">kali</a> <a href="/tags/maven/" style="font-size: 12px; color: #ccc">maven</a> <a href="/tags/mysql/" style="font-size: 12px; color: #ccc">mysql</a> <a href="/tags/nas/" style="font-size: 12px; color: #ccc">nas</a> <a href="/tags/pysyft/" style="font-size: 12px; color: #ccc">pysyft</a> <a href="/tags/sentinel/" style="font-size: 12px; color: #ccc">sentinel</a> <a href="/tags/trojan/" style="font-size: 12px; color: #ccc">trojan</a> <a href="/tags/%E4%B9%9D%E5%A4%A9%E5%BF%85%E6%98%87/" style="font-size: 12px; color: #ccc">九天必昇</a> <a href="/tags/%E5%88%86%E6%9E%90/" style="font-size: 24px; color: #4f4f4f">分析</a> <a href="/tags/%E5%AE%9E%E6%88%98/" style="font-size: 18px; color: #8e8e8e">实战</a> <a href="/tags/%E5%BF%83%E5%BE%97/" style="font-size: 30px; color: #111">心得</a> <a href="/tags/%E6%A8%A1%E5%9E%8B%E5%8E%8B%E7%BC%A9/" style="font-size: 12px; color: #ccc">模型压缩</a> <a href="/tags/%E7%A5%9E%E7%BB%8F%E7%BD%91%E7%BB%9C/" style="font-size: 12px; color: #ccc">神经网络</a> <a href="/tags/%E7%AB%9E%E8%B5%9B/" style="font-size: 12px; color: #ccc">竞赛</a> <a href="/tags/%E8%B6%85%E7%AE%97%E4%BD%BF%E7%94%A8%E6%95%99%E7%A8%8B/" style="font-size: 12px; color: #ccc">超算使用教程</a>
-            </div>
-          </div>
-        
-      </div>
-      
-      
-      
-    </div>
-    
-
-    
-    
-    
 
 
           </div>
@@ -293,6 +344,7 @@
 
       <!--noindex-->
       <div class="post-toc-wrap sidebar-panel">
+          <div class="post-toc motion-element"><ol class="nav"><li class="nav-item nav-level-2"><a class="nav-link" href="#1-%E7%8E%AF%E5%A2%83%E6%90%AD%E5%BB%BA"><span class="nav-number">1.</span> <span class="nav-text">1.环境搭建</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#1-python-3-7"><span class="nav-number">1.1.</span> <span class="nav-text">(1)python-3.7</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#2-pytorch-1-4-0"><span class="nav-number">1.2.</span> <span class="nav-text">(2) pytorch-1.4.0</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#3-syft-0-2-9"><span class="nav-number">1.3.</span> <span class="nav-text">(3) syft-0.2.9</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#4-protobuf-3-20-3"><span class="nav-number">1.4.</span> <span class="nav-text">(4)   protobuf-3.20.3</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#2-demo-%E9%AA%8C%E8%AF%81"><span class="nav-number">2.</span> <span class="nav-text">2. demo 验证</span></a></li></ol></div>
       </div>
       <!--/noindex-->
 
