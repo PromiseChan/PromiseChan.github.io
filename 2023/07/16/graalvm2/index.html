@@ -1,0 +1,438 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+  <meta charset="UTF-8">
+<meta name="viewport" content="width=device-width">
+<meta name="theme-color" content="#222"><meta name="generator" content="Hexo 6.3.0">
+
+  <link rel="apple-touch-icon" sizes="180x180" href="/images/apple-touch-icon-next.png">
+  <link rel="icon" type="image/png" sizes="32x32" href="/images/favicon-32x32-next.png">
+  <link rel="icon" type="image/png" sizes="16x16" href="/images/favicon-16x16-next.png">
+  <link rel="mask-icon" href="/images/logo.svg" color="#222">
+
+<link rel="stylesheet" href="/css/main.css">
+
+
+
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.7.2/css/all.min.css" integrity="sha256-dABdfBfUoC8vJUBOwGVdm8L9qlMWaHTIfXt+7GnZCIo=" crossorigin="anonymous">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/animate.css/3.1.1/animate.min.css" integrity="sha256-PR7ttpcvz8qrF57fur/yAx1qXMFJeJFiA6pSzWi0OIE=" crossorigin="anonymous">
+
+<script class="next-config" data-name="main" type="application/json">{"hostname":"example.com","root":"/","images":"/images","scheme":"Mist","darkmode":false,"version":"8.23.2","exturl":false,"sidebar":{"position":"left","width_expanded":320,"width_dual_column":240,"display":"always","padding":18,"offset":12,"onmobile":false},"hljswrap":true,"codeblock":{"theme":{"light":"default","dark":"stackoverflow-dark"},"prism":{"light":"prism","dark":"prism-dark"},"copy_button":{"enable":false,"style":"mac","show_result":false},"fold":{"enable":false,"height":500},"language":false,"highlight_theme":"normal"},"bookmark":{"enable":false,"color":"#222","save":"auto"},"mediumzoom":false,"lazyload":false,"pangu":false,"comments":{"style":"tabs","active":null,"storage":true,"lazyload":false,"nav":null},"stickytabs":false,"motion":{"enable":true,"async":false,"duration":200,"transition":{"menu_item":"fadeInDown","post_block":"fadeIn","post_header":"slideDownIn","post_body":"slideDownIn","coll_header":"slideLeftIn","sidebar":"slideUpIn"}},"prism":false,"i18n":{"placeholder":"搜索...","empty":"没有找到任何搜索结果：${query}","hits_time":"找到 ${hits} 个搜索结果（用时 ${time} 毫秒）","hits":"找到 ${hits} 个搜索结果"},"path":"/search.xml","localsearch":{"enable":true,"top_n_per_article":1,"unescape":false,"preload":false,"trigger":"auto"}}</script><script src="/js/config.js" defer></script>
+
+    <meta name="description" content="Dubbo AOT demo体验,并修复dubbo3 aot的编译报错问题https:&#x2F;&#x2F;github.com&#x2F;apache&#x2F;dubbo&#x2F;pull&#x2F;12735">
+<meta property="og:type" content="article">
+<meta property="og:title" content="graalvm + dubbo3">
+<meta property="og:url" content="http://example.com/2023/07/16/graalvm2/index.html">
+<meta property="og:site_name" content="PromiseChanの博客">
+<meta property="og:description" content="Dubbo AOT demo体验,并修复dubbo3 aot的编译报错问题https:&#x2F;&#x2F;github.com&#x2F;apache&#x2F;dubbo&#x2F;pull&#x2F;12735">
+<meta property="og:locale" content="zh_CN">
+<meta property="article:published_time" content="2023-07-16T14:57:20.000Z">
+<meta property="article:modified_time" content="2025-07-15T16:25:30.526Z">
+<meta property="article:author" content="Promise Chan">
+<meta property="article:tag" content="graalvm">
+<meta property="article:tag" content="springboot3">
+<meta property="article:tag" content="AOT">
+<meta property="article:tag" content="Dubbo3">
+<meta name="twitter:card" content="summary">
+
+
+<link rel="canonical" href="http://example.com/2023/07/16/graalvm2/">
+
+
+<script class="next-config" data-name="page" type="application/json">{"sidebar":"","isHome":false,"isPost":true,"lang":"zh-CN","comments":true,"permalink":"http://example.com/2023/07/16/graalvm2/","path":"2023/07/16/graalvm2/","title":"graalvm + dubbo3"}</script>
+
+<script class="next-config" data-name="calendar" type="application/json">""</script>
+<title>graalvm + dubbo3 | PromiseChanの博客</title>
+  
+
+
+
+
+
+
+
+
+  
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/animejs/3.2.1/anime.min.js" integrity="sha256-XL2inqUJaslATFnHdJOi9GfQ60on8Wx1C2H8DYiN1xY=" crossorigin="anonymous" defer></script>
+<script src="/js/utils.js" defer></script><script src="/js/motion.js" defer></script><script src="/js/sidebar.js" defer></script><script src="/js/next-boot.js" defer></script>
+
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/hexo-generator-searchdb/1.5.0/search.js" integrity="sha256-xFC6PJ82SL9b3WkGjFavNiA9gm5z6UBxWPiu4CYjptg=" crossorigin="anonymous" defer></script>
+<script src="/js/third-party/search/local-search.js" defer></script>
+
+
+
+
+
+
+
+  
+
+
+
+
+  
+
+  <script class="next-config" data-name="enableMath" type="application/json">false</script><script class="next-config" data-name="mathjax" type="application/json">{"enable":true,"tags":"none","mhchem":false,"js":{"url":"https://cdnjs.cloudflare.com/ajax/libs/mathjax/3.2.2/es5/tex-mml-chtml.js","integrity":"sha256-MASABpB4tYktI2Oitl4t+78w/lyA+D7b/s9GEP0JOGI="}}</script>
+<script src="/js/third-party/math/mathjax.js" defer></script>
+
+
+
+  <noscript>
+    <link rel="stylesheet" href="/css/noscript.css">
+  </noscript>
+<!-- hexo injector head_end start -->
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/katex@0.12.0/dist/katex.min.css">
+
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/hexo-math@4.0.0/dist/style.css">
+<!-- hexo injector head_end end --></head>
+
+<body itemscope itemtype="http://schema.org/WebPage" class="use-motion">
+  <div class="headband"></div>
+
+  <main class="main">
+    <div class="column">
+      <header class="header" itemscope itemtype="http://schema.org/WPHeader"><div class="site-brand-container">
+  <div class="site-nav-toggle">
+    <div class="toggle" aria-label="切换导航栏" role="button">
+        <span class="toggle-line"></span>
+        <span class="toggle-line"></span>
+        <span class="toggle-line"></span>
+    </div>
+  </div>
+
+  <div class="site-meta">
+
+    <a href="/" class="brand" rel="start">
+      <i class="logo-line"></i>
+      <p class="site-title">PromiseChanの博客</p>
+      <i class="logo-line"></i>
+    </a>
+  </div>
+
+  <div class="site-nav-right">
+    <div class="toggle popup-trigger" aria-label="搜索" role="button">
+        <i class="fa fa-search fa-fw fa-lg"></i>
+    </div>
+  </div>
+</div>
+
+
+
+<nav class="site-nav">
+  <ul class="main-menu menu"><li class="menu-item menu-item-home"><a href="/" rel="section"><i class="fa fa-home fa-fw"></i>首页</a></li><li class="menu-item menu-item-tags"><a href="/tags/" rel="section"><i class="fa fa-tags fa-fw"></i>标签</a></li><li class="menu-item menu-item-categories"><a href="/categories/" rel="section"><i class="fa fa-th fa-fw"></i>分类</a></li><li class="menu-item menu-item-archives"><a href="/archives/" rel="section"><i class="fa fa-archive fa-fw"></i>归档</a></li>
+      <li class="menu-item menu-item-search">
+        <a role="button" class="popup-trigger"><i class="fa fa-search fa-fw"></i>搜索
+        </a>
+      </li>
+  </ul>
+</nav>
+
+
+
+  <div class="search-pop-overlay">
+    <div class="popup search-popup">
+      <div class="search-header">
+        <span class="search-icon">
+          <i class="fa fa-search"></i>
+        </span>
+        <div class="search-input-container">
+          <input autocomplete="off" autocapitalize="off" maxlength="80"
+                placeholder="搜索..." spellcheck="false"
+                type="search" class="search-input">
+        </div>
+        <span class="popup-btn-close" role="button">
+          <i class="fa fa-times-circle"></i>
+        </span>
+      </div>
+      <div class="search-result-container">
+        <div class="search-result-icon">
+          <i class="fa fa-spinner fa-pulse fa-5x"></i>
+        </div>
+      </div>
+    </div>
+  </div>
+
+</header>
+        
+  
+  <aside class="sidebar">
+
+    <div class="sidebar-inner sidebar-nav-active sidebar-toc-active">
+      <ul class="sidebar-nav">
+        <li class="sidebar-nav-toc">
+          文章目录
+        </li>
+        <li class="sidebar-nav-overview">
+          站点概览
+        </li>
+      </ul>
+
+
+      <div class="sidebar-panel-container">
+        <!--noindex-->
+        <div class="post-toc-wrap sidebar-panel">
+            <div class="post-toc animated"><ol class="nav"><li class="nav-item nav-level-2"><a class="nav-link" href="#%E6%90%AD%E5%BB%BA%E7%8E%AF%E5%A2%83"><span class="nav-number">1.</span> <span class="nav-text">搭建环境</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#dubbo-%E7%8E%AF%E5%A2%83"><span class="nav-number">2.</span> <span class="nav-text">dubbo 环境</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#dubbo-demo%E5%B7%A5%E7%A8%8B%E9%85%8D%E7%BD%AE"><span class="nav-number">3.</span> <span class="nav-text">dubbo-demo工程配置</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E7%BC%96%E8%AF%91%E5%91%BD%E4%BB%A4"><span class="nav-number">4.</span> <span class="nav-text">编译命令</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E6%8A%A5%E9%94%99"><span class="nav-number">5.</span> <span class="nav-text">报错</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E8%A7%A3%E5%86%B3"><span class="nav-number">6.</span> <span class="nav-text">解决</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E7%BC%96%E8%AF%91%E6%88%90%E5%8A%9F"><span class="nav-number">7.</span> <span class="nav-text">编译成功</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E6%89%A7%E8%A1%8C"><span class="nav-number">8.</span> <span class="nav-text">执行</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E5%AF%B9%E6%AF%94"><span class="nav-number">9.</span> <span class="nav-text">对比</span></a></li></ol></div>
+        </div>
+        <!--/noindex-->
+
+      <iframe frameborder="no" border="0" marginwidth="0"
+         marginheight="0" width=330 
+          height=86
+          src="//music.163.com/outchain/player?type=2&id=27515324&auto=1&height=66">
+      </iframe>
+
+        <div class="site-overview-wrap sidebar-panel">
+          <div class="site-author animated" itemprop="author" itemscope itemtype="http://schema.org/Person">
+    <img class="site-author-image" itemprop="image" alt="Promise Chan"
+      src="/images/header.jpg">
+  <p class="site-author-name" itemprop="name">Promise Chan</p>
+  <div class="site-description" itemprop="description">Coding & upgrading</div>
+</div>
+<div class="site-state-wrap animated">
+  <nav class="site-state">
+      <div class="site-state-item site-state-posts">
+        <a href="/archives/">
+          <span class="site-state-item-count">43</span>
+          <span class="site-state-item-name">日志</span>
+        </a>
+      </div>
+      <div class="site-state-item site-state-categories">
+          <a href="/categories/">
+        <span class="site-state-item-count">5</span>
+        <span class="site-state-item-name">分类</span></a>
+      </div>
+      <div class="site-state-item site-state-tags">
+          <a href="/tags/">
+        <span class="site-state-item-count">67</span>
+        <span class="site-state-item-name">标签</span></a>
+      </div>
+  </nav>
+</div>
+  <div class="links-of-author animated">
+      <span class="links-of-author-item">
+        <a href="https://github.com/promiseChan" title="GitHub → https:&#x2F;&#x2F;github.com&#x2F;promiseChan" rel="noopener me" target="_blank"><i class="fab fa-github fa-fw"></i>GitHub</a>
+      </span>
+  </div>
+
+        </div>
+      </div>
+    </div>
+
+    
+  </aside>
+
+
+    </div>
+
+    <div class="main-inner post posts-expand">
+
+
+  
+
+
+<div class="post-block">
+  
+  
+
+  <article itemscope itemtype="http://schema.org/Article" class="post-content" lang="zh-CN">
+    <link itemprop="mainEntityOfPage" href="http://example.com/2023/07/16/graalvm2/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="image" content="/images/header.jpg">
+      <meta itemprop="name" content="Promise Chan">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="PromiseChanの博客">
+      <meta itemprop="description" content="Coding & upgrading">
+    </span>
+
+    <span hidden itemprop="post" itemscope itemtype="http://schema.org/CreativeWork">
+      <meta itemprop="name" content="graalvm + dubbo3 | PromiseChanの博客">
+      <meta itemprop="description" content="">
+    </span>
+      <header class="post-header">
+        <h1 class="post-title" itemprop="name headline">
+          graalvm + dubbo3
+        </h1>
+
+        <div class="post-meta-container">
+          <div class="post-meta">
+    <span class="post-meta-item">
+      <span class="post-meta-item-icon">
+        <i class="far fa-calendar"></i>
+      </span>
+      <span class="post-meta-item-text">发表于</span>
+
+      <time title="创建时间：2023-07-16 22:57:20" itemprop="dateCreated datePublished" datetime="2023-07-16T22:57:20+08:00">2023-07-16</time>
+    </span>
+    <span class="post-meta-item">
+      <span class="post-meta-item-icon">
+        <i class="far fa-calendar-check"></i>
+      </span>
+      <span class="post-meta-item-text">更新于</span>
+      <time title="修改时间：2025-07-16 00:25:30" itemprop="dateModified" datetime="2025-07-16T00:25:30+08:00">2025-07-16</time>
+    </span>
+
+  
+</div>
+
+        </div>
+      </header>
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody"><p>Dubbo AOT demo体验,并修复dubbo3 aot的编译报错问题<br><a target="_blank" rel="noopener" href="https://github.com/apache/dubbo/pull/12735">https://github.com/apache/dubbo/pull/12735</a></p>
+<span id="more"></span>
+
+<h2 id="搭建环境"><a href="#搭建环境" class="headerlink" title="搭建环境"></a>搭建环境</h2><ol>
+<li><p>下载graalvm<br>graalvm 类似增强版的Jdk，安装方法与jdk完全一致，但是得确认好版本</p>
+<p>GraalVM 目前支持两个java版本： jdk17 与jdk21</p>
+<p>下载地址：<a target="_blank" rel="noopener" href="https://www.graalvm.org/downloads/#">GraalVM社区版</a>（注意不是简单的GraalVM-jdk组件）</p>
+</li>
+<li><p>配置GraalVM 环境变量</p>
+</li>
+</ol>
+<figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta"># </span><span class="language-bash">配置JDK路径</span></span><br><span class="line">export JAVA_8_HOME=/Library/Java/JavaVirtualMachines/zulu-8.jdk/Contents/Home</span><br><span class="line">export JAVA_11_HOME=/Library/Java/JavaVirtualMachines/openjdk-11.jdk/Contents/Home</span><br><span class="line">export JAVA_17_HOME=/Library/Java/JavaVirtualMachines/openjdk-17.jdk/Contents/Home</span><br><span class="line">export GRAALVM_17_HOME=/Library/Java/JavaVirtualMachines/graalvm-community-openjdk-17.0.7+7.1/Contents/Home</span><br><span class="line"><span class="meta"># </span><span class="language-bash">设置默认JDK版本</span></span><br><span class="line"><span class="meta"># </span><span class="language-bash"><span class="built_in">export</span> JAVA_HOME=<span class="variable">$JAVA_17_HOME</span></span></span><br><span class="line">export JAVA_HOME=$GRAALVM_17_HOME</span><br><span class="line">CLASSPATH=$JAVA_HOME/lib/tools.jar:$JAVA_HOME/lib/dt.jar:.</span><br><span class="line"><span class="meta"># </span><span class="language-bash">配置<span class="built_in">alias</span>命令动态切换JDK版本</span>  </span><br><span class="line">alias jdk8=&quot;export JAVA_HOME=$JAVA_8_HOME &amp;&amp; export PATH=$JAVA_8_HOME/bin/:$PATH&quot;</span><br><span class="line">alias jdk11=&quot;export JAVA_HOME=$JAVA_11_HOME &amp;&amp; export PATH=$JAVA_11_HOME/bin/:$PATH&quot;</span><br><span class="line">alias jdk17=&quot;export JAVA_HOME=$JAVA_17_HOME &amp;&amp; export PATH=$JAVA_17_HOME/bin/:$PATH&quot;</span><br><span class="line">alias graal17=&quot;export JAVA_HOME=$GRAALVM_17_HOME &amp;&amp; export PATH=$GRAALVM_17_HOME/bin/:$PATH&quot;</span><br><span class="line">export JAVA_HOME</span><br><span class="line">export PATH=$JAVA_HOME/bin/:$PATH</span><br><span class="line">export CLASSPATH</span><br></pre></td></tr></table></figure>
+
+<p>3.验证</p>
+<figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">java -version</span><br></pre></td></tr></table></figure>
+
+<p>控制台输出</p>
+<figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">openjdk version &quot;17.0.7&quot; 2023-04-18</span><br><span class="line">OpenJDK Runtime Environment GraalVM CE 17.0.7+7.1 (build 17.0.7+7-jvmci-23.0-b12)</span><br><span class="line">OpenJDK 64-Bit Server VM GraalVM CE 17.0.7+7.1 (build 17.0.7+7-jvmci-23.0-b12, mixed mode, sharing)</span><br></pre></td></tr></table></figure>
+
+<ol start="4">
+<li>目前最新的GraalVM-CE版已经默认集成里native-image工具<br>可以用</li>
+</ol>
+<figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">sudo gu install native-image</span><br></pre></td></tr></table></figure>
+
+<p>验证或者安装</p>
+<figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">Downloading: Component catalog from www.graalvm.org</span><br><span class="line">Processing Component: Native Image</span><br><span class="line">Component Native Image (org.graalvm.native-image) is already installed.</span><br></pre></td></tr></table></figure>
+
+<h2 id="dubbo-环境"><a href="#dubbo-环境" class="headerlink" title="dubbo 环境"></a>dubbo 环境</h2><p>zookeeper: 3.7.1</p>
+<p><a target="_blank" rel="noopener" href="https://github.com/vran-dev/PrettyZoo">prettyZoo</a><br><a href="%5Bhttps://github.com/apache/dubbo-samples/tree/master/1-basic/dubbo-samples-native-image%5D">dubbo-aot-demo</a></p>
+<p>由于dubbo-aot 还未成熟，需要git clone 最新代码，自行编译安装到本地maven 仓库<br><a href="%5Bhttps://github.com/apache/dubbo/tree/3.3%5D">dubbo-jars</a></p>
+<h2 id="dubbo-demo工程配置"><a href="#dubbo-demo工程配置" class="headerlink" title="dubbo-demo工程配置"></a>dubbo-demo工程配置</h2><p>目前dubbo aot 只能用json2的序列化方式,hession2 存在问题</p>
+<figure class="highlight yml"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br></pre></td><td class="code"><pre><span class="line"><span class="attr">spring:</span></span><br><span class="line">  <span class="attr">application:</span></span><br><span class="line">    <span class="attr">name:</span> <span class="string">dubbo-samples-nativeimage-provider</span></span><br><span class="line"><span class="attr">dubbo:</span></span><br><span class="line">  <span class="attr">application:</span></span><br><span class="line">    <span class="attr">name:</span> <span class="string">$&#123;spring.application.name&#125;</span></span><br><span class="line">    <span class="attr">logger:</span> <span class="string">slf4j</span></span><br><span class="line"><span class="comment">#    compiler: jdk</span></span><br><span class="line">  <span class="attr">protocol:</span></span><br><span class="line">    <span class="attr">name:</span> <span class="string">dubbo</span></span><br><span class="line">    <span class="attr">port:</span> <span class="number">-1</span></span><br><span class="line">    <span class="attr">serialization:</span> <span class="string">fastjson2</span></span><br><span class="line">  <span class="attr">registry:</span></span><br><span class="line">    <span class="attr">id:</span> <span class="string">zk-registry</span></span><br><span class="line">    <span class="attr">address:</span> <span class="string">zookeeper://127.0.0.1:2181</span></span><br><span class="line">  <span class="attr">config-center:</span></span><br><span class="line">    <span class="attr">address:</span> <span class="string">zookeeper://127.0.0.1:2181</span></span><br><span class="line">  <span class="attr">metadata-report:</span></span><br><span class="line">    <span class="attr">address:</span> <span class="string">zookeeper://127.0.0.1:2181</span></span><br><span class="line">  <span class="attr">provider:</span></span><br><span class="line"><span class="comment">#    proxy: jdk</span></span><br><span class="line">    <span class="attr">serialization:</span> <span class="string">fastjson2</span></span><br><span class="line">  <span class="attr">consumer:</span></span><br><span class="line"><span class="comment">#    proxy: jdk</span></span><br><span class="line">    <span class="attr">serialization:</span> <span class="string">fastjson2</span></span><br><span class="line"></span><br><span class="line"><span class="attr">logging:</span></span><br><span class="line">  <span class="attr">pattern:</span></span><br><span class="line">    <span class="attr">level:</span> <span class="string">&#x27;%5p [$&#123;spring.application.name:&#125;,%X&#123;traceId:-&#125;,%X&#123;spanId:-&#125;]&#x27;</span></span><br><span class="line"></span><br><span class="line"><span class="attr">server:</span></span><br><span class="line">  <span class="attr">port:</span> <span class="number">9090</span></span><br></pre></td></tr></table></figure>
+
+<h2 id="编译命令"><a href="#编译命令" class="headerlink" title="编译命令"></a>编译命令</h2><figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">mvn clean package -P native native:compile -Dmaven.test.skip=true</span><br></pre></td></tr></table></figure>
+
+<h2 id="报错"><a href="#报错" class="headerlink" title="报错"></a>报错</h2><figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br></pre></td><td class="code"><pre><span class="line">Exception in thread &quot;main&quot; java.lang.IllegalStateException: No constructor or factory method candidate found for Root bean: class [org.apache.dubbo.config.spring.ServiceBean]; scope=singleton; abstract=false; lazyInit=null; autowireMode=3; dependencyCheck=0; autowireCandidate=true; primary=false; factoryBeanName=null; factoryMethodName=null; initMethodNames=null; destroyMethodNames=null and argument types []</span><br><span class="line">	at org.springframework.beans.factory.support.ConstructorResolver.resolveConstructorOrFactoryMethod(ConstructorResolver.java:944)</span><br><span class="line">	at org.springframework.beans.factory.support.RegisteredBean.resolveConstructorOrFactoryMethod(RegisteredBean.java:209)</span><br><span class="line">	at org.springframework.beans.factory.aot.BeanDefinitionMethodGenerator.&lt;init&gt;(BeanDefinitionMethodGenerator.java:86)</span><br><span class="line">	at org.springframework.beans.factory.aot.BeanDefinitionMethodGeneratorFactory.getBeanDefinitionMethodGenerator(BeanDefinitionMethodGeneratorFactory.java:100)</span><br><span class="line">	at org.springframework.beans.factory.aot.BeanDefinitionMethodGeneratorFactory.getBeanDefinitionMethodGenerator(BeanDefinitionMethodGeneratorFactory.java:115)</span><br><span class="line">	at org.springframework.beans.factory.aot.BeanRegistrationsAotProcessor.processAheadOfTime(BeanRegistrationsAotProcessor.java:48)</span><br><span class="line">	at org.springframework.beans.factory.aot.BeanRegistrationsAotProcessor.processAheadOfTime(BeanRegistrationsAotProcessor.java:36)</span><br><span class="line">	at org.springframework.context.aot.BeanFactoryInitializationAotContributions.getContributions(BeanFactoryInitializationAotContributions.java:67)</span><br><span class="line">	at org.springframework.context.aot.BeanFactoryInitializationAotContributions.&lt;init&gt;(BeanFactoryInitializationAotContributions.java:49)</span><br><span class="line">	at org.springframework.context.aot.BeanFactoryInitializationAotContributions.&lt;init&gt;(BeanFactoryInitializationAotContributions.java:44)</span><br><span class="line">	at org.springframework.context.aot.ApplicationContextAotGenerator.lambda$processAheadOfTime$0(ApplicationContextAotGenerator.java:58)</span><br><span class="line">	at org.springframework.context.aot.ApplicationContextAotGenerator.withCglibClassHandler(ApplicationContextAotGenerator.java:67)</span><br><span class="line">	at org.springframework.context.aot.ApplicationContextAotGenerator.processAheadOfTime(ApplicationContextAotGenerator.java:53)</span><br><span class="line">	at org.springframework.context.aot.ContextAotProcessor.performAotProcessing(ContextAotProcessor.java:106)</span><br><span class="line">	at org.springframework.context.aot.ContextAotProcessor.doProcess(ContextAotProcessor.java:84)</span><br><span class="line">	at org.springframework.context.aot.ContextAotProcessor.doProcess(ContextAotProcessor.java:49)</span><br><span class="line">	at org.springframework.context.aot.AbstractAotProcessor.process(AbstractAotProcessor.java:82)</span><br><span class="line">	at org.springframework.boot.SpringApplicationAotProcessor.main(SpringApplicationAotProcessor.java:80)</span><br><span class="line">[INFO] ------------------------------------------------------------------------</span><br><span class="line">[INFO] Reactor Summary for dubbo-samples-native-image 1.0-SNAPSHOT:</span><br><span class="line">[INFO] </span><br><span class="line">[INFO] dubbo-samples-native-image ......................... SUCCESS [  0.241 s]</span><br><span class="line">[INFO] dubbo-samples-native-image-interface ............... SUCCESS [  0.492 s]</span><br><span class="line">[INFO] dubbo-samples-native-image-provider ................ FAILURE [  3.659 s]</span><br><span class="line">[INFO] dubbo-samples-native-image-consumer ................ SKIPPED</span><br><span class="line">[INFO] ------------------------------------------------------------------------</span><br><span class="line">[INFO] BUILD FAILURE</span><br><span class="line">[INFO] ------------------------------------------------------------------------</span><br><span class="line">[INFO] Total time:  4.537 s</span><br><span class="line">[INFO] Finished at: 2023-07-16T22:24:41+08:00</span><br><span class="line">[INFO] ------------------------------------------------------------------------</span><br></pre></td></tr></table></figure>
+
+
+<h2 id="解决"><a href="#解决" class="headerlink" title="解决"></a>解决</h2><p>已经提交 pr 到 github<br><a target="_blank" rel="noopener" href="https://github.com/apache/dubbo/pull/12735">https://github.com/apache/dubbo/pull/12735</a></p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line">org.apache.dubbo.config.spring.ServiceBean</span><br><span class="line"><span class="comment">//添加无参构造函数</span></span><br><span class="line">    <span class="keyword">public</span> <span class="title function_">ServiceBean</span><span class="params">()</span> &#123;</span><br><span class="line">        <span class="built_in">this</span>.service = <span class="literal">null</span>;</span><br><span class="line">    &#125;</span><br></pre></td></tr></table></figure>
+
+<h2 id="编译成功"><a href="#编译成功" class="headerlink" title="编译成功"></a>编译成功</h2><figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br><span class="line">47</span><br><span class="line">48</span><br><span class="line">49</span><br><span class="line">50</span><br><span class="line">51</span><br><span class="line">52</span><br><span class="line">53</span><br><span class="line">54</span><br></pre></td><td class="code"><pre><span class="line">[2/8] Performing analysis...  [******]                                                (59.7s @ 2.39GB)</span><br><span class="line">  25,479 (91.57%) of 27,824 types reachable</span><br><span class="line">  44,360 (68.92%) of 64,369 fields reachable</span><br><span class="line"> 128,368 (65.62%) of 195,631 methods reachable</span><br><span class="line">   7,828 types,   462 fields, and 8,536 methods registered for reflection</span><br><span class="line">      88 types,    95 fields, and    65 methods registered for JNI access</span><br><span class="line">       5 native libraries: -framework CoreServices, -framework Foundation, dl, pthread, z</span><br><span class="line">[3/8] Building universe...                                                            (19.0s @ 2.41GB)</span><br><span class="line">[4/8] Parsing methods...      [***]                                                    (7.6s @ 1.70GB)</span><br><span class="line">[5/8] Inlining methods...     [****]                                                   (2.5s @ 1.73GB)</span><br><span class="line">[6/8] Compiling methods...    [******]                                                (35.4s @ 2.55GB)</span><br><span class="line">[7/8] Layouting methods...    [***]                                                   (11.9s @ 2.25GB)</span><br><span class="line">[8/8] Creating image...       [****]                                                  (14.4s @ 1.39GB)</span><br><span class="line">  61.84MB (54.73%) for code area:    86,261 compilation units</span><br><span class="line">  49.84MB (44.11%) for image heap:  545,697 objects and 228 resources</span><br><span class="line">   1.31MB ( 1.16%) for other data</span><br><span class="line"> 112.99MB in total</span><br><span class="line">------------------------------------------------------------------------------------------------------</span><br><span class="line">Top 10 origins of code area:                       Top 10 object types in image heap:</span><br><span class="line">  13.75MB java.base                                  14.76MB byte[] for code metadata</span><br><span class="line">   6.81MB jdk.compiler                                6.27MB java.lang.Class</span><br><span class="line">   4.49MB fastjson2-2.0.34.jar                        5.38MB java.lang.String</span><br><span class="line">   4.14MB tomcat-embed-core-10.1.7.jar                4.79MB byte[] for java.lang.String</span><br><span class="line">   3.42MB dubbo-3.3.0-beta.1-SNAPSHOT.jar             4.06MB byte[] for general heap data</span><br><span class="line">   2.91MB java.xml                                    2.14MB c.o.svm.core.hub.DynamicHubCompanion</span><br><span class="line">   1.92MB jackson-databind-2.14.2.jar                 1.58MB byte[] for reflection metadata</span><br><span class="line">   1.59MB svm.jar (Native Image)                      1.14MB byte[] for embedded resources</span><br><span class="line">   1.53MB spring-core-6.0.7.jar                       1.07MB java.lang.String[]</span><br><span class="line">   1.23MB spring-boot-3.0.5.jar                     914.65kB c.o.s.c.h.DynamicHub$ReflectionMetadata</span><br><span class="line">  19.56MB for 156 more packages                       7.33MB for 4935 more object types</span><br><span class="line">------------------------------------------------------------------------------------------------------</span><br><span class="line">Recommendations:</span><br><span class="line"> HEAP: Set max heap for improved and more predictable memory usage.</span><br><span class="line"> CPU:  Enable more CPU features with &#x27;-march=native&#x27; for improved performance.</span><br><span class="line">------------------------------------------------------------------------------------------------------</span><br><span class="line">              42.2s (26.7% of total time) in 308 GCs | Peak RSS: 2.95GB | CPU load: 5.43</span><br><span class="line">------------------------------------------------------------------------------------------------------</span><br><span class="line">Produced artifacts:</span><br><span class="line"> /Users/promisechan/Desktop/code/java_code/dubbo-samples-native-image/dubbo-samples-native-image-consumer/target/dubbo-samples-native-image-consumer (executable)</span><br><span class="line">======================================================================================================</span><br><span class="line">Finished generating &#x27;dubbo-samples-native-image-consumer&#x27; in 2m 37s.</span><br><span class="line">[INFO] ------------------------------------------------------------------------</span><br><span class="line">[INFO] Reactor Summary for dubbo-samples-native-image 1.0-SNAPSHOT:</span><br><span class="line">[INFO] </span><br><span class="line">[INFO] dubbo-samples-native-image ......................... SUCCESS [  0.276 s]</span><br><span class="line">[INFO] dubbo-samples-native-image-interface ............... SUCCESS [  0.570 s]</span><br><span class="line">[INFO] dubbo-samples-native-image-provider ................ SUCCESS [02:47 min]</span><br><span class="line">[INFO] dubbo-samples-native-image-consumer ................ SUCCESS [02:45 min]</span><br><span class="line">[INFO] ------------------------------------------------------------------------</span><br><span class="line">[INFO] BUILD SUCCESS</span><br><span class="line">[INFO] ------------------------------------------------------------------------</span><br><span class="line">[INFO] Total time:  05:34 min</span><br><span class="line">[INFO] Finished at: 2023-07-16T23:13:56+08:00</span><br><span class="line">[INFO] ------------------------------------------------------------------------</span><br></pre></td></tr></table></figure>
+
+
+
+<h2 id="执行"><a href="#执行" class="headerlink" title="执行"></a>执行</h2><figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">./dubbo-samples-native-image-provider/target/dubbo-samples-native-image-provider</span><br></pre></td></tr></table></figure>
+<p>日志</p>
+<figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">2023-07-16T23:17:40.712+08:00  INFO [dubbo-samples-nativeimage-provider,,] 5376 --- [           main] o.a.d.n.p.NativeDemoProviderApplication  : Started NativeDemoProviderApplication in 0.348 seconds (process running for 0.359)</span><br><span class="line"></span><br></pre></td></tr></table></figure>
+
+<figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">./dubbo-samples-native-image-consumer/target/dubbo-samples-native-image-consumer </span><br></pre></td></tr></table></figure>
+<p>日志</p>
+<figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br></pre></td><td class="code"><pre><span class="line">o.a.d.c.d.DefaultApplicationDeployer     :  [DUBBO] Dubbo Application[1.1](dubbo-samples-nativeimage-consumer) is ready., dubbo version: 3.3.0-beta.1-SNAPSHOT, current host: 192.168.3.150</span><br><span class="line">2023-07-16T23:17:58.943+08:00  INFO [dubbo-samples-nativeimage-consumer,,] 5381 --- [           main] o.a.d.n.c.NativeDemoConsumerApplication  : Started NativeDemoConsumerApplication in 0.194 seconds (process running for 0.206)</span><br><span class="line"></span><br><span class="line">...</span><br><span class="line">...</span><br><span class="line"></span><br><span class="line">o.a.d.remoting.transport.DecodeHandler   :  [DUBBO] Decode decodeable message org.apache.dubbo.rpc.protocol.dubbo.DecodeableRpcResult, dubbo version: 3.3.0-beta.1-SNAPSHOT, current host: 192.168.3.150</span><br><span class="line">2023-07-16T23:17:58.947+08:00 DEBUG [dubbo-samples-nativeimage-consumer,,] 5381 --- [           main] i.m.c.u.i.logging.InternalLoggerFactory  : Using SLF4J as the default logging framework</span><br><span class="line">result: world</span><br><span class="line"></span><br></pre></td></tr></table></figure>
+
+
+<h2 id="对比"><a href="#对比" class="headerlink" title="对比"></a>对比</h2><p>jvm 启动耗时 1.933 s, native-image 启动耗时 0.359 s<br>是 native-images的 5.38 倍</p>
+<figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">2023-07-16T23:20:32.967+08:00  INFO [dubbo-samples-nativeimage-provider,,] 5434 --- [           main] o.a.d.n.p.NativeDemoProviderApplication  : Started NativeDemoProviderApplication in 1.933 seconds (process running for 2.203)</span><br></pre></td></tr></table></figure>
+
+    </div>
+
+    
+    
+    
+
+    <footer class="post-footer">
+          <div class="post-tags">
+              <a href="/tags/graalvm/" rel="tag"># graalvm</a>
+              <a href="/tags/springboot3/" rel="tag"># springboot3</a>
+              <a href="/tags/AOT/" rel="tag"># AOT</a>
+              <a href="/tags/Dubbo3/" rel="tag"># Dubbo3</a>
+          </div>
+
+        
+
+          <div class="post-nav">
+            <div class="post-nav-item">
+                <a href="/2023/07/13/graalvm1/" rel="prev" title="graalvm Springboot3 AOT 使用指引">
+                  <i class="fa fa-angle-left"></i> graalvm Springboot3 AOT 使用指引
+                </a>
+            </div>
+            <div class="post-nav-item">
+                <a href="/2023/07/21/graalvm3/" rel="next" title="graalvm3">
+                  graalvm3 <i class="fa fa-angle-right"></i>
+                </a>
+            </div>
+          </div>
+    </footer>
+  </article>
+</div>
+
+
+
+
+
+
+</div>
+  </main>
+
+  <footer class="footer">
+    <div class="footer-inner">
+
+  <div class="copyright">
+    &copy; 
+    <span itemprop="copyrightYear">2025</span>
+    <span class="with-love">
+      <i class="fa fa-heart"></i>
+    </span>
+    <span class="author" itemprop="copyrightHolder">Promise Chan</span>
+  </div>
+  <div class="powered-by">由 <a href="https://hexo.io/" rel="noopener" target="_blank">Hexo</a> & <a href="https://theme-next.js.org/mist/" rel="noopener" target="_blank">NexT.Mist</a> 强力驱动
+  </div><a href="https://icp.gov.moe/?keyword=20180708" rel="external nofollow noreferrer" target="_blank" data-pjax-state="" style="
+    border-bottom-width: 0px;
+">萌 ICP 备 20180708 号</a>
+<!-- 网站运行时间的设置 -->
+<span id="timeDate">载入天数...</span>
+<span id="times">载入时分秒...</span>
+<script>
+    var now = new Date();
+    function createtime() {
+        var grt= new Date("03/10/2022 22:00:00");//此处修改你的建站时间，注意格式
+        now.setTime(now.getTime()+250);
+        days = (now - grt ) / 1000 / 60 / 60 / 24; dnum = Math.floor(days);
+        hours = (now - grt ) / 1000 / 60 / 60 - (24 * dnum); hnum = Math.floor(hours);
+        if(String(hnum).length ==1 ){hnum = "0" + hnum;} minutes = (now - grt ) / 1000 /60 - (24 * 60 * dnum) - (60 * hnum);
+        mnum = Math.floor(minutes); if(String(mnum).length ==1 ){mnum = "0" + mnum;}
+        seconds = (now - grt ) / 1000 - (24 * 60 * 60 * dnum) - (60 * 60 * hnum) - (60 * mnum);
+        snum = Math.round(seconds); if(String(snum).length ==1 ){snum = "0" + snum;}
+        document.getElementById("timeDate").innerHTML = "小站在混沌中存活了 "+dnum+" 天 ";
+        document.getElementById("times").innerHTML = hnum + " 小时 " + mnum + " 分 " + snum + " 秒";
+    }
+setInterval("createtime()",250);
+</script>
+
+    </div>
+  </footer>
+
+  
+  <div class="toggle sidebar-toggle" role="button">
+    <span class="toggle-line"></span>
+    <span class="toggle-line"></span>
+    <span class="toggle-line"></span>
+  </div>
+  <div class="sidebar-dimmer"></div>
+  <div class="back-to-top" role="button" aria-label="返回顶部">
+    <i class="fa fa-arrow-up fa-lg"></i>
+    <span>0%</span>
+  </div>
+
+<noscript>
+  <div class="noscript-warning">Theme NexT works best with JavaScript enabled</div>
+</noscript>
+
+<script src="/live2dw/lib/L2Dwidget.min.js?094cbace49a39548bed64abff5988b05"></script><script>L2Dwidget.init({"log":false,"pluginJsPath":"lib/","pluginModelPath":"assets/","pluginRootPath":"live2dw/","tagMode":false});</script></body>
+</html>
